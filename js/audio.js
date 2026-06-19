@@ -9,6 +9,37 @@
   let enabled = false;
   let reverb = null;
 
+  // Sound scheme modulation
+  const SCHEMES = {
+    Default: { osc: 'triangle', attack: 0.005, decay: 0.25, wetMul: 1.0, pitchMul: 1.0 },
+    Musica:  { osc: 'sine',     attack: 0.02,  decay: 0.45, wetMul: 1.4, pitchMul: 1.0 },
+    Robotz:  { osc: 'square',   attack: 0.001, decay: 0.10, wetMul: 0.3, pitchMul: 0.85 },
+    Utopia:  { osc: 'triangle', attack: 0.01,  decay: 0.55, wetMul: 1.7, pitchMul: 1.05 }
+  };
+  let currentScheme = 'Default';
+  try {
+    const s = sessionStorage.getItem('rw93_sound_scheme');
+    if (s && SCHEMES[s]) currentScheme = s;
+  } catch (e) {}
+
+  Audio.setScheme = function (name) {
+    if (SCHEMES[name]) currentScheme = name;
+    try { sessionStorage.setItem('rw93_sound_scheme', currentScheme); } catch (e) {}
+  };
+  Audio.getScheme = function () { return currentScheme; };
+  function schemeApply(opts) {
+    const sch = SCHEMES[currentScheme] || SCHEMES.Default;
+    return {
+      type: opts.type || sch.osc,
+      vol: opts.vol,
+      attack: opts.attack != null ? Math.max(sch.attack, opts.attack) : sch.attack,
+      decay: opts.decay != null ? Math.max(sch.decay, opts.decay) : sch.decay,
+      wet: (opts.wet || 0) * sch.wetMul,
+      delay: opts.delay,
+      pitchMul: sch.pitchMul
+    };
+  }
+
   function ensureCtx() {
     if (ctx) return ctx;
     const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -135,8 +166,10 @@
 
   Audio.ding = function () {
     if (!enabled) return;
-    tone(880, 0.08, { type: 'triangle', vol: 0.16, decay: 0.25, wet: 0.4 });
-    tone(1320, 0.12, { type: 'triangle', vol: 0.14, decay: 0.3, wet: 0.4, delay: 0.04 });
+    const a = schemeApply({ vol: 0.16, decay: 0.25, wet: 0.4 });
+    const b = schemeApply({ vol: 0.14, decay: 0.3, wet: 0.4, delay: 0.04 });
+    tone(880 * a.pitchMul, 0.08, { type: a.type, vol: a.vol, decay: a.decay, wet: a.wet, attack: a.attack });
+    tone(1320 * b.pitchMul, 0.12, { type: b.type, vol: b.vol, decay: b.decay, wet: b.wet, attack: b.attack, delay: b.delay });
   };
 
   Audio.shutdown = function () {

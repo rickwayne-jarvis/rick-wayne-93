@@ -182,20 +182,22 @@
   function openMyComputer() {
     if (RW.WM.get('my-computer')) { RW.WM.bringToFront('my-computer'); return; }
     const drives = [
-      { label: 'C:\\ Director', icon: hardDriveIcon(), action: () => RW.Explorer.openWork() },
-      { label: 'A:\\ Treatments', icon: floppyIcon(),  action: () => alert('Drive A is not ready.\n\nProbably for the best. The first draft never is.') },
-      { label: 'D:\\ Dailies',   icon: cdIcon(),       action: () => alert('Please insert a disc.\n\nNot that kind.') }
+      { id: 'a', label: '(A:) 3.5" Floppy',     icon: floppyIcon(),    action: () => openDriveA() },
+      { id: 'c', label: '(C:) Hard Drive',      icon: hardDriveIcon(), action: () => openDriveC() },
+      { id: 'd', label: '(D:) CD-ROM Drive',    icon: cdIcon(),        action: () => openDriveD() },
+      { id: 'cp', label: 'Control Panel',       icon: ICONS.computer,  action: () => Desktop.openControlPanel() },
+      { id: 'rb', label: 'Recycle Bin',         icon: ICONS.recycle,   action: () => openRecycle() }
     ];
     let html = '<div class="my-computer-grid">';
     drives.forEach((d, i) => {
-      html += '<div class="mc-drive" data-idx="' + i + '"><div class="icon-img">' + d.icon + '</div><div class="label">' + RW.WM.escapeHtml(d.label) + '</div></div>';
+      html += '<div class="mc-drive" data-idx="' + i + '" data-id="' + d.id + '"><div class="icon-img">' + d.icon + '</div><div class="label">' + RW.WM.escapeHtml(d.label) + '</div></div>';
     });
     html += '</div>';
     const w = RW.WM.open({
       id: 'my-computer',
       title: 'My Computer',
       icon: ICONS.computer,
-      width: 420, height: 260,
+      width: 480, height: 300,
       contentHTML: html
     });
     w.body.querySelectorAll('.mc-drive').forEach((el, i) => {
@@ -204,32 +206,554 @@
         el.classList.add('selected');
       });
       el.addEventListener('dblclick', () => drives[i].action());
+      el.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (drives[i].id === 'd') {
+          RW.ContextMenu.show(e.clientX, e.clientY, [
+            { label: 'Open', action: () => drives[i].action() },
+            { sep: true },
+            { label: 'Eject', action: () => {
+              const html2 = '<div class="dialog-body"><p>Cannot eject. Drive is the soul of the operation.</p></div>' +
+                '<div class="dialog-buttons"><button data-close>OK</button></div>';
+              const aw = RW.WM.open({
+                title: 'Cannot Eject D:', icon: cdIcon(),
+                width: 360, height: 160, resizable: false, contentHTML: html2
+              });
+              aw.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(aw.id));
+              if (RW.Audio) RW.Audio.error();
+            }}
+          ]);
+        }
+      });
     });
+  }
+
+  // ===== Drive A =====
+  function openDriveA() {
+    const html =
+      '<div class="dialog-body mc-drive-a-error">' +
+        '<div class="critical-icon"><svg viewBox="0 0 32 32" width="32" height="32">' +
+          '<circle cx="16" cy="16" r="13" fill="#c8102e" stroke="#000"/>' +
+          '<path d="M9 9 L23 23 M23 9 L9 23" stroke="#fff" stroke-width="3" fill="none"/>' +
+        '</svg></div>' +
+        '<div class="critical-msg"><p>There is no disk in drive A:.</p><p>Please insert a disk and try again.</p></div>' +
+      '</div>' +
+      '<div class="dialog-buttons">' +
+        '<button data-act="cancel">Cancel</button>' +
+        '<button data-act="retry">Retry</button>' +
+        '<button data-act="continue">Continue</button>' +
+      '</div>';
+    const w = RW.WM.open({
+      title: 'Drive A', icon: floppyIcon(),
+      width: 400, height: 200, resizable: false, contentHTML: html
+    });
+    if (RW.Audio) RW.Audio.error();
+    w.body.querySelectorAll('button[data-act]').forEach(b => {
+      b.addEventListener('click', () => {
+        const act = b.dataset.act;
+        if (act === 'continue') {
+          RW.WM.close(w.id);
+          const html2 = '<div class="dialog-body"><p>Continued.</p></div>' +
+            '<div class="dialog-buttons"><button data-close>OK</button></div>';
+          const aw = RW.WM.open({
+            title: 'Drive A', icon: floppyIcon(),
+            width: 280, height: 140, resizable: false, contentHTML: html2
+          });
+          aw.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(aw.id));
+        } else {
+          RW.WM.close(w.id);
+        }
+      });
+    });
+  }
+
+  // ===== Drive C =====
+  function openDriveC() {
+    if (RW.WM.get('drive-c')) { RW.WM.bringToFront('drive-c'); return; }
+    const items = [
+      { label: 'Program Files', icon: ICONS.folder, action: () => openProgramFiles() },
+      { label: 'Windows',       icon: ICONS.folder, action: () => openWindowsFolder() },
+      { label: 'My Documents',  icon: ICONS.folder, action: () => openMyDocuments() },
+      { label: 'autoexec.bat',  icon: ICONS.text,   action: () => openSystemText('autoexec.bat', AUTOEXEC_BAT) }
+    ];
+    openFolderWindow({ id: 'drive-c', title: 'C:\\', path: 'C:\\', items: items });
+  }
+
+  function openProgramFiles() {
+    if (RW.WM.get('pf')) { RW.WM.bringToFront('pf'); return; }
+    const items = [
+      { label: 'Notepad',               icon: ICONS.text,  action: () => openAbout() },
+      { label: 'Calculator',            icon: ICONS.exe,   action: () => RW.Calculator.open() },
+      { label: 'Paint',                 icon: ICONS.exe,   action: () => RW.Paint.open() },
+      { label: 'Solitaire',             icon: ICONS.exe,   action: () => RW.Solitaire.open() },
+      { label: 'Minesweeper',           icon: ICONS.mine,  action: () => RW.Minesweeper.open() },
+      { label: 'Movie Maker',           icon: ICONS.movie, action: () => RW.MovieMaker.open() },
+      { label: 'Windows Media Player',  icon: ICONS.video, action: () => RW.Explorer.openWork() }
+    ];
+    openFolderWindow({ id: 'pf', title: 'Program Files', path: 'C:\\Program Files', items: items });
+  }
+
+  function openWindowsFolder() {
+    if (RW.WM.get('windows-folder')) { RW.WM.bringToFront('windows-folder'); return; }
+    const items = [
+      { label: 'system.ini', icon: ICONS.text, action: () => openSystemText('system.ini', SACRED_BYTES) },
+      { label: 'config.sys', icon: ICONS.text, action: () => openSystemText('config.sys', SACRED_BYTES) }
+    ];
+    openFolderWindow({ id: 'windows-folder', title: 'Windows', path: 'C:\\Windows', items: items });
+  }
+
+  function openMyDocuments() {
+    if (RW.WM.get('mydocs')) { RW.WM.bringToFront('mydocs'); return; }
+    const items = [
+      { label: 'diary.txt',                icon: ICONS.text,  action: () => openSystemText('diary.txt', DIARY_TXT) },
+      { label: 'first-movie.mp4',          icon: ICONS.video, action: () => openFirstMovie() },
+      { label: 'letter-to-younger-me.txt', icon: ICONS.text,  action: () => openSystemText('letter-to-younger-me.txt', LETTER_TXT) },
+      { label: 'why-i-direct.txt',         icon: ICONS.text,  action: () => openSystemText('why-i-direct.txt', WHY_TXT) }
+    ];
+    openFolderWindow({ id: 'mydocs', title: 'My Documents', path: 'C:\\My Documents', items: items });
+  }
+
+  function openFolderWindow(opts) {
+    const wrap = document.createElement('div');
+    wrap.className = 'explorer-body';
+    wrap.innerHTML =
+      '<div class="menu-bar">' +
+        '<span class="mb-item"><u>F</u>ile</span>' +
+        '<span class="mb-item"><u>E</u>dit</span>' +
+        '<span class="mb-item"><u>V</u>iew</span>' +
+        '<span class="mb-item"><u>H</u>elp</span>' +
+      '</div>' +
+      '<div class="address-bar">' +
+        '<label>Address:</label>' +
+        '<div class="address-input"><span class="address-path">' + RW.WM.escapeHtml(opts.path) + '</span></div>' +
+      '</div>' +
+      '<div class="explorer-list"></div>' +
+      '<div class="status-bar">' +
+        '<div class="sb-cell">' + opts.items.length + ' object(s)</div>' +
+        '<div class="sb-cell" style="margin-left:auto">My Computer</div>' +
+      '</div>';
+    const w = RW.WM.open({
+      id: opts.id, title: opts.title, icon: ICONS.folder,
+      width: 520, height: 360, contentNode: wrap
+    });
+    w.body.style.padding = '0';
+    const list = wrap.querySelector('.explorer-list');
+    opts.items.forEach(it => {
+      const el = document.createElement('div');
+      el.className = 'explorer-item';
+      el.innerHTML = '<div class="icon-img">' + it.icon + '</div><div class="label">' + RW.WM.escapeHtml(it.label) + '</div>';
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        list.querySelectorAll('.explorer-item.selected').forEach(x => x.classList.remove('selected'));
+        el.classList.add('selected');
+      });
+      el.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        if (RW.Audio) RW.Audio.dblclick();
+        if (it.action) it.action();
+      });
+      list.appendChild(el);
+    });
+  }
+
+  function openSystemText(title, content) {
+    const id = 'np-' + title.replace(/[^a-z0-9]/gi, '');
+    if (RW.WM.get(id)) { RW.WM.bringToFront(id); return; }
+    const html = '<div class="notepad-body" style="height:100%"><textarea readonly>' +
+      RW.WM.escapeHtml(content) + '</textarea></div>';
+    RW.WM.open({
+      id: id,
+      title: title + ' - Notepad',
+      icon: ICONS.text,
+      width: 520, height: 420,
+      contentHTML: html
+    });
+    RW.StartMenu && RW.StartMenu.touchDocument(title);
+  }
+
+  const SACRED_BYTES = 'These bytes are sacred. Do not edit. - Rick';
+
+  const AUTOEXEC_BAT =
+'@ECHO OFF\n' +
+'REM Loading inspiration drivers...\n' +
+'REM Mounting curiosity at C:\\HEART\n' +
+'REM Setting PATH=C:\\KIDS_WHO_NEVER_GREW_UP\n' +
+'PROMPT $P$G_BUT_KEEP_GOING\n' +
+'SET WAKE_UP_TIME=BEFORE_THE_SUN\n' +
+'SET BEDTIME=AFTER_THE_EDIT\n' +
+'ECHO Ready, Rick.\n';
+
+  const DIARY_TXT =
+'august 14, 2003\n' +
+'mom let me have the camera again. dad said be careful with it.\n' +
+'me and the guys are gonna shoot the matrix today behind the\n' +
+'shed. mike is neo. i\'m directing. i don\'t know what directing\n' +
+'means yet but i think it means saying things like ACTION.\n' +
+'\n' +
+'august 16, 2003\n' +
+'we shot for six hours. nothing worked. battery died twice. mike\n' +
+'fell into a bush. it was the best day of my whole life.\n' +
+'\n' +
+'august 23, 2003\n' +
+'finished the edit on the family computer. windows movie maker\n' +
+'crashed twice. when it played back i cried a little. i don\'t\n' +
+'think i told anyone.\n' +
+'\n' +
+'september 1, 2003\n' +
+'school started. nobody else seems to think about this stuff\n' +
+'all day. i guess that\'s how i know.\n' +
+'\n' +
+'january, today\n' +
+'i think i made it. thanks for reading.\n';
+
+  const LETTER_TXT =
+'hey kid.\n' +
+'\n' +
+'i know the basement is cold and the cables look like spaghetti\n' +
+'and the camera battery is dying. it\'s fine. keep going.\n' +
+'\n' +
+'the people who hired you the longest are the ones who saw it\n' +
+'in this version of you. the version sitting on the basement\n' +
+'floor at 1am trying to make the bush look like the matrix.\n' +
+'\n' +
+'you\'ll get the gear. you\'ll get the team. you\'ll get the\n' +
+'brands. none of it is the thing. the thing is the feeling\n' +
+'you have right now when the edit finally cuts together.\n' +
+'keep chasing that feeling. that feeling is the whole job.\n' +
+'\n' +
+'and tell your mom thanks for letting you wreck the basement\n' +
+'with cables.\n' +
+'\n' +
+'love,\n' +
+'you\n';
+
+  const WHY_TXT =
+'I direct because a great commercial is the most generous\n' +
+'thing the medium can do. Thirty seconds, a few million\n' +
+'strangers, one shared feeling. That\'s the deal. I make the\n' +
+'deal good.\n';
+
+  function openFirstMovie() {
+    const ID2 = 'first-movie';
+    if (RW.WM.get(ID2)) { RW.WM.bringToFront(ID2); return; }
+    const wrap = document.createElement('div');
+    wrap.className = 'fm-body';
+    wrap.innerHTML =
+      '<div class="fm-titlebar-extra">first-movie.mp4 - Windows Media Player</div>' +
+      '<div class="fm-screen"><div class="fm-line" data-fm-line></div></div>' +
+      '<div class="fm-controls">' +
+        '<button class="fm-btn" data-fm-play>Play</button>' +
+        '<button class="fm-btn" data-fm-stop>Stop</button>' +
+        '<div class="fm-time" data-fm-time>0:00</div>' +
+      '</div>' +
+      '<div class="fm-info">Rick\'s first short film, 2003. Lost to time. This .mp4 was reconstructed from memory. If you have a copy, mail it to rick_wayne@me.com.</div>';
+    const w = RW.WM.open({
+      id: ID2,
+      title: 'Windows Media Player - first-movie.mp4',
+      icon: ICONS.video,
+      width: 540, height: 460,
+      contentNode: wrap
+    });
+    w.body.style.padding = '0';
+
+    const lineEl = wrap.querySelector('[data-fm-line]');
+    const timeEl = wrap.querySelector('[data-fm-time]');
+    const lines = [
+      'RICK\'S FIRST SHORT FILM (2003)',
+      'RECONSTRUCTED FROM MEMORY',
+      'DIRECTED BY A KID',
+      'STARRING HIS FRIENDS',
+      'MADE IN WINDOWS MOVIE MAKER',
+      'FIN'
+    ];
+    let timers = [];
+    let startTs = 0;
+    let timeId = null;
+
+    function fmtT(ms) {
+      const s = Math.max(0, Math.floor(ms / 1000));
+      const m = Math.floor(s / 60);
+      return m + ':' + String(s % 60).padStart(2, '0');
+    }
+    function stop() {
+      timers.forEach(t => clearTimeout(t));
+      timers = [];
+      if (timeId) { clearInterval(timeId); timeId = null; }
+      lineEl.textContent = '';
+      timeEl.textContent = '0:00';
+    }
+    function play() {
+      stop();
+      startTs = Date.now();
+      timeId = setInterval(() => { timeEl.textContent = fmtT(Date.now() - startTs); }, 200);
+      lines.forEach((ln, i) => {
+        const showAt = i * 1500;
+        const hideAt = showAt + 1200;
+        timers.push(setTimeout(() => { lineEl.textContent = ln; lineEl.classList.add('show'); }, showAt));
+        timers.push(setTimeout(() => { lineEl.classList.remove('show'); }, hideAt));
+      });
+      // end after last line
+      timers.push(setTimeout(() => {
+        if (timeId) { clearInterval(timeId); timeId = null; }
+      }, lines.length * 1500 + 200));
+    }
+    wrap.querySelector('[data-fm-play]').addEventListener('click', play);
+    wrap.querySelector('[data-fm-stop]').addEventListener('click', stop);
+    const prevClose = w.onClose;
+    w.onClose = function () { stop(); if (prevClose) prevClose(); };
+    play();
+    RW.StartMenu && RW.StartMenu.touchDocument('first-movie.mp4');
+  }
+
+  // ===== Drive D =====
+  function openDriveD() {
+    if (RW.WM.get('drive-d')) { RW.WM.bringToFront('drive-d'); return; }
+    const items = [
+      { label: 'RICK_WAYNE_REELS_1995.ISO', icon: cdIcon(), action: () => simpleInfo('Disc Info', 'Disc inserted: RICK_WAYNE_REELS_1995.ISO. Open highlights.mp4 to play the featured reel.') },
+      { label: 'highlights.mp4', icon: ICONS.video, action: () => {
+        const featured = (RW.projects || []).find(p => /sharpie/i.test(p.id) && /roty/i.test(p.id))
+          || (RW.projects || [])[0];
+        if (featured && RW.WMP) RW.WMP.openProject(featured.id);
+      }}
+    ];
+    openFolderWindow({ id: 'drive-d', title: 'D:\\', path: 'D:\\', items: items });
+  }
+
+  function simpleInfo(title, body) {
+    const html = '<div class="dialog-body"><p>' + RW.WM.escapeHtml(body) + '</p></div>' +
+      '<div class="dialog-buttons"><button data-close>OK</button></div>';
+    const aw = RW.WM.open({
+      title: title, icon: ICONS.computer,
+      width: 380, height: 180, resizable: false, contentHTML: html
+    });
+    aw.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(aw.id));
+  }
+
+  // ===== Control Panel =====
+  Desktop.openControlPanel = function () {
+    if (RW.WM.get('control-panel')) { RW.WM.bringToFront('control-panel'); return; }
+    const items = [
+      { label: 'Display',             icon: ICONS.computer, action: () => Desktop.openDisplayProperties() },
+      { label: 'Sounds',              icon: soundCpIcon(),  action: () => openSoundsCP() },
+      { label: 'Date/Time',           icon: clockCpIcon(),  action: () => openDateTimeCP() },
+      { label: 'Mouse',               icon: mouseCpIcon(),  action: () => openMouseCP() },
+      { label: 'Add/Remove Programs', icon: arpCpIcon(),    action: () => openAddRemoveCP() }
+    ];
+    const wrap = document.createElement('div');
+    wrap.className = 'explorer-body';
+    wrap.innerHTML =
+      '<div class="menu-bar">' +
+        '<span class="mb-item"><u>F</u>ile</span>' +
+        '<span class="mb-item"><u>E</u>dit</span>' +
+        '<span class="mb-item"><u>V</u>iew</span>' +
+        '<span class="mb-item"><u>H</u>elp</span>' +
+      '</div>' +
+      '<div class="address-bar"><label>Address:</label><div class="address-input"><span class="address-path">Control Panel</span></div></div>' +
+      '<div class="explorer-list"></div>' +
+      '<div class="status-bar"><div class="sb-cell">' + items.length + ' object(s)</div><div class="sb-cell" style="margin-left:auto">Configures system settings</div></div>';
+    const w = RW.WM.open({
+      id: 'control-panel', title: 'Control Panel', icon: ICONS.computer,
+      width: 520, height: 360, contentNode: wrap
+    });
+    w.body.style.padding = '0';
+    const list = wrap.querySelector('.explorer-list');
+    items.forEach(it => {
+      const el = document.createElement('div');
+      el.className = 'explorer-item';
+      el.innerHTML = '<div class="icon-img">' + it.icon + '</div><div class="label">' + RW.WM.escapeHtml(it.label) + '</div>';
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        list.querySelectorAll('.explorer-item.selected').forEach(x => x.classList.remove('selected'));
+        el.classList.add('selected');
+      });
+      el.addEventListener('dblclick', () => { if (RW.Audio) RW.Audio.dblclick(); it.action(); });
+      list.appendChild(el);
+    });
+  };
+
+  function soundCpIcon() {
+    return '<svg viewBox="0 0 32 32" width="32" height="32"><rect x="3" y="6" width="26" height="20" fill="#c0c0c0" stroke="#000"/><rect x="3" y="6" width="26" height="3" fill="#000080"/><path d="M8 18 h4 l5 -4 v12 l-5 -4 h-4z" fill="#fff" stroke="#000"/><path d="M22 15 c2 2 2 7 0 9" stroke="#000" fill="none"/></svg>';
+  }
+  function clockCpIcon() {
+    return '<svg viewBox="0 0 32 32" width="32" height="32"><circle cx="16" cy="16" r="13" fill="#fff" stroke="#000"/><line x1="16" y1="16" x2="16" y2="8" stroke="#000" stroke-width="2"/><line x1="16" y1="16" x2="22" y2="16" stroke="#000" stroke-width="2"/></svg>';
+  }
+  function mouseCpIcon() {
+    return '<svg viewBox="0 0 32 32" width="32" height="32"><rect x="9" y="5" width="14" height="22" rx="6" fill="#c0c0c0" stroke="#000"/><line x1="16" y1="5" x2="16" y2="14" stroke="#000"/><rect x="14.5" y="8" width="3" height="5" fill="#808080" stroke="#000"/></svg>';
+  }
+  function arpCpIcon() {
+    return '<svg viewBox="0 0 32 32" width="32" height="32"><rect x="4" y="6" width="24" height="20" fill="#fff" stroke="#000"/><rect x="4" y="6" width="24" height="3" fill="#000080"/><line x1="8" y1="14" x2="24" y2="14" stroke="#000"/><line x1="8" y1="18" x2="24" y2="18" stroke="#000"/><line x1="8" y1="22" x2="20" y2="22" stroke="#000"/></svg>';
+  }
+
+  function openSoundsCP() {
+    const enabled = RW.Audio.isEnabled();
+    const scheme = sessionStorage.getItem('rw93_sound_scheme') || 'Default';
+    const html =
+      '<div class="dialog-body">' +
+        '<p><b>Sounds Properties</b></p>' +
+        '<p><label><input type="checkbox" data-sound-enable ' + (enabled ? 'checked' : '') + '> Enable Windows sounds</label></p>' +
+        '<p style="margin-top:10px"><b>Scheme:</b> <select data-scheme>' +
+          ['Default','Musica','Robotz','Utopia'].map(s => '<option ' + (s === scheme ? 'selected' : '') + '>' + s + '</option>').join('') +
+        '</select></p>' +
+        '<p style="font-size:11px;color:#444">Schemes change the timbre of system dings.</p>' +
+      '</div>' +
+      '<div class="dialog-buttons"><button data-test>Test ding</button><button data-close>OK</button></div>';
+    const w = RW.WM.open({
+      title: 'Sounds Properties', icon: soundCpIcon(),
+      width: 380, height: 260, resizable: false, contentHTML: html
+    });
+    const cb = w.body.querySelector('[data-sound-enable]');
+    cb.addEventListener('change', () => {
+      RW.Audio.resume();
+      RW.Audio.setEnabled(cb.checked);
+    });
+    const sel = w.body.querySelector('[data-scheme]');
+    sel.addEventListener('change', () => {
+      RW.Audio.setScheme && RW.Audio.setScheme(sel.value);
+      try { sessionStorage.setItem('rw93_sound_scheme', sel.value); } catch (e) {}
+    });
+    w.body.querySelector('[data-test]').addEventListener('click', () => {
+      RW.Audio.resume(); RW.Audio.ding();
+    });
+    w.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(w.id));
+  }
+
+  function openDateTimeCP() {
+    const html =
+      '<div class="dialog-body">' +
+        '<p><b>Date/Time Properties</b></p>' +
+        '<p>Current system date and time:</p>' +
+        '<p class="dt-display" data-dt style="font-family:Courier New,monospace;font-size:16px;background:#fff;padding:6px;border:2px inset #c0c0c0;text-align:center"></p>' +
+      '</div>' +
+      '<div class="dialog-buttons"><button data-close>OK</button></div>';
+    const w = RW.WM.open({
+      title: 'Date/Time Properties', icon: clockCpIcon(),
+      width: 360, height: 220, resizable: false, contentHTML: html
+    });
+    const out = w.body.querySelector('[data-dt]');
+    function tick() {
+      const d = new Date();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      let h = d.getHours();
+      const min = String(d.getMinutes()).padStart(2, '0');
+      const sec = String(d.getSeconds()).padStart(2, '0');
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12; if (h === 0) h = 12;
+      out.textContent = mm + '/' + dd + '/' + yyyy + '  ' + h + ':' + min + ':' + sec + ' ' + ampm;
+    }
+    tick();
+    const id = setInterval(tick, 1000);
+    const prevClose = w.onClose;
+    w.onClose = function () { clearInterval(id); if (prevClose) prevClose(); };
+    w.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(w.id));
+  }
+
+  function openMouseCP() {
+    const speeds = ['Real Slow','Slow','Just Right','Fast','Sonic'];
+    let html =
+      '<div class="dialog-body">' +
+        '<p><b>Mouse Properties</b></p>' +
+        '<p>Pointer speed:</p>';
+    speeds.forEach((s, i) => {
+      html += '<label class="mouse-speed-row"><input type="radio" name="ms" value="' + i + '" ' +
+        (i === 2 ? 'checked' : '') + ' data-speed' + (i === 4 ? ' title="Not implemented. Try not to be sad."' : '') + '> ' +
+        '<span' + (i === 4 ? ' title="Not implemented. Try not to be sad."' : '') + '>' + s + '</span></label>';
+    });
+    html += '</div><div class="dialog-buttons"><button data-close>OK</button></div>';
+    const w = RW.WM.open({
+      title: 'Mouse Properties', icon: mouseCpIcon(),
+      width: 360, height: 280, resizable: false, contentHTML: html
+    });
+    w.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(w.id));
+  }
+
+  function openAddRemoveCP() {
+    const rows = [
+      ['Sycophancy.exe', 'incompatible with the work'],
+      ['QuickFix.exe',   'no such thing'],
+      ['Burnout.dll',    'opted out']
+    ];
+    let html =
+      '<div class="dialog-body">' +
+        '<p><b>Add/Remove Programs Properties</b></p>' +
+        '<p>Software you cannot install on this system:</p>' +
+        '<div class="arp-list">' +
+          rows.map(r => '<div class="arp-row"><span class="arp-name">' + RW.WM.escapeHtml(r[0]) +
+            '</span><span class="arp-reason">Reason: ' + RW.WM.escapeHtml(r[1]) + '</span></div>').join('') +
+        '</div>' +
+      '</div>' +
+      '<div class="dialog-buttons"><button data-close>OK</button></div>';
+    const w = RW.WM.open({
+      title: 'Add/Remove Programs Properties', icon: arpCpIcon(),
+      width: 420, height: 280, resizable: false, contentHTML: html
+    });
+    w.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(w.id));
   }
 
   function openRecycle() {
     if (RW.WM.get('recycle-bin')) { RW.WM.bringToFront('recycle-bin'); return; }
-    const html =
-      '<div class="dialog-body">' +
-      '<p><b>Recycle Bin - 1 item</b></p>' +
-      '<p style="margin:8px 0">Found: <b>doubt.tmp</b></p>' +
-      '<p style="font-size:11px;color:#444">Last modified: every project. Original location: between takes.</p>' +
-      '<p style="margin-top:12px">Empty Recycle Bin?</p>' +
+    const rows = [
+      { name: 'Bad ideas',                              size: '3.4 MB',
+        restore: 'Restored. They will return on their own anyway.' },
+      { name: 'Notes from a 2009 student film',         size: '1.1 MB',
+        restore: 'Restored. We were so close to something.' },
+      { name: 'the first draft',                        size: '8.7 GB',
+        restore: 'Restored. The first draft was the lesson, not the film.' }
+    ];
+    const wrap = document.createElement('div');
+    wrap.className = 'recycle-body';
+    wrap.innerHTML =
+      '<div class="recycle-toolbar">' +
+        '<button class="mm-btn" data-empty>Empty Recycle Bin</button>' +
+        '<button class="mm-btn" data-close>Close</button>' +
       '</div>' +
-      '<div class="dialog-buttons">' +
-      '<button data-yes>Yes, empty it</button>' +
-      '<button data-close>No, keep doubting</button>' +
-      '</div>';
+      '<div class="recycle-list">' +
+        '<div class="recycle-row recycle-head"><span class="rr-name">Name</span><span class="rr-size">Size</span></div>' +
+        rows.map((r, i) => '<div class="recycle-row" data-idx="' + i + '">' +
+          '<span class="rr-icon"><svg viewBox="0 0 32 32" width="20" height="20"><path d="M6 2h16l6 6v22H6z" fill="#fff" stroke="#000"/></svg></span>' +
+          '<span class="rr-name">' + RW.WM.escapeHtml(r.name) + '</span>' +
+          '<span class="rr-size">' + RW.WM.escapeHtml(r.size) + '</span>' +
+        '</div>').join('') +
+      '</div>' +
+      '<div class="status-bar"><div class="sb-cell">' + rows.length + ' object(s)</div><div class="sb-cell" style="margin-left:auto">Recycle Bin</div></div>';
     const w = RW.WM.open({
       id: 'recycle-bin', title: 'Recycle Bin', icon: ICONS.recycle,
-      width: 360, height: 220, contentHTML: html
+      width: 460, height: 320, contentNode: wrap
     });
-    w.body.querySelector('[data-yes]').addEventListener('click', () => {
-      w.body.innerHTML = '<div class="dialog-body"><p>Doubt deleted. Confidence restored.</p><p style="font-size:11px;color:#444">Until tomorrow.</p></div><div class="dialog-buttons"><button data-close>OK</button></div>';
-      w.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close('recycle-bin'));
+    w.body.style.padding = '0';
+
+    function info(title, body) {
+      const html = '<div class="dialog-body"><p>' + RW.WM.escapeHtml(body) + '</p></div>' +
+        '<div class="dialog-buttons"><button data-close>OK</button></div>';
+      const aw = RW.WM.open({
+        title: title, icon: ICONS.recycle,
+        width: 380, height: 160, resizable: false, contentHTML: html
+      });
+      aw.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(aw.id));
+    }
+
+    wrap.querySelectorAll('.recycle-row[data-idx]').forEach(row => {
+      const idx = parseInt(row.dataset.idx, 10);
+      row.addEventListener('click', () => {
+        wrap.querySelectorAll('.recycle-row.selected').forEach(x => x.classList.remove('selected'));
+        row.classList.add('selected');
+      });
+      row.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        RW.ContextMenu.show(e.clientX, e.clientY, [
+          { label: 'Restore', action: () => info('Restore', rows[idx].restore) },
+          { label: 'Delete',  action: () => info('Delete', 'Deleted. Some things should stay deleted.') }
+        ]);
+      });
+    });
+    wrap.querySelector('[data-empty]').addEventListener('click', () => {
+      info('Recycle Bin', 'Recycle Bin emptied. The work continues.');
       if (RW.Audio) RW.Audio.ding();
     });
-    w.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close('recycle-bin'));
+    wrap.querySelector('[data-close]').addEventListener('click', () => RW.WM.close('recycle-bin'));
   }
 
   function hardDriveIcon() {

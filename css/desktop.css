@@ -498,3 +498,45 @@
   text-align: center;
   font-style: italic;
 }
+
+/* Drive A critical error */
+.mc-drive-a-error {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.mc-drive-a-error .critical-icon { flex: 0 0 36px; }
+.mc-drive-a-error .critical-msg p { margin: 2px 0; }
+
+/* Recycle Bin v4 */
+.recycle-body { display: flex; flex-direction: column; height: 100%; background: #c0c0c0; }
+.recycle-toolbar { display: flex; gap: 6px; padding: 6px 8px; border-bottom: 1px solid #fff; box-shadow: inset 0 -1px 0 #808080; }
+.recycle-list { flex: 1; background: #fff; margin: 6px 8px; border: 2px solid; border-color: #808080 #fff #fff #808080; overflow-y: auto; font-family: 'W95FA','Tahoma',sans-serif; font-size: 11px; }
+.recycle-row { display: grid; grid-template-columns: 28px 1fr 100px; align-items: center; padding: 2px 6px; cursor: default; }
+.recycle-row.recycle-head { background: #dfdfdf; font-weight: bold; border-bottom: 1px solid #808080; grid-template-columns: 1fr 100px; padding-left: 6px; }
+.recycle-row.recycle-head .rr-name { padding-left: 0; }
+.recycle-row.selected { background: var(--w95-navy); color: #fff; }
+.rr-icon svg { display: block; }
+.rr-size { text-align: right; }
+
+/* First movie player */
+.fm-body { display: flex; flex-direction: column; height: 100%; background: #c0c0c0; }
+.fm-titlebar-extra { display: none; }
+.fm-screen { flex: 1; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; margin: 8px; border: 2px solid; border-color: #808080 #fff #fff #808080; overflow: hidden; }
+.fm-line { font-family: 'Times New Roman', Times, serif; font-size: 26px; letter-spacing: 0.15em; text-align: center; padding: 12px; opacity: 0; transition: opacity 0.4s linear; color: #fff; }
+.fm-line.show { opacity: 1; }
+.fm-controls { display: flex; align-items: center; gap: 8px; padding: 6px 8px; }
+.fm-btn { background: #c0c0c0; border: 2px solid; border-color: #fff #404040 #404040 #fff; padding: 3px 12px; font-family: 'W95FA','Tahoma',sans-serif; font-size: 11px; cursor: default; }
+.fm-btn:active { border-color: #404040 #fff #fff #404040; }
+.fm-time { font-family: 'Courier New', monospace; font-size: 12px; padding: 2px 6px; background: #000; color: #0f0; border: 2px solid; border-color: #404040 #fff #fff #404040; }
+.fm-info { padding: 8px 12px; background: #c0c0c0; font-family: 'W95FA','Tahoma',sans-serif; font-size: 11px; border-top: 1px solid #808080; }
+
+/* Mouse properties */
+.mouse-speed-row { display: block; padding: 3px 0; }
+
+/* Add/Remove Programs */
+.arp-list { background: #fff; border: 2px solid; border-color: #808080 #fff #fff #808080; max-height: 130px; overflow-y: auto; padding: 4px 6px; }
+.arp-row { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; border-bottom: 1px dotted #808080; }
+.arp-row:last-child { border-bottom: 0; }
+.arp-name { font-weight: bold; }
+.arp-reason { color: #444; font-size: 11px; }
