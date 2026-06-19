@@ -278,7 +278,7 @@
           return;
         }
       }
-      // No legal foundation — roll back
+      // No legal foundation, roll back
       state.history.pop();
     }
 
@@ -371,7 +371,7 @@
           return;
         }
       }
-      // Illegal — snap back (just re-render)
+      // Illegal, snap back (just re-render)
       render();
     }
 

@@ -86,7 +86,7 @@
         '<button class="ie-toolbtn"><span class="ie-tb-arr">&rarr;</span><span>Forward</span></button>' +
         '<button class="ie-toolbtn">&#10006; Stop</button>' +
         '<button class="ie-toolbtn">&#x21BA; Refresh</button>' +
-        '<button class="ie-toolbtn">&#127968; Home</button>' +
+        '<button class="ie-toolbtn">Home</button>' +
         '<div class="ie-tb-sep"></div>' +
         '<button class="ie-toolbtn">Search</button>' +
         '<button class="ie-toolbtn">Favorites</button>' +
