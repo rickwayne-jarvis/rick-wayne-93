@@ -396,6 +396,7 @@
 
     // ===== Win animation =====
     function startWinAnimation() {
+      if (RW.Easter && RW.Easter.markSolitaireWin) RW.Easter.markSolitaireWin();
       const winLayer = wrap.querySelector('.sol-win');
       const canvas = wrap.querySelector('#sol-win-canvas');
       const rect = felt.getBoundingClientRect();

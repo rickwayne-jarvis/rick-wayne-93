@@ -88,6 +88,8 @@
         { sep: true },
         { label: 'Refresh',          action: () => { if (RW.Audio) RW.Audio.click(); } },
         { sep: true },
+        { label: 'Send Rick a postcard', action: () => RW.MovieMaker && RW.MovieMaker.open() },
+        { sep: true },
         { label: 'Paste',         disabled: true },
         { label: 'Paste Shortcut',disabled: true },
         { sep: true },

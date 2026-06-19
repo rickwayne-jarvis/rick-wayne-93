@@ -540,3 +540,81 @@
 .arp-row:last-child { border-bottom: 0; }
 .arp-name { font-weight: bold; }
 .arp-reason { color: #444; font-size: 11px; }
+
+/* Toast */
+.rw-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 50px;
+  z-index: 9500;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #404040 #404040 #fff;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.25);
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+  min-width: 220px;
+  max-width: 320px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.rw-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.rw-toast .rw-toast-title {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  font-weight: bold;
+  padding: 2px 6px;
+}
+.rw-toast .rw-toast-body { padding: 8px 10px; }
+
+/* 1989 dialog */
+.born-1989 { background: #0000aa; color: #fff; padding: 16px; font-family: 'Courier New', monospace; }
+.born-1989 .bsod-style-bar { background: #fff; color: #0000aa; display: inline-block; padding: 0 8px; font-weight: bold; margin-bottom: 8px; }
+.born-1989 p { margin: 6px 0; }
+
+/* Solitaire Rick card overlay */
+.sol-rick-card {
+  position: fixed;
+  inset: 0;
+  z-index: 9100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4);
+  cursor: pointer;
+}
+.sol-rick-card .src-card {
+  position: relative;
+  width: 220px;
+  height: 320px;
+  background: #fff;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Times New Roman', Times, serif;
+  color: #000;
+  animation: src-pop 0.5s ease;
+}
+@keyframes src-pop {
+  from { transform: scale(0.6) rotate(-8deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0); opacity: 1; }
+}
+.sol-rick-card .src-corner {
+  position: absolute;
+  font-size: 18px;
+  text-align: center;
+  line-height: 1;
+}
+.sol-rick-card .src-corner.tl { top: 8px; left: 8px; }
+.sol-rick-card .src-corner.br { bottom: 8px; right: 8px; transform: rotate(180deg); }
+.sol-rick-card .src-name { font-size: 22px; font-weight: bold; letter-spacing: 0.06em; }
+.sol-rick-card .src-role { font-size: 13px; letter-spacing: 0.15em; color: #444; margin-top: 4px; }

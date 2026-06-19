@@ -322,6 +322,7 @@
       updateLCDs();
       setSmile('8)');
       if (RW.Audio) RW.Audio.minesweeperWin();
+      if (RW.Easter && RW.Easter.markMinesweeperWin) RW.Easter.markMinesweeperWin();
     }
   }
 
