@@ -44,16 +44,18 @@
   function startBoot(skipChime) {
     // Stage 1: text scroll
     const lines = [
-      'Award BIOS v4.51PG',
-      'Copyright (C) 1984-1993 Award Software, Inc.',
+      'RICK WAYNE BIOS v4.51',
+      'Copyright (C) 1989-2026 Rick Wayne',
       '',
-      'RICK WAYNE BIOS - DIRECTOR.SYS',
-      'CPU: Rick Wayne @ Brooklyn, NY',
-      'Memory Test:  640K OK',
-      'Detecting IDE drives ... Done',
+      'MEMORY OK... 32 MB FREE',
+      'DETECTING DREAMS... FOUND',
+      'LOADING NOSTALGIA.SYS',
+      'INITIALIZING IMAGINATION...',
+      'MOUNTING CAMERA.SYS',
+      'READING REELS FROM DISK...',
       '',
       'Starting MS-DOS...',
-      'C:\\> WIN',
+      "C:\\\\> WIN",
       ''
     ];
     let i = 0;
