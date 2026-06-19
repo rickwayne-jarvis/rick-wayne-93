@@ -20,6 +20,7 @@
     const w = windows[id];
     if (!w) return;
     zCounter++;
+    if (zCounter > 8999) zCounter = 8999;
     w.el.style.zIndex = zCounter;
     // mark all inactive
     Object.values(windows).forEach(x => {
@@ -27,7 +28,10 @@
       const tb = x.task; if (tb) tb.classList.remove('active');
     });
     w.el.classList.remove('inactive');
-    if (w.task) w.task.classList.add('active');
+    if (w.task) {
+      w.task.classList.add('active');
+      w.task.classList.remove('minimized');
+    }
     activeId = id;
   }
 
@@ -51,11 +55,15 @@
     if (w.minimized) {
       w.el.style.display = '';
       w.minimized = false;
+      if (w.task) w.task.classList.remove('minimized');
       bringToFront(id);
     } else {
       w.el.style.display = 'none';
       w.minimized = true;
-      if (w.task) w.task.classList.remove('active');
+      if (w.task) {
+        w.task.classList.remove('active');
+        w.task.classList.add('minimized');
+      }
       activeId = null;
     }
   }

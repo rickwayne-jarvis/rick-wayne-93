@@ -83,6 +83,7 @@
 /* TASKBAR */
 .taskbar {
   height: 28px;
+  width: 100%;
   background: var(--w95-gray);
   border-top: 2px solid var(--w95-white);
   display: flex;
@@ -90,7 +91,7 @@
   padding: 2px;
   gap: 3px;
   position: relative;
-  z-index: 1000;
+  z-index: 9000;
 }
 
 .start-btn {
@@ -163,26 +164,38 @@
   background: repeating-linear-gradient(45deg, #c0c0c0 0 2px, #b0b0b0 2px 4px);
   padding-top: 1px;
 }
+.task-btn.minimized {
+  border-color: var(--w95-gray-dark) var(--w95-white) var(--w95-white) var(--w95-gray-dark);
+  padding-top: 1px;
+}
 
 .system-tray {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0;
   height: 22px;
-  padding: 0 6px;
+  padding: 0;
   border: 2px solid;
   border-color: var(--w95-gray-darker) var(--w95-white) var(--w95-white) var(--w95-gray-darker);
   margin-right: 2px;
+}
+.system-tray > * {
+  padding: 0 6px;
+}
+.system-tray > *:not(:first-child) {
+  border-left: 1px solid var(--w95-gray-dark);
+  box-shadow: -1px 0 0 var(--w95-white) inset;
 }
 
 .tray-icon {
   background: transparent;
   border: 0;
-  padding: 0;
   cursor: default;
   display: flex;
   align-items: center;
-  width: 18px; height: 18px;
+  justify-content: center;
+  height: 18px;
+  min-width: 18px;
 }
 
 .clock {
@@ -190,6 +203,7 @@
   font-size: 11px;
   min-width: 56px;
   text-align: center;
+  padding-right: 8px;
 }
 
 /* Generic resize handle */
