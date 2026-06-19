@@ -103,25 +103,45 @@
 
   function openAbout() {
     if (RW.WM.get('about-me')) { RW.WM.bringToFront('about-me'); return; }
-    const bio = RW.bio;
-    const html = '<div class="notepad-body" style="height:100%"><textarea readonly>' +
-      'RICK WAYNE - DIRECTOR.SYS\r\n' +
-      '==========================\r\n\r\n' +
-      bio.name + '\r\n' +
-      bio.tagline + '\r\n' +
-      bio.location + '\r\n\r\n' +
-      bio.headline + '\r\n\r\n' +
-      bio.long + '\r\n\r\n' +
-      'Contact: ' + bio.email + '\r\n' +
-      'Reel:    ' + bio.reel + '\r\n' +
-      'IG:      ' + bio.instagram + '\r\n\r\n' +
-      '(c) 1993-2026 Rick Wayne. All rights reserved.\r\n' +
-      '</textarea></div>';
+    const html = '\n<div class="notepad-doc">\n' +
+      '  <pre class="np-pre">RICK WAYNE - DIRECTOR.SYS\n' +
+      '==========================\n' +
+      '</pre>\n' +
+      '  <pre class="np-pre">Rick Wayne\n' +
+      'Director. Creative Director. Writer.\n' +
+      'Brooklyn, NY\n' +
+      '</pre>\n' +
+      '  <pre class="np-pre">I was born in 1989. That\'s why you\'re seeing this hidden Windows theme. My career started here, on a beige Windows 95 machine, making home videos in Windows Movie Maker in 2003. I never stopped. I hone the craft every day.</pre>\n\n' +
+      '  <pre class="np-pre">FIRST SHOOT\n' +
+      '-----------</pre>\n' +
+      '  <div class="first-shoot-photo">\n' +
+      '    <div class="paint-chrome">\n' +
+      '      <div class="paint-titlebar">\n' +
+      '        <span class="paint-title">Untitled.bmp - Paint</span>\n' +
+      '        <span class="paint-ctrls"><button>_</button><button>[]</button><button>X</button></span>\n' +
+      '      </div>\n' +
+      '      <div class="paint-menubar">File  Edit  View  Image  Options  Help</div>\n' +
+      '      <div class="paint-canvas">\n' +
+      '        <div class="scanlines"></div>\n' +
+      '        <div class="vhs-noise"></div>\n' +
+      '        <img class="first-shoot-img" src="images/1%20(80).JPG" alt="Rick\'s first shoot">\n' +
+      '      </div>\n' +
+      '    </div>\n' +
+      '    <p class="np-pre photo-caption">This is the first time I ever picked up a camera. Me and my friends made a movie called The Matrix. We didn\'t know what we were doing. We didn\'t care. I haven\'t stopped since.</p>\n' +
+      '  </div>\n\n' +
+      '  <pre class="np-pre">I BELIEVE\n' +
+      '---------\n' +
+      'Great commercial work is great human work first. Strategy is a craft. Directing is a craft. Casting is a craft. Editing is a craft. The brief is a starting point, not a ceiling. The best films feel inevitable. They never are.</pre>\n\n' +
+      '  <pre class="np-pre">Contact: rick_wayne@me.com\n' +
+      'Reel:    https://rickwayne.cc\n' +
+      'IG:      https://instagram.com/rick_wayne</pre>\n\n' +
+      '  <pre class="np-pre">(c) 1993-2026 Rick Wayne. All rights reserved.</pre>\n' +
+      '</div>\n';
     RW.WM.open({
       id: 'about-me',
       title: 'About Me.txt - Notepad',
       icon: ICONS.text,
-      width: 520, height: 380,
+      width: 620, height: 540,
       contentHTML: html
     });
   }
