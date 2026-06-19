@@ -27,6 +27,9 @@
   image-rendering: pixelated;
 }
 
+/* The hidden attribute must beat any display: flex/grid below. */
+[hidden] { display: none !important; }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -130,11 +133,17 @@ a { color: var(--navy); }
 .desktop-icons {
   list-style: none;
   margin: 0;
-  padding: 14px 0 0 14px;
+  padding: 14px 0 14px 14px;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
   gap: 8px;
-  max-width: 110px;
+  height: calc(100% - 14px);
+  pointer-events: none;        /* let clicks fall through gaps */
+}
+.desktop-icon {
+  pointer-events: auto;        /* but icons themselves are clickable */
 }
 .desktop-icon {
   width: 86px;

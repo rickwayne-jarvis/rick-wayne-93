@@ -34,12 +34,37 @@
     const text = document.getElementById('boot-text');
     const prompt = document.getElementById('boot-prompt');
     let i = 0, j = 0;
+    let advanced = false;
     text.textContent = '';
 
+    const finish = () => {
+      if (advanced) return;
+      advanced = true;
+      document.removeEventListener('keydown', onInput);
+      screen.removeEventListener('click', onInput);
+      screen.style.transition = 'opacity 320ms';
+      screen.style.opacity = '0';
+      if (window.Sound) window.Sound.boot();
+      setTimeout(() => {
+        if (screen.parentNode) screen.remove();
+        const dt = document.getElementById('desktop');
+        if (dt) dt.hidden = false;
+        startClock();
+      }, 360);
+    };
+
+    function fillRemaining() {
+      const remaining = bootLines.slice(i);
+      const head = remaining[0] ? remaining[0].slice(j) + '\n' : '';
+      text.textContent += head + remaining.slice(1).join('\n');
+      i = bootLines.length;
+      prompt.hidden = false;
+    }
+
     function typeLine() {
+      if (advanced) return;
       if (i >= bootLines.length) {
         prompt.hidden = false;
-        attachAdvance();
         return;
       }
       const line = bootLines[i];
@@ -50,28 +75,19 @@
       } else {
         text.textContent += '\n';
         i++; j = 0;
-        // Pause after blank lines and headline-ish ones
         const pause = bootLines[i - 1] === "" ? 90 : 30;
         setTimeout(typeLine, pause);
       }
     }
 
-    function attachAdvance() {
-      const adv = () => {
-        document.removeEventListener('keydown', adv);
-        screen.removeEventListener('click', adv);
-        screen.style.transition = 'opacity 320ms';
-        screen.style.opacity = '0';
-        if (window.Sound) window.Sound.boot();
-        setTimeout(() => {
-          screen.remove();
-          document.getElementById('desktop').hidden = false;
-          startClock();
-        }, 360);
-      };
-      document.addEventListener('keydown', adv);
-      screen.addEventListener('click', adv);
-    }
+    // Any input either flushes (if typing not done) or finishes.
+    const onInput = () => {
+      if (advanced) return;
+      if (prompt.hidden) fillRemaining();
+      else finish();
+    };
+    document.addEventListener('keydown', onInput);
+    screen.addEventListener('click', onInput);
 
     typeLine();
   }
