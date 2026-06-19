@@ -118,6 +118,10 @@
       case 'open-solitaire':    RW.Solitaire.open(); break;
       case 'open-calculator':   RW.Calculator.open(); break;
       case 'open-paint':        RW.Paint.open(); break;
+      case 'open-moviemaker':   RW.MovieMaker.open(); break;
+      case 'open-music':        RW.Music.open(); break;
+      case 'open-ie':           RW.IE.open(); break;
+      case 'open-control-panel': RW.Desktop.openControlPanel && RW.Desktop.openControlPanel(); break;
       case 'open-about':        RW.Desktop.openAbout(); break;
       case 'open-contact':      RW.Desktop.openContact(); break;
       case 'open-display-properties': RW.Desktop.openDisplayProperties(); break;
