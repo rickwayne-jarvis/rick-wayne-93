@@ -55,7 +55,7 @@
       'READING REELS FROM DISK...',
       '',
       'Starting MS-DOS...',
-      "C:\\\\> WIN",
+      "C:\\> WIN",
       ''
     ];
     let i = 0;
