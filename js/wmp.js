@@ -161,11 +161,11 @@
       }
     }
     window.addEventListener('message', onVimeoMessage);
-    w.onCloseRaw = w.onClose;
-    w.onClose = function () { window.removeEventListener('message', onVimeoMessage); if (w.onCloseRaw) w.onCloseRaw(); };
-    // re-attach
-    const wRef = RW.WM.get(winId);
-    if (wRef) wRef.onClose = w.onClose;
+    const prevClose = w.onClose;
+    w.onClose = function () {
+      window.removeEventListener('message', onVimeoMessage);
+      if (prevClose) prevClose();
+    };
 
     // Wire transport buttons
     wrap.querySelectorAll('[data-t]').forEach(btn => {

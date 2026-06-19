@@ -1,0 +1,100 @@
+/* startmenu.css - Start menu */
+
+.start-menu {
+  position: absolute;
+  left: 2px;
+  bottom: 30px;
+  display: flex;
+  background: var(--w95-gray);
+  border: 2px solid;
+  border-color: var(--w95-white) var(--w95-gray-darker) var(--w95-gray-darker) var(--w95-white);
+  box-shadow: 1px 1px 0 #000;
+  z-index: 5000;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 12px;
+  min-width: 200px;
+}
+
+.start-side {
+  width: 32px;
+  background: var(--w95-gray-dark);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 12px 0;
+}
+.start-side-text {
+  transform: rotate(-90deg);
+  white-space: nowrap;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: 2px;
+}
+.start-side-text span {
+  color: var(--w95-white);
+}
+
+.start-items {
+  list-style: none;
+  margin: 0;
+  padding: 2px;
+  min-width: 200px;
+}
+.start-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 22px 4px 4px;
+  cursor: default;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 12px;
+  position: relative;
+}
+.start-item .si-ico {
+  display: inline-block;
+  width: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-right: 4px;
+  font-size: 11px;
+  color: var(--w95-navy);
+}
+.start-item .si-label { flex: 1; }
+.start-item .si-arrow {
+  font-size: 10px;
+  margin-left: 6px;
+}
+.start-item:hover, .start-item.hover {
+  background: var(--w95-navy);
+  color: #fff;
+}
+.start-item:hover .si-ico, .start-item.hover .si-ico { color: #fff; }
+.start-item.disabled { color: var(--w95-gray-dark); }
+.start-item.disabled:hover { background: transparent; color: var(--w95-gray-dark); }
+
+.sm-sep {
+  list-style: none;
+  height: 0;
+  margin: 3px 4px;
+  border-top: 1px solid var(--w95-gray-dark);
+  border-bottom: 1px solid var(--w95-white);
+}
+
+.sub-menu {
+  position: absolute;
+  list-style: none;
+  margin: 0; padding: 2px;
+  background: var(--w95-gray);
+  border: 2px solid;
+  border-color: var(--w95-white) var(--w95-gray-darker) var(--w95-gray-darker) var(--w95-white);
+  min-width: 180px;
+  left: 100%;
+  top: -4px;
+  display: none;
+}
+.start-item.has-sub.hover > .sub-menu,
+.start-item.has-sub:hover > .sub-menu {
+  display: block;
+}
