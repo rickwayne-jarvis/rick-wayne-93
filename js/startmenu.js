@@ -71,16 +71,17 @@
   function init() {
     const b = btn();
     b.addEventListener('click', (e) => {
-      // detect logo clicks vs full button
-      // Always toggle. Also count.
-      logoClicks++;
-      clearTimeout(logoTimer);
-      logoTimer = setTimeout(() => { logoClicks = 0; }, 2500);
-      if (logoClicks >= 7) {
-        logoClicks = 0;
-        openAboutWindows();
-        closeMenu();
-        return;
+      const onLogo = !!e.target.closest('.start-logo');
+      if (onLogo) {
+        logoClicks++;
+        clearTimeout(logoTimer);
+        logoTimer = setTimeout(() => { logoClicks = 0; }, 3000);
+        if (logoClicks >= 7) {
+          logoClicks = 0;
+          openAboutWindows();
+          closeMenu();
+          return;
+        }
       }
       toggle();
     });

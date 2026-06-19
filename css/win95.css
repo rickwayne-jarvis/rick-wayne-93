@@ -66,6 +66,24 @@ button { font-family: inherit; }
 
 .title-bar-text {
   letter-spacing: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.title-bar-text .tb-icon svg {
+  width: 14px; height: 14px;
+  vertical-align: middle;
+}
+.task-btn .tb-icon svg {
+  width: 14px; height: 14px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.task-btn .tb-icon {
+  display: inline-flex; align-items: center;
+}
+.title-bar-text .tb-icon {
+  display: inline-flex; align-items: center;
 }
 
 /* base window outline */
