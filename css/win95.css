@@ -1,0 +1,281 @@
+/* win95.css - base palette and overrides on top of 98.css */
+
+:root {
+  --w95-gray:        #c0c0c0;
+  --w95-gray-dark:   #808080;
+  --w95-gray-darker: #404040;
+  --w95-gray-light:  #dfdfdf;
+  --w95-gray-lite:   #efefef;
+  --w95-black:       #000000;
+  --w95-white:       #ffffff;
+  --w95-teal:        #008080;
+  --w95-navy:        #000080;
+  --w95-blue:        #0a246a;
+  --w95-blue-light:  #a6caf0;
+  --w95-titlebar-1:  #0a246a;
+  --w95-titlebar-2:  #a6caf0;
+  --w95-inactive-1:  #808080;
+  --w95-inactive-2:  #c0c0c0;
+  --w95-red:         #ff0000;
+  --w95-lcd-bg:      #000000;
+  --w95-lcd-on:      #ff0000;
+  --w95-lcd-off:     #380000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background: var(--w95-teal);
+  color: var(--w95-black);
+  font-family: 'W95FA', 'Microsoft Sans Serif', 'Tahoma', 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  overflow: hidden;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  letter-spacing: 0;
+}
+
+[hidden] { display: none !important; }
+
+button { font-family: inherit; }
+
+/* Active titlebar gradient on 98.css windows */
+.window > .title-bar {
+  background: linear-gradient(90deg, var(--w95-titlebar-1) 0%, var(--w95-titlebar-2) 100%);
+  font-weight: bold;
+  font-family: 'W95FA', 'Microsoft Sans Serif', 'Tahoma', sans-serif;
+  padding: 2px 2px 2px 4px;
+}
+.window.inactive > .title-bar {
+  background: linear-gradient(90deg, var(--w95-inactive-1) 0%, var(--w95-inactive-2) 100%);
+  color: var(--w95-gray-light);
+}
+.window.inactive .title-bar-controls button {
+  /* still visible */
+}
+
+.title-bar-text {
+  letter-spacing: 0;
+}
+
+/* base window outline */
+.window {
+  background: var(--w95-gray);
+  color: var(--w95-black);
+  border: 2px solid;
+  border-color: var(--w95-white) var(--w95-gray-darker) var(--w95-gray-darker) var(--w95-white);
+  box-shadow: inset -1px -1px 0 var(--w95-gray-dark), inset 1px 1px 0 var(--w95-gray-light);
+  padding: 2px;
+  position: absolute;
+}
+
+.window-body {
+  background: var(--w95-gray);
+}
+
+/* Mobile fallback */
+.mobile-fallback {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: var(--w95-teal);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.mobile-card { position: relative; max-width: 340px; width: 100%; }
+@media (max-width: 720px), (max-height: 480px) {
+  .mobile-fallback { display: flex; }
+  .desktop, .boot-screen { display: none !important; }
+}
+
+/* Boot screen */
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #000;
+  color: #c8c8c8;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+}
+.boot-stage { position: absolute; inset: 0; padding: 40px; }
+.boot-stage-1 {
+  color: #c8c8c8;
+  background: #000;
+}
+.boot-text { white-space: pre-wrap; margin: 0; font-family: 'Courier New', monospace; }
+
+.boot-stage-2 {
+  background: linear-gradient(180deg, #0a246a 0%, #1f4ea1 60%, #4a7dc8 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.boot-banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60px;
+}
+.boot-clouds {
+  position: absolute;
+  inset: -120px -200px;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cloud {
+  position: absolute;
+  width: 240px;
+  height: 80px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+  filter: blur(20px);
+}
+.cloud-a { top: 10%;  left: 5%;  animation: drift 18s linear infinite; }
+.cloud-b { top: 55%;  left: 60%; animation: drift 24s linear infinite reverse; }
+.cloud-c { top: 75%;  left: 20%; animation: drift 30s linear infinite; }
+@keyframes drift {
+  from { transform: translateX(-40px); }
+  to   { transform: translateX(40px); }
+}
+
+.boot-flag {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 6px;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 16px;
+  transform: skewX(-12deg);
+}
+.bf-q { display: block; }
+.bf-q1 { background: #ff0000; }
+.bf-q2 { background: #00cc00; }
+.bf-q3 { background: #0066ff; }
+.bf-q4 { background: #ffcc00; }
+
+.boot-wordmark { text-align: center; }
+.boot-microsoft {
+  font-family: 'W95FA', 'Tahoma', sans-serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.boot-windows {
+  font-family: 'W95FA', 'Tahoma', sans-serif;
+  font-size: 56px;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.boot-windows span {
+  font-size: 56px;
+  margin-left: 14px;
+}
+
+.boot-progress-wrap {
+  width: 320px;
+  text-align: center;
+}
+.boot-loading {
+  font-family: 'W95FA', 'Tahoma', sans-serif;
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.boot-progress {
+  height: 14px;
+  background: #000;
+  border: 2px solid;
+  border-color: #404040 #fff #fff #404040;
+  padding: 1px;
+}
+.boot-progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #00aaff 0%, #0066cc 100%);
+  transition: width 0.2s linear;
+}
+.boot-skip {
+  position: absolute;
+  bottom: 16px;
+  right: 24px;
+  font-family: 'W95FA', 'Tahoma', sans-serif;
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* BSOD */
+.bsod {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: #0000aa;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  padding: 60px;
+  text-align: left;
+  line-height: 1.4;
+}
+.bsod-inner { max-width: 720px; margin: 0 auto; }
+.bsod-bar {
+  background: #fff;
+  color: #0000aa;
+  display: inline-block;
+  padding: 0 8px;
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+
+/* Shutdown screen */
+.shutdown-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 99997;
+  background: #000;
+  color: #ff7700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'W95FA', 'Tahoma', sans-serif;
+  font-size: 22px;
+  cursor: pointer;
+}
+.shutdown-inner { padding: 24px; }
+
+/* CRT shake easter egg */
+body.crt-shake .desktop {
+  animation: crt-shake 0.6s ease-in-out;
+  filter: hue-rotate(45deg) saturate(1.4);
+}
+@keyframes crt-shake {
+  0%, 100% { transform: translate(0,0); }
+  10% { transform: translate(-2px,1px); }
+  20% { transform: translate(2px,-1px); }
+  30% { transform: translate(-1px,-2px); }
+  40% { transform: translate(1px,2px); }
+  50% { transform: translate(-2px,0); }
+  60% { transform: translate(2px,1px); }
+  70% { transform: translate(-1px,2px); }
+  80% { transform: translate(1px,-2px); }
+  90% { transform: translate(-1px,0); }
+}
