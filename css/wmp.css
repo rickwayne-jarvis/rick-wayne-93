@@ -1,0 +1,192 @@
+/* wmp.css - Windows Media Player 6.4-ish chrome */
+
+.wmp-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  background: var(--w95-gray);
+}
+
+.wmp-body .menu-bar {
+  display: flex;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+  background: var(--w95-gray);
+  border-bottom: 1px solid var(--w95-gray-dark);
+  position: relative;
+  z-index: 5;
+}
+.wmp-body .menu-bar .mb-item {
+  padding: 2px 8px;
+  cursor: default;
+  position: relative;
+}
+.wmp-body .menu-bar .mb-item.open,
+.wmp-body .menu-bar .mb-item:hover {
+  background: var(--w95-navy);
+  color: #fff;
+}
+.wmp-body .menu-bar .mb-sub {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--w95-gray);
+  border: 2px solid;
+  border-color: var(--w95-white) var(--w95-gray-darker) var(--w95-gray-darker) var(--w95-white);
+  min-width: 140px;
+  padding: 2px;
+  display: none;
+  color: #000;
+}
+.wmp-body .menu-bar .mb-item.open .mb-sub { display: block; }
+.wmp-body .menu-bar .mb-sub div {
+  padding: 3px 12px;
+  cursor: default;
+}
+.wmp-body .menu-bar .mb-sub div:hover {
+  background: var(--w95-navy);
+  color: #fff;
+}
+.wmp-body .menu-bar .mb-sep { border-top: 1px solid var(--w95-gray-dark); border-bottom: 1px solid var(--w95-white); margin: 3px 2px; height: 0; padding: 0; }
+
+.wmp-main {
+  display: flex;
+  flex: 1;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+.wmp-video {
+  flex: 1;
+  background: #000;
+  position: relative;
+}
+.wmp-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
+}
+.wmp-video .wmp-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 14px;
+}
+
+.wmp-info {
+  width: 280px;
+  background: var(--w95-gray);
+  border-left: 2px solid var(--w95-gray-darker);
+  padding: 8px;
+  overflow: auto;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+  color: #000;
+}
+.wmp-info.hidden { display: none; }
+.wmp-info h3 { margin: 0 0 4px; font-size: 12px; }
+.wmp-info .meta { margin: 0 0 6px; color: #303030; }
+.wmp-info .meta b { color: #000; }
+.wmp-info .copy { margin: 6px 0; line-height: 1.4; }
+
+.wmp-scoreboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin: 8px 0;
+}
+.wmp-scoreboard .tile {
+  background: #fff;
+  border: 2px solid;
+  border-color: var(--w95-gray-darker) var(--w95-white) var(--w95-white) var(--w95-gray-darker);
+  padding: 4px;
+}
+.wmp-scoreboard .tile .val {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000080;
+}
+.wmp-scoreboard .tile .lbl {
+  font-size: 10px;
+  color: #404040;
+}
+
+.wmp-controls {
+  background: var(--w95-gray);
+  border-top: 2px solid var(--w95-white);
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wmp-transport {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.wmp-transport button {
+  width: 26px;
+  height: 22px;
+  background: var(--w95-gray);
+  border: 2px solid;
+  border-color: var(--w95-white) var(--w95-gray-darker) var(--w95-gray-darker) var(--w95-white);
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+  cursor: default;
+  padding: 0;
+}
+.wmp-transport button:active {
+  border-color: var(--w95-gray-darker) var(--w95-white) var(--w95-white) var(--w95-gray-darker);
+}
+.wmp-transport .gap { flex: 1; }
+.wmp-volume {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+}
+.wmp-volume input[type=range] {
+  width: 80px;
+}
+
+.wmp-seek {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+.wmp-seek input[type=range] {
+  flex: 1;
+}
+.wmp-seek .time { min-width: 72px; text-align: center; color: #000; }
+
+.wmp-status {
+  height: 18px;
+  background: var(--w95-gray);
+  border-top: 1px solid var(--w95-white);
+  padding: 0 6px;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+}
+.wmp-status .sb-cell {
+  border-left: 1px solid var(--w95-gray-darker);
+  border-right: 1px solid var(--w95-white);
+  padding: 0 8px;
+  height: 14px;
+  display: flex; align-items: center;
+}
+
+/* About WMP */
+.about-wmp { padding: 16px; }
+.about-wmp h2 { margin: 0 0 8px; font-family: 'W95FA','Tahoma',sans-serif; }
