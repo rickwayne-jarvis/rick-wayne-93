@@ -6,13 +6,12 @@ window.RW = {
     name: "Rick Wayne",
     tagline: "Director. Creative Director. Writer.",
     location: "Brooklyn, NY",
-    company: "Underscore Films",
     agency: "Brand Imagination Group",
-    headline: "Rick Wayne is a New York-based commercial and documentary director and founder of Underscore Films.",
+    headline: "Rick Wayne is a New York-based commercial and documentary director.",
     long: "Rick Wayne has been directing commercial and brand films for more than 15 years for some of the world's most beloved brands. His agency experience as Executive Creative Director on global campaigns makes him a sharper director on set: treatments that read like strategy decks, the authority to defend a vision in a room of stakeholders, and the ability to translate agency feedback into the next take. His career began in Chicago, expanded in Los Angeles, and he now resides in Brooklyn, NY.",
-    email: "rick@underscorefilms.com",
+    email: "rick_wayne@me.com",
     instagram: "https://instagram.com/rick_wayne",
-    vimeo: "https://vimeo.com/rickwayne"
+    reel: "https://rickwayne.cc"
   },
 
   projects: [
@@ -183,6 +182,6 @@ window.RW = {
     { outlet: "Voyage LA", domain: "voyagela.com", date: "", title: "Check Out Rick Wayne's Story", url: "https://voyagela.com/interview/check-rick-waynes-story/" },
     { outlet: "ShoutOut LA", domain: "shoutoutla.com", date: "", title: "Meet Rick Wayne: Film, TV and Commercial Director", url: "https://shoutoutla.com/meet-rick-wayne-film-tv-commercial-director/" },
     { outlet: "PR Newswire", domain: "prnewswire.com", date: "", title: "Everything the Light Touches Is Your Canvas, Sharpie x Mufasa", url: "https://www.prnewswire.com/news-releases/everything-the-light-touches-is-your-canvas-sharpie-celebrates-the-circle-of-creativity-with-disneys-mufasa-the-lion-kingin-theaters-now-302338461.html" },
-    { outlet: "IMDb", domain: "imdb.com", date: "", title: "Rick Wayne, Director, Underscore Films", url: "https://www.imdb.com/name/nm6271643/" }
+    { outlet: "IMDb", domain: "imdb.com", date: "", title: "Rick Wayne, Director", url: "https://www.imdb.com/name/nm6271643/" }
   ]
 };

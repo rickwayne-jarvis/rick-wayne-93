@@ -1,0 +1,164 @@
+/* solitaire.css - Klondike layout + card art */
+
+.sol-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--w95-gray);
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+}
+
+.sol-body .menu-bar {
+  display: flex;
+  background: var(--w95-gray);
+  border-bottom: 1px solid var(--w95-gray-dark);
+  position: relative;
+  z-index: 5;
+}
+.sol-body .menu-bar .mb-item { padding: 2px 8px; cursor: default; position: relative; }
+.sol-body .menu-bar .mb-item:hover, .sol-body .menu-bar .mb-item.open { background: var(--w95-navy); color: #fff; }
+.sol-body .menu-bar .mb-sub {
+  position: absolute; top: 100%; left: 0;
+  background: var(--w95-gray);
+  border: 2px solid;
+  border-color: var(--w95-white) var(--w95-gray-darker) var(--w95-gray-darker) var(--w95-white);
+  min-width: 140px; padding: 2px; display: none; color: #000; z-index: 50;
+}
+.sol-body .menu-bar .mb-item.open .mb-sub { display: block; }
+.sol-body .menu-bar .mb-sub div { padding: 3px 18px 3px 8px; cursor: default; }
+.sol-body .menu-bar .mb-sub div:hover { background: var(--w95-navy); color: #fff; }
+.sol-body .menu-bar .mb-sep { border-top: 1px solid var(--w95-gray-dark); border-bottom: 1px solid var(--w95-white); margin: 3px 2px; height: 0; padding: 0; }
+
+.sol-felt {
+  flex: 1;
+  background: #008000;
+  background-image: linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 6px);
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sol-top {
+  display: grid;
+  grid-template-columns: 60px 60px 30px 60px 60px 60px 60px;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.sol-tableau {
+  display: grid;
+  grid-template-columns: repeat(7, 60px);
+  gap: 10px;
+  align-items: start;
+  min-height: 320px;
+}
+.sol-pile {
+  width: 60px;
+  position: relative;
+}
+.sol-tab { min-height: 320px; }
+.sol-spacer { }
+
+.sol-empty {
+  width: 60px;
+  height: 84px;
+  border: 1px dashed rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.4);
+  font-size: 18px;
+}
+
+.sol-card {
+  width: 60px;
+  height: 84px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 4px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  user-select: none;
+  cursor: pointer;
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.35);
+  font-family: 'Times New Roman', serif;
+}
+.sol-card.face .cnr {
+  position: absolute;
+  font-size: 11px;
+  line-height: 1.0;
+  font-weight: bold;
+  text-align: center;
+}
+.sol-card.face .cnr.tl { top: 3px; left: 4px; }
+.sol-card.face .cnr.br { bottom: 3px; right: 4px; transform: rotate(180deg); }
+.sol-card.face .pip {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+.sol-card.face.red, .sol-card.face.red .pip, .sol-card.face.red .cnr { color: #c00000; }
+.sol-card.face:not(.red) { color: #000; }
+
+/* Card backs */
+.sol-card.back {
+  background:
+    repeating-linear-gradient(45deg, #1042a4 0 4px, #2860c8 4px 8px);
+  border: 2px solid #fff;
+  outline: 1px solid #000;
+}
+.sol-card.back-red {
+  background:
+    repeating-linear-gradient(45deg, #a40e0e 0 4px, #cc2e2e 4px 8px);
+}
+.sol-card.back-castle {
+  background:
+    radial-gradient(circle, #224 30%, #112 70%),
+    repeating-linear-gradient(0deg, #224 0 2px, #112 2px 4px);
+}
+
+.sol-drag-ghost {
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  width: 60px;
+  height: 84px;
+}
+.sol-drag-ghost .sol-card { box-shadow: 2px 2px 6px rgba(0,0,0,0.5); }
+
+.sol-win {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.0);
+  cursor: pointer;
+  z-index: 100;
+}
+.sol-win canvas {
+  width: 100%; height: 100%; display: block;
+}
+.sol-win-tip {
+  position: absolute;
+  top: 14px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--w95-gray);
+  border: 2px solid;
+  border-color: var(--w95-white) var(--w95-gray-darker) var(--w95-gray-darker) var(--w95-white);
+  padding: 4px 10px;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 12px;
+  color: #000;
+}
+
+.sol-deck-picker .sol-deck-grid {
+  display: flex; gap: 12px; padding: 8px 0;
+}
+.sol-deck-btn {
+  width: 60px; height: 84px;
+  border: 2px solid #fff; outline: 1px solid #000;
+  cursor: default;
+  padding: 0;
+}

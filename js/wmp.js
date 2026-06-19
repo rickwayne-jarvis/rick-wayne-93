@@ -229,7 +229,7 @@
     function openAbout() {
       const html = '<div class="about-wmp"><h2>Windows Media Player</h2>' +
         '<p>Version 6.4 (Rick Wayne edition)</p>' +
-        '<p>(c) 1996-2026 Underscore Films. Built on Vimeo postMessage and one extra cup of coffee.</p>' +
+        '<p>(c) 1996-2026 Rick Wayne. Built on postMessage and one extra cup of coffee.</p>' +
         '</div><div class="dialog-buttons"><button data-close>OK</button></div>';
       const aw = RW.WM.open({
         title: 'About Windows Media Player', icon: ICONS.video,

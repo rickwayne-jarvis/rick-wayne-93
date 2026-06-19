@@ -60,7 +60,7 @@
         { label: 'Send To', sub: [
           { label: 'Treatment Folder',  action: () => alert('Treatment saved. Not really.') },
           { label: 'Pitch Deck Drive',  action: () => alert('Pitched. Probably booked.') },
-          { label: 'Vimeo, Eventually', action: () => alert('Uploading. ETA: 4 hours.') }
+          { label: 'Reel, Eventually', action: () => alert('Uploading. ETA: 4 hours.') }
         ]},
         { sep: true },
         { label: 'Cut',   disabled: true },

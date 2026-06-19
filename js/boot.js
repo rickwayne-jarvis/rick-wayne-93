@@ -47,7 +47,7 @@
       'Award BIOS v4.51PG',
       'Copyright (C) 1984-1993 Award Software, Inc.',
       '',
-      'UNDERSCORE FILMS BIOS - DIRECTOR.SYS',
+      'RICK WAYNE BIOS - DIRECTOR.SYS',
       'CPU: Rick Wayne @ Brooklyn, NY',
       'Memory Test:  640K OK',
       'Detecting IDE drives ... Done',

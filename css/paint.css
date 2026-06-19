@@ -1,0 +1,197 @@
+/* paint.css - MS Paint chrome */
+
+.paint-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--w95-gray);
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+}
+
+/* Reuse menu bar styling */
+.paint-body .menu-bar {
+  display: flex;
+  background: var(--w95-gray);
+  border-bottom: 1px solid var(--w95-gray-dark);
+  position: relative;
+  z-index: 5;
+}
+.paint-body .menu-bar .mb-item {
+  padding: 2px 8px;
+  cursor: default;
+  position: relative;
+}
+.paint-body .menu-bar .mb-item:hover,
+.paint-body .menu-bar .mb-item.open {
+  background: var(--w95-navy);
+  color: #fff;
+}
+.paint-body .menu-bar .mb-sub {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--w95-gray);
+  border: 2px solid;
+  border-color: var(--w95-white) var(--w95-gray-darker) var(--w95-gray-darker) var(--w95-white);
+  min-width: 150px;
+  padding: 2px;
+  display: none;
+  color: #000;
+  z-index: 50;
+}
+.paint-body .menu-bar .mb-item.open .mb-sub { display: block; }
+.paint-body .menu-bar .mb-sub div {
+  padding: 3px 18px 3px 8px;
+  cursor: default;
+}
+.paint-body .menu-bar .mb-sub div:hover { background: var(--w95-navy); color: #fff; }
+.paint-body .menu-bar .mb-sep { border-top: 1px solid var(--w95-gray-dark); border-bottom: 1px solid var(--w95-white); margin: 3px 2px; height: 0; padding: 0; }
+
+.paint-workarea {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.paint-toolbox {
+  width: 60px;
+  background: var(--w95-gray);
+  border-right: 1px solid var(--w95-gray-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px 0;
+}
+.pt-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.pt-row {
+  display: flex;
+  gap: 1px;
+}
+.pt-tool {
+  width: 26px;
+  height: 24px;
+  background: var(--w95-gray);
+  border: 2px solid;
+  border-color: var(--w95-white) var(--w95-gray-darker) var(--w95-gray-darker) var(--w95-white);
+  cursor: default;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pt-tool.active {
+  border-color: var(--w95-gray-darker) var(--w95-white) var(--w95-white) var(--w95-gray-darker);
+  background: repeating-linear-gradient(45deg, #c0c0c0 0 2px, #b0b0b0 2px 4px);
+}
+
+.pt-options {
+  margin-top: 6px;
+  background: var(--w95-gray);
+  border: 2px solid;
+  border-color: var(--w95-gray-darker) var(--w95-white) var(--w95-white) var(--w95-gray-darker);
+  width: 54px;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 2px;
+  gap: 4px;
+}
+.pt-opt-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.pt-opt {
+  width: 44px;
+  height: 22px;
+  background: var(--w95-gray);
+  border: 2px solid;
+  border-color: var(--w95-white) var(--w95-gray-darker) var(--w95-gray-darker) var(--w95-white);
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.pt-opt.active {
+  border-color: var(--w95-gray-darker) var(--w95-white) var(--w95-white) var(--w95-gray-darker);
+}
+.pt-opt-text { font-size: 10px; }
+.pt-opt-dot { display: block; }
+
+.paint-canvas-area {
+  flex: 1;
+  overflow: auto;
+  background: var(--w95-gray-dark);
+  padding: 6px;
+}
+#paint-canvas {
+  background: #fff;
+  border: 1px solid var(--w95-gray-darker);
+  display: block;
+  image-rendering: pixelated;
+  cursor: crosshair;
+}
+
+.paint-palette {
+  background: var(--w95-gray);
+  border-top: 1px solid var(--w95-white);
+  padding: 4px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.pp-current {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+.pp-bg, .pp-fg {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #000;
+  position: absolute;
+}
+.pp-bg { right: 0; bottom: 0; background: #fff; }
+.pp-fg { left: 0;  top: 0;    background: #000; }
+
+.pp-palette {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 1px;
+  flex: 1;
+  max-width: 380px;
+}
+.pp-palette button {
+  width: 18px;
+  height: 14px;
+  border: 1px solid #000;
+  padding: 0;
+  cursor: default;
+}
+
+.paint-statusbar {
+  height: 18px;
+  display: flex;
+  background: var(--w95-gray);
+  border-top: 1px solid var(--w95-white);
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+}
+.ps-cell {
+  border: 1px solid var(--w95-gray-darker);
+  border-top: 0; border-right: 0;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  min-width: 80px;
+}
+.ps-cell:first-child { flex: 1; }

@@ -18,15 +18,15 @@
     network: '<svg viewBox="0 0 32 32" width="32" height="32"><rect x="3" y="6" width="14" height="10" fill="#c0c0c0" stroke="#000"/><rect x="15" y="16" width="14" height="10" fill="#c0c0c0" stroke="#000"/><line x1="10" y1="16" x2="22" y2="16" stroke="#000"/></svg>'
   };
 
-  // Desktop icons config
+  // Desktop icons config - left column, authentic Win95 order
   const desktopIcons = [
-    { id: 'work',     label: 'WORK',           icon: ICONS.folder,   action: () => RW.Explorer.openWork() },
-    { id: 'press',    label: 'PRESS',          icon: ICONS.folder,   action: () => RW.Explorer.openPress() },
-    { id: 'about',    label: 'About Me.txt',   icon: ICONS.text,     action: () => openAbout() },
-    { id: 'contact',  label: 'Contact.eml',    icon: ICONS.mail,     action: () => openContact() },
-    { id: 'mine',     label: 'Minesweeper.exe',icon: ICONS.mine,     action: () => RW.Minesweeper.open() },
-    { id: 'mycomp',   label: 'My Computer',    icon: ICONS.computer, action: () => openMyComputer() },
-    { id: 'recycle',  label: 'Recycle Bin',    icon: ICONS.recycle,  action: () => openRecycle() }
+    { id: 'mycomp',   label: 'My Computer',     icon: ICONS.computer, action: () => openMyComputer() },
+    { id: 'work',     label: 'WORK',            icon: ICONS.folder,   action: () => RW.Explorer.openWork() },
+    { id: 'press',    label: 'PRESS',           icon: ICONS.folder,   action: () => RW.Explorer.openPress() },
+    { id: 'about',    label: 'ABOUT ME.txt',    icon: ICONS.text,     action: () => openAbout() },
+    { id: 'contact',  label: 'CONTACT.eml',     icon: ICONS.mail,     action: () => openContact() },
+    { id: 'mine',     label: 'MINESWEEPER.exe', icon: ICONS.mine,     action: () => RW.Minesweeper.open() },
+    { id: 'recycle',  label: 'Recycle Bin',     icon: ICONS.recycle,  action: () => openRecycle() }
   ];
 
   function buildIcons() {
@@ -109,13 +109,13 @@
       '==========================\r\n\r\n' +
       bio.name + '\r\n' +
       bio.tagline + '\r\n' +
-      bio.location + '   |   ' + bio.company + '\r\n\r\n' +
+      bio.location + '\r\n\r\n' +
       bio.headline + '\r\n\r\n' +
       bio.long + '\r\n\r\n' +
       'Contact: ' + bio.email + '\r\n' +
-      'Vimeo:   ' + bio.vimeo + '\r\n' +
+      'Reel:    ' + bio.reel + '\r\n' +
       'IG:      ' + bio.instagram + '\r\n\r\n' +
-      '(c) 1993 Underscore Films. All rights reserved.\r\n' +
+      '(c) 1993-2026 Rick Wayne. All rights reserved.\r\n' +
       '</textarea></div>';
     RW.WM.open({
       id: 'about-me',
@@ -221,19 +221,13 @@
   // ===== Display properties =====
   Desktop.openDisplayProperties = function () {
     if (RW.WM.get('display-props')) { RW.WM.bringToFront('display-props'); return; }
-    const colors = [
-      { name: 'Teal',      value: '#008080' },
-      { name: 'Navy',      value: '#000080' },
-      { name: 'Olive',     value: '#808000' },
-      { name: 'Magenta',   value: '#800080' },
-      { name: 'Gray',      value: '#808080' }
-    ];
+    const catalog = (RW.Wallpaper && RW.Wallpaper.catalog) || [];
     let html =
       '<div class="display-prefs">' +
-        '<p style="margin:0 0 6px"><b>Background</b></p>' +
+        '<p style="margin:0 0 6px"><b>Wallpaper</b></p>' +
         '<div class="preview" id="dp-preview"><div class="mini-taskbar"></div></div>' +
-        '<div class="swatch-row" id="dp-swatches"></div>' +
-        '<div style="font-size:11px">Pick a wallpaper color. Yes, that is all the choice.</div>' +
+        '<div class="dp-list" id="dp-list"></div>' +
+        '<div style="font-size:11px">Pick a Windows 95 wallpaper.</div>' +
       '</div>' +
       '<div class="dialog-buttons">' +
         '<button data-close>OK</button>' +
@@ -243,28 +237,37 @@
       id: 'display-props',
       title: 'Display Properties',
       icon: ICONS.computer,
-      width: 320, height: 320,
+      width: 360, height: 360,
       resizable: false,
       contentHTML: html
     });
-    const swatchRow = w.body.querySelector('#dp-swatches');
+    const list = w.body.querySelector('#dp-list');
     const preview = w.body.querySelector('#dp-preview');
-    const desktopEl = document.querySelector('.desktop');
-    colors.forEach(c => {
-      const s = document.createElement('div');
-      s.className = 'swatch';
-      s.style.background = c.value;
-      s.title = c.name;
-      s.addEventListener('click', () => {
-        swatchRow.querySelectorAll('.swatch').forEach(x => x.classList.remove('selected'));
-        s.classList.add('selected');
-        preview.style.background = c.value;
-        desktopEl.style.background = c.value;
-        document.body.style.background = c.value;
+    function previewItem(name) {
+      const colorVal = RW.Wallpaper.previewColor(name);
+      const url = RW.Wallpaper.previewURL(name);
+      if (colorVal) {
+        preview.style.background = colorVal;
+      } else if (url) {
+        preview.style.background = 'center / cover no-repeat url("' + url + '")';
+      }
+    }
+    catalog.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'dp-row';
+      row.dataset.name = item.name;
+      if (RW.Wallpaper.current === item.name) row.classList.add('selected');
+      row.textContent = item.name;
+      row.addEventListener('click', () => {
+        list.querySelectorAll('.dp-row').forEach(x => x.classList.remove('selected'));
+        row.classList.add('selected');
+        previewItem(item.name);
+        RW.Wallpaper.apply(item.name);
         if (RW.Audio) RW.Audio.click();
       });
-      swatchRow.appendChild(s);
+      list.appendChild(row);
     });
+    if (RW.Wallpaper.current) previewItem(RW.Wallpaper.current);
     w.body.querySelectorAll('[data-close]').forEach(b => {
       b.addEventListener('click', () => RW.WM.close('display-props'));
     });

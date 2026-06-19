@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Rick Wayne, Director. Underscore Films. Brooklyn. A Windows 95 portfolio.">
+  <meta name="description" content="Rick Wayne, Director. Brooklyn. A Windows 95 portfolio.">
   <title>RICK WAYNE 93 - DIRECTOR.SYS</title>
 
   <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/w95fa">
@@ -14,6 +14,9 @@
   <link rel="stylesheet" href="css/explorer.css">
   <link rel="stylesheet" href="css/wmp.css">
   <link rel="stylesheet" href="css/minesweeper.css">
+  <link rel="stylesheet" href="css/calculator.css">
+  <link rel="stylesheet" href="css/paint.css">
+  <link rel="stylesheet" href="css/solitaire.css">
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23008080'/%3E%3Crect x='2' y='2' width='12' height='2' fill='%23fff'/%3E%3Crect x='2' y='6' width='12' height='2' fill='%23fff'/%3E%3Crect x='2' y='10' width='12' height='2' fill='%23fff'/%3E%3C/svg%3E">
 </head>
@@ -106,7 +109,7 @@
       <div class="task-divider"></div>
       <div class="task-buttons" id="task-buttons"></div>
       <div class="system-tray">
-        <button class="tray-icon" id="net-icon" title="Network: Underscore LAN" type="button">
+        <button class="tray-icon" id="net-icon" title="Network: Connected" type="button">
           <svg viewBox="0 0 16 16" width="16" height="16"><rect x="1" y="3" width="11" height="8" fill="#c0c0c0" stroke="#000"/><rect x="3" y="11" width="7" height="2" fill="#808080" stroke="#000"/><rect x="4" y="13" width="5" height="1" fill="#000"/></svg>
         </button>
         <button class="tray-icon" id="sound-toggle" title="Toggle sound" type="button">
@@ -133,20 +136,20 @@
             <li class="start-item has-sub" data-sub="accessories">
               <span class="si-ico">[A]</span><span class="si-label">Accessories</span><span class="si-arrow">&#9654;</span>
               <ul class="sub-menu" id="sub-accessories">
-                <li class="start-item" data-action="placeholder" data-label="Notepad"><span class="si-ico">[T]</span><span class="si-label">Notepad</span></li>
-                <li class="start-item" data-action="placeholder" data-label="Calculator"><span class="si-ico">[=]</span><span class="si-label">Calculator</span></li>
-                <li class="start-item" data-action="placeholder" data-label="Paint"><span class="si-ico">[B]</span><span class="si-label">Paint</span></li>
+                <li class="start-item" data-action="open-about"><span class="si-ico">[T]</span><span class="si-label">Notepad</span></li>
+                <li class="start-item" data-action="open-calculator"><span class="si-ico">[=]</span><span class="si-label">Calculator</span></li>
+                <li class="start-item" data-action="open-paint"><span class="si-ico">[B]</span><span class="si-label">Paint</span></li>
               </ul>
             </li>
             <li class="start-item has-sub" data-sub="games">
               <span class="si-ico">[G]</span><span class="si-label">Games</span><span class="si-arrow">&#9654;</span>
               <ul class="sub-menu" id="sub-games">
                 <li class="start-item" data-action="open-minesweeper"><span class="si-ico">[M]</span><span class="si-label">Minesweeper</span></li>
-                <li class="start-item" data-action="placeholder" data-label="Solitaire"><span class="si-ico">[S]</span><span class="si-label">Solitaire</span></li>
-                <li class="start-item" data-action="placeholder" data-label="Hearts"><span class="si-ico">[H]</span><span class="si-label">Hearts</span></li>
+                <li class="start-item" data-action="open-solitaire"><span class="si-ico">[S]</span><span class="si-label">Solitaire</span></li>
               </ul>
             </li>
             <li class="start-item" data-action="open-work"><span class="si-ico">[W]</span><span class="si-label">Work</span></li>
+            <li class="start-item" data-action="open-press"><span class="si-ico">[N]</span><span class="si-label">Press</span></li>
           </ul>
         </li>
         <li class="start-item has-sub" data-sub="documents">
@@ -158,13 +161,9 @@
         <li class="start-item has-sub" data-sub="settings">
           <span class="si-ico">[S]</span><span class="si-label">Settings</span><span class="si-arrow">&#9654;</span>
           <ul class="sub-menu" id="sub-settings">
-            <li class="start-item" data-action="placeholder" data-label="Control Panel"><span class="si-ico">[C]</span><span class="si-label">Control Panel</span></li>
             <li class="start-item" data-action="toggle-sound"><span class="si-ico">[V]</span><span class="si-label">Sound</span></li>
             <li class="start-item" data-action="open-display-properties"><span class="si-ico">[M]</span><span class="si-label">Display Properties</span></li>
           </ul>
-        </li>
-        <li class="start-item" data-action="placeholder" data-label="Find: Files or Folders">
-          <span class="si-ico">[F]</span><span class="si-label">Find</span><span class="si-arrow">&#9654;</span>
         </li>
         <li class="start-item" data-action="open-help">
           <span class="si-ico">[?]</span><span class="si-label">Help</span>
@@ -187,9 +186,13 @@
   <script src="js/wm.js"></script>
   <script src="js/contextmenu.js"></script>
   <script src="js/desktop.js"></script>
+  <script src="js/wallpaper.js"></script>
   <script src="js/explorer.js"></script>
   <script src="js/wmp.js"></script>
   <script src="js/minesweeper.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/paint.js"></script>
+  <script src="js/solitaire.js"></script>
   <script src="js/startmenu.js"></script>
   <script src="js/keyboard.js"></script>
   <script src="js/easter.js"></script>

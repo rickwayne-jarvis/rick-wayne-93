@@ -6,9 +6,8 @@
     "name": "Rick Wayne",
     "tagline": "Director. Creative Director. Writer.",
     "location": "Brooklyn, NY",
-    "company": "Underscore Films",
     "agency": "Brand Imagination Group (BiG)",
-    "headline": "Rick Wayne is a New York-based commercial and documentary director and founder of Underscore Films.",
+    "headline": "Rick Wayne is a New York-based commercial and documentary director.",
     "long": "Rick Wayne has been directing commercial and brand films for more than 15 years for some of the world's most beloved brands. His agency experience as Executive Creative Director on global campaigns makes him a sharper director on set: treatments that read like strategy decks, the authority to defend a vision in a room of stakeholders, and the ability to translate agency feedback into the next take. His career began in Chicago, expanded in Los Angeles, and he now resides in Brooklyn, NY.",
     "subhed": "He builds whatever world the story needs.",
     "reel_embed": "https://player.vimeo.com/video/1186763796?title=0&byline=0&portrait=0&dnt=1",
@@ -247,12 +246,6 @@
       "url": "https://shoutoutla.com/meet-rick-wayne-film-tv-commercial-director/"
     },
     {
-      "id": "artrprnr",
-      "outlet": "ARTRPRNR",
-      "title": "Member Spotlight: Rick Wayne of Underscore Films",
-      "url": "https://artrprnr.com/member-spotlight-rick-wayne-of-underscore-films/"
-    },
-    {
       "id": "prnewswire",
       "outlet": "PR Newswire",
       "title": "Everything the Light Touches Is Your Canvas",
@@ -261,7 +254,7 @@
     {
       "id": "imdb",
       "outlet": "IMDb",
-      "title": "Rick Wayne, Director, Underscore Films",
+      "title": "Rick Wayne, Director",
       "url": "https://www.imdb.com/name/nm6271643/"
     }
   ]

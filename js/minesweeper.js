@@ -392,7 +392,7 @@
     const html = '<div class="dialog-body"><p><b>Minesweeper</b></p>' +
       '<p>Version 3.10 (Rick Wayne edition)</p>' +
       '<p>Left click to reveal. Right click to flag. Middle click or both buttons to chord.</p>' +
-      '<p>(c) 1995-2026 Underscore Films.</p>' +
+      '<p>(c) 1995-2026 Rick Wayne.</p>' +
       '</div><div class="dialog-buttons"><button data-close>OK</button></div>';
     const w = RW.WM.open({
       title: 'About Minesweeper', icon: RW.ICONS.mine,

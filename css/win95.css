@@ -54,7 +54,24 @@ button { font-family: inherit; }
   background: linear-gradient(90deg, var(--w95-titlebar-1) 0%, var(--w95-titlebar-2) 100%);
   font-weight: bold;
   font-family: 'W95FA', 'Microsoft Sans Serif', 'Tahoma', sans-serif;
-  padding: 2px 2px 2px 4px;
+  padding: 1px 2px 1px 4px;
+  height: 18px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.window > .title-bar .title-bar-controls {
+  display: flex;
+  gap: 0;
+  align-items: center;
+}
+.window > .title-bar .title-bar-controls button {
+  width: 16px;
+  height: 14px;
+  min-width: 16px;
+  padding: 0;
+  font-size: 9px;
 }
 .window.inactive > .title-bar {
   background: linear-gradient(90deg, var(--w95-inactive-1) 0%, var(--w95-inactive-2) 100%);

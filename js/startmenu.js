@@ -57,7 +57,7 @@
       '<h3>Microsoft Windows 95</h3>' +
       '<p>Rick Wayne edition</p>' +
       '<p style="margin:10px 0">This system: Rick Wayne, Director.<br>Brain trust: probably his actual brain.<br>Easter eggs: more than this one.</p>' +
-      '<p style="font-size:11px;color:#444">Copyright (c) 1995-2026 Underscore Films. Built with Vanilla JS, Web Audio, and good faith.</p>' +
+      '<p style="font-size:11px;color:#444">Copyright (c) 1995-2026 Rick Wayne. Built with Vanilla JS, Web Audio, and good faith.</p>' +
       '</div>' +
       '<div class="dialog-buttons"><button data-close>OK</button></div>';
     const w = RW.WM.open({
@@ -115,6 +115,9 @@
       case 'open-work':         RW.Explorer.openWork(); break;
       case 'open-press':        RW.Explorer.openPress(); break;
       case 'open-minesweeper':  RW.Minesweeper.open(); break;
+      case 'open-solitaire':    RW.Solitaire.open(); break;
+      case 'open-calculator':   RW.Calculator.open(); break;
+      case 'open-paint':        RW.Paint.open(); break;
       case 'open-about':        RW.Desktop.openAbout(); break;
       case 'open-contact':      RW.Desktop.openContact(); break;
       case 'open-display-properties': RW.Desktop.openDisplayProperties(); break;
@@ -122,24 +125,8 @@
       case 'open-run':          RW.Desktop.openRun(); break;
       case 'open-shutdown':     RW.Desktop.openShutdown(); break;
       case 'toggle-sound':      RW.Desktop.toggleSound(); break;
-      case 'placeholder':
-        showPlaceholder(label);
-        break;
       default: break;
     }
-  }
-
-  function showPlaceholder(label) {
-    const html = '<div class="dialog-body">' +
-      '<p><b>' + RW.WM.escapeHtml(label) + '</b></p>' +
-      '<p>Not installed in this build.</p>' +
-      '<p style="font-size:11px;color:#666">Try Minesweeper, or open WORK.</p>' +
-      '</div><div class="dialog-buttons"><button data-close>OK</button></div>';
-    const w = RW.WM.open({
-      title: label, icon: RW.ICONS.exe, width: 320, height: 200, resizable: false, contentHTML: html
-    });
-    w.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(w.id));
-    if (RW.Audio) RW.Audio.error();
   }
 
   document.addEventListener('rw:desktop-ready', init);
