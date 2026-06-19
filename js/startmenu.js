@@ -121,6 +121,8 @@
       case 'open-moviemaker':   RW.MovieMaker.open(); break;
       case 'open-music':        RW.Music.open(); break;
       case 'open-ie':           RW.IE.open(); break;
+      case 'open-mixtape':      RW.Mixtape && RW.Mixtape.open(); break;
+      case 'open-myspace':      RW.MySpace && RW.MySpace.open(); break;
       case 'open-control-panel': RW.Desktop.openControlPanel && RW.Desktop.openControlPanel(); break;
       case 'open-about':        RW.Desktop.openAbout(); break;
       case 'open-contact':      RW.Desktop.openContact(); break;

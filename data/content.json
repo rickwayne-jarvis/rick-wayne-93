@@ -1,0 +1,37 @@
+{
+  "bio": {
+    "name": "Rick Wayne",
+    "tagline": "Director. Creative Director. Writer.",
+    "location": "Brooklyn, NY",
+    "agency": "Brand Imagination Group",
+    "headline": "Rick Wayne is a New York-based commercial and documentary director.",
+    "long": "Rick Wayne has been directing commercial and brand films for more than 15 years for some of the world's most beloved brands. His agency experience as Executive Creative Director on global campaigns makes him a sharper director on set: treatments that read like strategy decks, the authority to defend a vision in a room of stakeholders, and the ability to translate agency feedback into the next take. His career began in Chicago, expanded in Los Angeles, and he now resides in Brooklyn, NY.",
+    "email": "rick_wayne@me.com",
+    "instagram": "https://instagram.com/rick_wayne",
+    "linkedin": "https://www.linkedin.com/in/rickwaynenyc/",
+    "vimeo": "https://vimeo.com/rickwayne",
+    "reel": "https://rickwayne.cc"
+  },
+  "about": {
+    "title": "RICK WAYNE - DIRECTOR.SYS",
+    "subtitle": "Rick Wayne. Director. Creative Director. Writer. Brooklyn, NY.",
+    "intro": "I was born in 1989. That's why you're seeing this hidden Windows theme. My career started here, on a beige Windows 95 machine, making home videos in Windows Movie Maker in 2003. I never stopped. I hone the craft every day.",
+    "firstShootHeading": "FIRST SHOOT",
+    "firstShootCaption": "This is the first time I ever picked up a camera. Me and my friends made a movie called The Matrix. We didn't know what we were doing. We didn't care. I haven't stopped since.",
+    "matrixImage": "images/1%20(80).JPG",
+    "believeHeading": "I BELIEVE",
+    "believeCopy": "Great commercial work is great human work first. Strategy is a craft. Directing is a craft. Casting is a craft. Editing is a craft. The brief is a starting point, not a ceiling. The best films feel inevitable. They never are.",
+    "copyright": "(c) 1993-2026 Rick Wayne. All rights reserved."
+  },
+  "press": [
+    { "outlet": "America Scope 360", "domain": "americascope360.com", "date": "March 2026", "title": "From Teenage Hustler to Global Creative Leader: The Rise of Rick Wayne", "url": "https://americascope360.com/creative-director/from-teenage-hustler-to-global-creative-leader-the-rise-of-rick-wayne/" },
+    { "outlet": "LBBOnline", "domain": "lbbonline.com", "date": "March 2026", "title": "Apple, the Cha-Cha Slide and The Millennial's Guide to Making It", "url": "https://lbbonline.com/news/Apple-the-Cha-Cha-Slide-and-The-Millennials-Guide-to-Making-It-The-Work-That-Made-Rick-Wayne" },
+    { "outlet": "LBBOnline", "domain": "lbbonline.com", "date": "2026", "title": "LiveLab Founders Launch Brand Imagination Group", "url": "https://lbbonline.com/news/LiveLab-Founders-Launch-Brand-Imagination-Group" },
+    { "outlet": "MediaPost", "domain": "mediapost.com", "date": "2026", "title": "BiG Debuts: Creative Agency Focuses on Emotional Advertising", "url": "https://www.mediapost.com/publications/article/411743/big-debuts-creative-agency-focuses-on-emotional-a.html" },
+    { "outlet": "Bold Journey", "domain": "boldjourney.com", "date": "2024", "title": "Meet Rick Wayne", "url": "https://boldjourney.com/meet-rick-wayne/" },
+    { "outlet": "Voyage LA", "domain": "voyagela.com", "date": "", "title": "Check Out Rick Wayne's Story", "url": "https://voyagela.com/interview/check-rick-waynes-story/" },
+    { "outlet": "ShoutOut LA", "domain": "shoutoutla.com", "date": "", "title": "Meet Rick Wayne: Film, TV and Commercial Director", "url": "https://shoutoutla.com/meet-rick-wayne-film-tv-commercial-director/" },
+    { "outlet": "PR Newswire", "domain": "prnewswire.com", "date": "", "title": "Everything the Light Touches Is Your Canvas, Sharpie x Mufasa", "url": "https://www.prnewswire.com/news-releases/everything-the-light-touches-is-your-canvas-sharpie-celebrates-the-circle-of-creativity-with-disneys-mufasa-the-lion-kingin-theaters-now-302338461.html" },
+    { "outlet": "IMDb", "domain": "imdb.com", "date": "", "title": "Rick Wayne, Director", "url": "https://www.imdb.com/name/nm6271643/" }
+  ]
+}

@@ -21,6 +21,30 @@
     music: '<svg viewBox="0 0 32 32" width="32" height="32"><rect x="3" y="6" width="26" height="20" fill="#c0c0c0" stroke="#000"/><rect x="3" y="6" width="26" height="3" fill="#000080"/><rect x="5" y="11" width="22" height="9" fill="#000"/><circle cx="10" cy="15.5" r="1.5" fill="#0f0"/><circle cx="22" cy="15.5" r="1.5" fill="#0f0"/><path d="M11 22 L11 16 L14 16 L14 21" stroke="#000" stroke-width="1.5" fill="none"/><circle cx="10" cy="22" r="1.5" fill="#000"/></svg>'
   };
 
+  // v5: cassette tape SVG for Mixtape.exe.
+  const mixtapeIconSVG =
+    '<svg viewBox="0 0 32 32" width="32" height="32">' +
+      '<rect x="2" y="6"  width="28" height="20" fill="#c0c0c0" stroke="#000"/>' +
+      '<rect x="4" y="9"  width="24" height="12" fill="#101820" stroke="#000"/>' +
+      '<circle cx="11" cy="15" r="2.6" fill="#c0c0c0" stroke="#000"/>' +
+      '<circle cx="21" cy="15" r="2.6" fill="#c0c0c0" stroke="#000"/>' +
+      '<rect x="3" y="22" width="26" height="3" fill="#808080" stroke="#000"/>' +
+      '<rect x="6" y="10" width="20" height="2" fill="#ff8c00"/>' +
+      '<text x="16" y="20" font-family="monospace" font-size="4.5" text-anchor="middle" fill="#fff">MIXTAPE</text>' +
+    '</svg>';
+
+  // v5: IE logo with white shortcut-arrow overlay for My Space.url. No image asset.
+  const mySpaceShortcutIconSVG =
+    '<svg viewBox="0 0 32 32" width="32" height="32">' +
+      '<circle cx="16" cy="16" r="12" fill="#1976d2" stroke="#000"/>' +
+      '<ellipse cx="16" cy="16" rx="12" ry="4.5" fill="none" stroke="#fff" stroke-width="0.8"/>' +
+      '<ellipse cx="16" cy="16" rx="4.5" ry="12" fill="none" stroke="#fff" stroke-width="0.8"/>' +
+      '<text x="16" y="21" font-family="serif" font-weight="bold" font-size="15" text-anchor="middle" fill="#ffcc00">e</text>' +
+      /* shortcut arrow corner */
+      '<rect x="2" y="22" width="10" height="10" fill="#fff" stroke="#000"/>' +
+      '<polygon points="4,24 9,24 9,21 11,25 9,29 9,26 4,26" fill="#000"/>' +
+    '</svg>';
+
   // Desktop icons config - left column, authentic Win95 order
   const desktopIcons = [
     { id: 'mycomp',   label: 'My Computer',     icon: ICONS.computer, action: () => openMyComputer() },
@@ -30,6 +54,11 @@
     { id: 'contact',  label: 'CONTACT.eml',     icon: ICONS.mail,     action: () => openContact() },
     { id: 'mine',     label: 'MINESWEEPER.exe', icon: ICONS.mine,     action: () => RW.Minesweeper.open() },
     { id: 'movie',    label: 'Movie Maker.exe', icon: ICONS.movie,    action: () => RW.MovieMaker.open() },
+    /* v5: My Space shortcut sits below Movie Maker per spec. CSS-built IE icon
+       plus the white shortcut-arrow corner glyph (no external image). */
+    { id: 'myspace',  label: 'My Space.url',    icon: mySpaceShortcutIconSVG, action: () => RW.MySpace && RW.MySpace.open() },
+    /* v5: Mixtape.exe with cassette icon. */
+    { id: 'mixtape',  label: 'Mixtape.exe',     icon: mixtapeIconSVG,         action: () => RW.Mixtape && RW.Mixtape.open() },
     { id: 'music',    label: 'Music.exe',       icon: ICONS.music,    action: () => RW.Music && RW.Music.open() },
     { id: 'ie',       label: 'Internet Explorer.exe', icon: ICONS.ie, action: () => RW.IE && RW.IE.open() },
     { id: 'recycle',  label: 'Recycle Bin',     icon: ICONS.recycle,  action: () => openRecycle() }
@@ -141,6 +170,7 @@
       '  <pre class="np-pre">Contact: rick_wayne@me.com\n' +
       'Reel:    https://rickwayne.cc\n' +
       'IG:      https://instagram.com/rick_wayne</pre>\n\n' +
+      '  <pre class="np-pre">P.S. - open Mixtape.exe. I made you something.</pre>\n\n' +
       '  <pre class="np-pre">(c) 1993-2026 Rick Wayne. All rights reserved.</pre>\n' +
       '</div>\n';
     RW.WM.open({

@@ -127,10 +127,17 @@
         '<p>Born this year. Thanks for noticing.</p>' +
         '<p>Press any key to continue _</p>' +
       '</div>' +
-      '<div class="dialog-buttons"><button data-close>OK</button></div>';
+      '<div class="dialog-buttons">' +
+        '<button data-act="myspace">Open My Space (back when I was cool)</button>' +
+        '<button data-close>OK</button>' +
+      '</div>';
     const w = RW.WM.open({
       title: 'RICK_WAYNE.SYS', icon: RW.ICONS.computer,
-      width: 380, height: 220, resizable: false, contentHTML: html
+      width: 460, height: 220, resizable: false, contentHTML: html
+    });
+    w.body.querySelector('[data-act="myspace"]').addEventListener('click', () => {
+      RW.WM.close(w.id);
+      if (RW.MySpace && RW.MySpace.open) RW.MySpace.open();
     });
     w.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(w.id));
   }
@@ -208,7 +215,11 @@
           '<div class="src-role">DIRECTOR</div>' +
         '</div>';
       document.body.appendChild(overlay);
-      overlay.addEventListener('click', () => overlay.remove());
+      // v5: clicking the bouncing card ALSO opens My Space.url.
+      overlay.addEventListener('click', () => {
+        overlay.remove();
+        if (RW.MySpace && RW.MySpace.open) RW.MySpace.open();
+      });
       setTimeout(() => { if (overlay.parentNode) overlay.remove(); }, 12000);
     }, 600);
   };

@@ -6,26 +6,117 @@
   <meta name="description" content="Rick Wayne, Director. Brooklyn. A Windows 95 portfolio.">
   <title>RICK WAYNE 93 - DIRECTOR.SYS</title>
 
-  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/w95fa">
-  <link rel="stylesheet" href="css/98.css">
-  <link rel="stylesheet" href="css/win95.css">
-  <link rel="stylesheet" href="css/desktop.css">
-  <link rel="stylesheet" href="css/startmenu.css">
-  <link rel="stylesheet" href="css/explorer.css">
-  <link rel="stylesheet" href="css/wmp.css">
-  <link rel="stylesheet" href="css/minesweeper.css">
-  <link rel="stylesheet" href="css/calculator.css">
-  <link rel="stylesheet" href="css/paint.css">
-  <link rel="stylesheet" href="css/solitaire.css">
-  <link rel="stylesheet" href="css/moviemaker.css">
-  <link rel="stylesheet" href="css/music.css">
-  <link rel="stylesheet" href="css/ie.css">
-
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23008080'/%3E%3Crect x='2' y='2' width='12' height='2' fill='%23fff'/%3E%3Crect x='2' y='6' width='12' height='2' fill='%23fff'/%3E%3Crect x='2' y='10' width='12' height='2' fill='%23fff'/%3E%3C/svg%3E">
+
+  <!-- v6 ROUTER: decide mobile vs desktop before any heavy CSS or JS loads.
+       sessionStorage 'view-mode' overrides device detection.
+       ?view=mobile or ?view=desktop URL param sets and persists for the session.
+       All script tags are written with `defer` so module-top DOM lookups find
+       the body elements that follow. -->
+  <script>
+  (function () {
+    var url = new URL(window.location.href);
+    var qp = url.searchParams.get('view');
+    var override = null;
+    try {
+      if (qp === 'mobile' || qp === 'desktop') {
+        sessionStorage.setItem('view-mode', qp);
+        override = qp;
+        url.searchParams.delete('view');
+        history.replaceState(null, '', url.pathname + (url.search ? url.search : '') + url.hash);
+      } else {
+        override = sessionStorage.getItem('view-mode');
+      }
+    } catch (e) {}
+    var isMobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+    if (!isMobile) isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    var mode = override || (isMobile ? 'mobile' : 'desktop');
+    document.documentElement.classList.add('mode-' + mode);
+    window.RW_MODE = mode;
+
+    function addCSS(href) {
+      document.write('<link rel="stylesheet" href="' + href + '">');
+    }
+    function addJS(src) {
+      document.write('<script src="' + src + '" defer><\/script>');
+    }
+
+    // Shared content - both routes need it.
+    addJS('js/data.js');
+    addJS('js/content.js');
+
+    if (mode === 'mobile') {
+      addCSS('css/mobile.css');
+      addJS('js/mobile.js');
+    } else {
+      // Desktop OS bundle (mirrors the original load order).
+      addCSS('https://fonts.cdnfonts.com/css/w95fa');
+      addCSS('css/98.css');
+      addCSS('css/win95.css');
+      addCSS('css/desktop.css');
+      addCSS('css/startmenu.css');
+      addCSS('css/explorer.css');
+      addCSS('css/wmp.css');
+      addCSS('css/minesweeper.css');
+      addCSS('css/calculator.css');
+      addCSS('css/paint.css');
+      addCSS('css/solitaire.css');
+      addCSS('css/moviemaker.css');
+      addCSS('css/music.css');
+      addCSS('css/ie.css');
+      addCSS('css/mixtape.css');
+      addCSS('css/myspace.css');
+      // NOTE: boot.js dispatches `rw:desktop-ready` from its top-level IIFE
+      // when sessionStorage marks the boot as already done. Other modules
+      // listen for that event in their IIFEs to build icons/clock/etc. So
+      // boot.js MUST load AFTER everything that listens for the event,
+      // otherwise the event fires before any listeners are attached and the
+      // desktop renders blank. (This was the original load order in the
+      // monolithic index.html where boot.js was nested between other scripts;
+      // here we make it explicit by putting boot.js last among the desktop
+      // bundle.)
+      addJS('js/audio.js');
+      addJS('js/wm.js');
+      addJS('js/contextmenu.js');
+      addJS('js/desktop.js');
+      addJS('js/wallpaper.js');
+      addJS('js/explorer.js');
+      addJS('js/wmp.js');
+      addJS('js/minesweeper.js');
+      addJS('js/calculator.js');
+      addJS('js/paint.js');
+      addJS('js/solitaire.js');
+      addJS('js/moviemaker.js');
+      addJS('js/music.js');
+      addJS('js/ie.js');
+      addJS('js/mixtape.js');
+      addJS('js/myspace.js');
+      addJS('js/startmenu.js');
+      addJS('js/keyboard.js');
+      addJS('js/easter.js');
+      addJS('js/mode-toggle-desktop.js');
+      addJS('js/boot.js');
+    }
+  })();
+  </script>
+
+  <style>
+    /* Router-level visibility. */
+    html.mode-mobile body > #mobile-fallback,
+    html.mode-mobile body > .desktop,
+    html.mode-mobile body > #boot-screen,
+    html.mode-mobile body > #bsod,
+    html.mode-mobile body > #shutdown-screen { display: none !important; }
+    html.mode-desktop body > #mobile-root { display: none !important; }
+    html.mode-mobile, html.mode-mobile body { background: #fff; overflow: auto; cursor: auto; }
+  </style>
 </head>
 <body>
 
-  <!-- Mobile fallback -->
+  <!-- v6 mobile root. js/mobile.js renders into this. -->
+  <div id="mobile-root"></div>
+
+  <!-- Mobile fallback (kept as graceful degradation if mobile.js fails) -->
   <div id="mobile-fallback" class="mobile-fallback">
     <div class="mobile-card window">
       <div class="title-bar"><div class="title-bar-text">RICK WAYNE.SYS</div></div>
@@ -112,6 +203,9 @@
       <div class="task-divider"></div>
       <div class="task-buttons" id="task-buttons"></div>
       <div class="system-tray">
+        <button class="tray-icon" id="tray-mobile-view" title="Mobile view (switch to mobile site)" type="button" aria-label="Mobile view">
+          <svg viewBox="0 0 16 16" width="16" height="16"><rect x="4" y="1" width="8" height="14" fill="#c0c0c0" stroke="#000"/><rect x="5" y="3" width="6" height="9" fill="#000080"/><circle cx="8" cy="13.5" r="0.7" fill="#000"/></svg>
+        </button>
         <button class="tray-icon" id="net-icon" title="Network: Connected" type="button">
           <svg viewBox="0 0 16 16" width="16" height="16"><rect x="1" y="3" width="11" height="8" fill="#c0c0c0" stroke="#000"/><rect x="3" y="11" width="7" height="2" fill="#808080" stroke="#000"/><rect x="4" y="13" width="5" height="1" fill="#000"/></svg>
         </button>
@@ -144,7 +238,9 @@
                 <li class="start-item" data-action="open-paint"><span class="si-ico">[B]</span><span class="si-label">Paint</span></li>
                 <li class="start-item" data-action="open-moviemaker"><span class="si-ico">[V]</span><span class="si-label">Movie Maker</span></li>
                 <li class="start-item" data-action="open-music"><span class="si-ico">[J]</span><span class="si-label">Music</span></li>
+                <li class="start-item" data-action="open-mixtape"><span class="si-ico">[#]</span><span class="si-label">Mixtape</span></li>
                 <li class="start-item" data-action="open-ie"><span class="si-ico">[E]</span><span class="si-label">Internet Explorer</span></li>
+                <li class="start-item" data-action="open-myspace"><span class="si-ico">[e]</span><span class="si-label">My Space</span></li>
               </ul>
             </li>
             <li class="start-item has-sub" data-sub="games">
@@ -169,6 +265,7 @@
           <ul class="sub-menu" id="sub-settings">
             <li class="start-item" data-action="toggle-sound"><span class="si-ico">[V]</span><span class="si-label">Sound</span></li>
             <li class="start-item" data-action="open-display-properties"><span class="si-ico">[M]</span><span class="si-label">Display Properties</span></li>
+            <li class="start-item" data-action="switch-to-mobile"><span class="si-ico">[&#8617;]</span><span class="si-label">Mobile view</span></li>
           </ul>
         </li>
         <li class="start-item" data-action="open-help">
@@ -185,25 +282,8 @@
     </div>
   </main>
 
-  <!-- Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/audio.js"></script>
-  <script src="js/boot.js"></script>
-  <script src="js/wm.js"></script>
-  <script src="js/contextmenu.js"></script>
-  <script src="js/desktop.js"></script>
-  <script src="js/wallpaper.js"></script>
-  <script src="js/explorer.js"></script>
-  <script src="js/wmp.js"></script>
-  <script src="js/minesweeper.js"></script>
-  <script src="js/calculator.js"></script>
-  <script src="js/paint.js"></script>
-  <script src="js/solitaire.js"></script>
-  <script src="js/moviemaker.js"></script>
-  <script src="js/music.js"></script>
-  <script src="js/ie.js"></script>
-  <script src="js/startmenu.js"></script>
-  <script src="js/keyboard.js"></script>
-  <script src="js/easter.js"></script>
+  <!-- v6 note: script tags are injected by the router in <head>, with `defer`.
+       Do not add static <script> tags here; v4/v5 desktop bundles load via the
+       router. -->
 </body>
 </html>

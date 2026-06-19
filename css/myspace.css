@@ -1,0 +1,498 @@
+/* myspace.css - authentic mid-2000s MySpace. Verdana 11px. */
+
+.msp-page {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #000;
+  background:
+    /* faint glitter */
+    radial-gradient(circle at 20% 30%, rgba(255,255,200,0.06) 1px, transparent 2px),
+    radial-gradient(circle at 70% 80%, rgba(255,200,255,0.07) 1px, transparent 2px),
+    /* tiled subtle pattern */
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><rect width='8' height='8' fill='%23eef3fb'/><rect width='1' height='1' fill='%23dfe6f2' x='0' y='0'/><rect width='1' height='1' fill='%23dfe6f2' x='4' y='4'/></svg>") repeat;
+  background-color: #eef3fb;
+  min-height: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Sparkles overlay (CSS animation) */
+.msp-sparkles {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image:
+    radial-gradient(circle at 10% 20%, #fff 0.5px, transparent 1.2px),
+    radial-gradient(circle at 80% 30%, #fff 0.5px, transparent 1.2px),
+    radial-gradient(circle at 30% 70%, #fff 0.5px, transparent 1.2px),
+    radial-gradient(circle at 60% 90%, #fff 0.5px, transparent 1.2px),
+    radial-gradient(circle at 90% 60%, #fff 0.5px, transparent 1.2px),
+    radial-gradient(circle at 45% 45%, #fff 0.5px, transparent 1.2px);
+  background-size: 320px 320px;
+  animation: msp-sparkle 4s linear infinite;
+  opacity: 0.5;
+}
+@keyframes msp-sparkle {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.65; }
+}
+
+/* Top band (dark MySpace blue) */
+.msp-topband {
+  background: linear-gradient(180deg, #003399 0%, #002277 100%);
+  color: #fff;
+  padding: 6px 0 0;
+  position: relative;
+  z-index: 2;
+}
+.msp-topband-inner {
+  padding: 6px 14px 8px;
+}
+.msp-logo {
+  font-family: 'Trebuchet MS', Verdana, sans-serif;
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 0;
+  color: #fff;
+}
+.msp-logo .msp-dot { color: #ff9900; }
+.msp-logo .msp-tag {
+  font-size: 11px;
+  font-weight: normal;
+  margin-left: 10px;
+  color: #ccdfff;
+  font-style: italic;
+}
+.msp-nav {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #ccdfff;
+  word-spacing: 2px;
+}
+.msp-nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 0 2px;
+}
+.msp-nav a:hover { text-decoration: underline; }
+
+/* Music widget (top-right floating) */
+.msp-musicwidget {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  width: 196px;
+  background: #fff;
+  border: 1px solid #6699cc;
+  z-index: 4;
+  font-size: 10px;
+  text-align: center;
+  padding: 4px;
+}
+.msp-mw-title {
+  background: linear-gradient(90deg, #6699cc, #003399);
+  color: #fff;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 2px 6px;
+  text-align: left;
+  margin: -4px -4px 4px;
+}
+.msp-mw-disc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 2px;
+}
+.msp-mw-spin {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, #000 4px, #555 5px, #222 8px, #555 10px, #222 13px, #777 14px);
+  border: 1px solid #333;
+  animation: msp-disc 3s linear infinite;
+}
+@keyframes msp-disc {
+  from { transform: rotate(0); }
+  to   { transform: rotate(360deg); }
+}
+.msp-mw-controls {
+  display: flex;
+  gap: 2px;
+}
+.msp-mw-controls button {
+  font-family: Verdana, sans-serif;
+  font-size: 10px;
+  padding: 1px 4px;
+  background: #cce0ff;
+  border: 1px solid #6699cc;
+  cursor: pointer;
+}
+.msp-mw-now {
+  padding: 4px 2px 1px;
+  font-size: 10px;
+  word-wrap: break-word;
+}
+.msp-mw-repeat {
+  font-size: 9px;
+  color: #555;
+  padding-bottom: 2px;
+}
+
+/* Main two-column layout */
+.msp-main {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 8px;
+  padding: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+/* === Left column === */
+.msp-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.msp-profilepic {
+  background: #fff;
+  border: 1px solid #6699cc;
+  padding: 4px;
+}
+.msp-profilepic-inner {
+  width: 100%;
+  height: 220px;
+  position: relative;
+  background:
+    repeating-linear-gradient(45deg, #102030 0 4px, #1a2840 4px 8px);
+  overflow: hidden;
+  border: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.msp-pp-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.18), transparent 60%);
+}
+.msp-pp-initials {
+  position: relative;
+  font-family: 'Courier New', monospace;
+  font-size: 56px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 2px 0 #003399, 4px 4px 0 rgba(0,0,0,0.4);
+  letter-spacing: 4px;
+  z-index: 2;
+}
+.msp-pp-scan {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 3px);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.msp-name {
+  font-family: 'Trebuchet MS', Verdana, sans-serif;
+  font-size: 22px;
+  font-weight: bold;
+  color: #003399;
+  margin: 2px 0 0;
+  line-height: 1.05;
+}
+.msp-subtitle {
+  font-style: italic;
+  font-size: 11px;
+  color: #444;
+  margin-bottom: 4px;
+}
+.msp-meta {
+  background: #fff;
+  border: 1px solid #6699cc;
+  padding: 6px;
+  font-size: 11px;
+}
+.msp-meta > div { margin: 2px 0; }
+.msp-mood { color: #006600; }
+.msp-viewmy { padding-top: 4px; }
+.msp-viewmy a { color: #003399; }
+
+.msp-contactbox {
+  background: #fff;
+  border: 1px solid #6699cc;
+}
+.msp-cb-title {
+  background: linear-gradient(180deg, #6699cc 0%, #4477aa 100%);
+  color: #fff;
+  font-weight: bold;
+  padding: 3px 8px;
+  font-size: 11px;
+}
+.msp-cb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  padding: 5px;
+}
+.msp-cb-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #eaf2fb;
+  border: 1px solid #6699cc;
+  color: #003399;
+  padding: 3px 5px;
+  font-size: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.msp-cb-btn:hover {
+  background: #d6e6fa;
+}
+.msp-cb-icon {
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.msp-url {
+  background: #fff;
+  border: 1px solid #6699cc;
+  padding: 4px 6px;
+  font-size: 10px;
+}
+.msp-url-label { color: #666; }
+.msp-url-val { color: #003399; word-break: break-all; }
+
+/* === Right column === */
+.msp-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.msp-section {
+  background: #fff;
+  border: 1px solid #6699cc;
+}
+.msp-section-title {
+  background: linear-gradient(180deg, #ffa500 0%, #ff8c00 100%);
+  color: #fff;
+  font-weight: bold;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-family: 'Trebuchet MS', Verdana, sans-serif;
+  /* intentional misalignment: not quite centered */
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.25);
+  border-bottom: 1px solid #cc6600;
+}
+.msp-section-title-blue {
+  background: linear-gradient(180deg, #6699cc 0%, #336699 100%);
+  border-bottom: 1px solid #224477;
+}
+.msp-section-body {
+  padding: 7px 9px 9px 8px; /* intentionally not-quite-square */
+}
+.msp-section-body p { margin: 4px 0 6px; }
+
+/* Interests table (mid-2000s style) */
+.msp-interests-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.msp-interests-table th {
+  background: #ffcc99;
+  color: #993300;
+  text-align: left;
+  padding: 4px 6px;
+  width: 90px;
+  border-bottom: 1px solid #cc9966;
+  vertical-align: top;
+  font-weight: bold;
+}
+.msp-interests-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid #ffe0c0;
+  vertical-align: top;
+}
+
+/* Heart */
+.msp-heart {
+  color: #ff3366;
+  font-size: 13px;
+}
+
+/* Top 8 grid (4x2). Tom as the first friend lives in a separate block. */
+.msp-top8-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  margin-top: 6px;
+}
+.msp-top8-tile {
+  border: 1px solid #6699cc;
+  background: #fff;
+  cursor: default;
+}
+.msp-top8-art {
+  aspect-ratio: 1 / 1;
+  background:
+    linear-gradient(135deg, #1c2632 0%, #2c3e54 50%, #1a2030 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  padding: 6px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Trebuchet MS', Verdana, sans-serif;
+}
+.msp-top8-stripe {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 10px;
+  background: linear-gradient(90deg, #ffa500, #ff8c00);
+}
+.msp-top8-tile:nth-child(2n) .msp-top8-art {
+  background: linear-gradient(135deg, #3a1c2c 0%, #5a2c44 50%, #2a0c1c 100%);
+}
+.msp-top8-tile:nth-child(3n) .msp-top8-art {
+  background: linear-gradient(135deg, #1c3a2c 0%, #2c5a44 50%, #0c2a1c 100%);
+}
+.msp-top8-tile:nth-child(5n) .msp-top8-art {
+  background: linear-gradient(135deg, #2c1c3a 0%, #44285a 50%, #18102a 100%);
+}
+.msp-top8-title {
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 1.1;
+  text-shadow: 1px 1px 0 #000;
+  margin-top: 14px;
+}
+.msp-top8-year {
+  font-size: 10px;
+  color: #ffcc99;
+  margin-top: 3px;
+}
+.msp-top8-foot {
+  text-align: center;
+  color: #003399;
+  font-size: 10px;
+  margin-top: 6px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Tom as Rick's first friend, placed subtly above the grid */
+.msp-friend-tom {
+  display: inline-block;
+  margin-bottom: 4px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px dashed #6699cc;
+  padding: 3px;
+  background: #f3f8ff;
+}
+.msp-friend-tom-avatar {
+  width: 60px;
+  height: 60px;
+  background:
+    radial-gradient(circle at 50% 35%, #ffeac0 0 14px, #ddc090 14px 18px, #c0c0c0 18px),
+    linear-gradient(180deg, #cce0ff 0%, #6699cc 100%);
+  border: 2px solid #003399;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #003399;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+.msp-friend-tom-avatar { font-size: 14px; }
+.msp-friend-label {
+  font-size: 10px;
+  color: #003399;
+  margin-top: 2px;
+}
+
+/* Comments */
+.msp-comments {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.msp-comment {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 6px;
+  border-top: 1px dashed #6699cc;
+  padding-top: 6px;
+}
+.msp-comment:first-child { border-top: 0; padding-top: 0; }
+.msp-comment-avatar {
+  width: 52px;
+  height: 52px;
+  background:
+    linear-gradient(135deg, #ffcc99 0%, #ff9933 100%),
+    repeating-linear-gradient(45deg, #ffe0bf 0 4px, transparent 4px 8px);
+  border: 1px solid #cc6600;
+}
+.msp-comment:nth-child(2n) .msp-comment-avatar {
+  background: linear-gradient(135deg, #99ccff 0%, #3366cc 100%);
+  border-color: #003399;
+}
+.msp-comment:nth-child(3n) .msp-comment-avatar {
+  background: linear-gradient(135deg, #cc99ff 0%, #6633cc 100%);
+  border-color: #330099;
+}
+.msp-comment:nth-child(4n) .msp-comment-avatar {
+  background: linear-gradient(135deg, #99ffcc 0%, #339966 100%);
+  border-color: #006633;
+}
+.msp-comment-body {
+  background: #fffbeb;
+  border: 1px solid #ffcc99;
+  padding: 4px 6px;
+  position: relative;
+}
+.msp-comment-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  border-bottom: 1px dotted #ffcc99;
+  padding-bottom: 2px;
+  margin-bottom: 3px;
+}
+.msp-comment-author { color: #003399; font-weight: bold; }
+.msp-comment-date { color: #666; }
+.msp-comment-text {
+  font-size: 11px;
+  color: #222;
+}
+.msp-comments-foot {
+  margin-top: 8px;
+  text-align: right;
+  font-size: 10px;
+}
+.msp-comments-foot a { color: #003399; }
+
+/* Footer */
+.msp-footer {
+  text-align: center;
+  padding: 10px;
+  background: #003399;
+  color: #ccdfff;
+  font-size: 10px;
+  position: relative;
+  z-index: 2;
+}

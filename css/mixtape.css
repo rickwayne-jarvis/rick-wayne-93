@@ -1,0 +1,189 @@
+/* mixtape.css - Win95 Sound Recorder / Media Player aesthetic */
+
+.mix-body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #c0c0c0;
+  font-family: 'W95FA', 'Tahoma', sans-serif;
+  font-size: 11px;
+}
+
+/* === Menu bar (shared mb-* class pattern reused from Solitaire) === */
+.mix-menubar {
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+  padding: 2px 4px;
+  display: flex;
+  gap: 0;
+  position: relative;
+  z-index: 30;
+}
+.mix-menubar .mb-item {
+  padding: 2px 8px;
+  cursor: default;
+  position: relative;
+  user-select: none;
+}
+.mix-menubar .mb-item:hover { background: #000080; color: #fff; }
+.mix-menubar .mb-item.open { background: #000080; color: #fff; }
+.mix-menubar .mb-sub {
+  display: none;
+  position: absolute;
+  left: 0; top: 100%;
+  background: #c0c0c0;
+  color: #000;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  min-width: 150px;
+  padding: 2px;
+  font-size: 11px;
+  box-shadow: 1px 1px 0 #000;
+}
+.mix-menubar .mb-item.open > .mb-sub { display: block; }
+.mix-menubar .mb-sub > div {
+  padding: 3px 18px 3px 18px;
+  cursor: default;
+  position: relative;
+}
+.mix-menubar .mb-sub > div:hover { background: #000080; color: #fff; }
+.mix-menubar .mb-sub > div.checked::before {
+  content: "\2714";
+  position: absolute;
+  left: 4px;
+}
+.mix-menubar .mb-sep {
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  margin: 3px 2px;
+  padding: 0;
+  pointer-events: none;
+}
+
+/* === Now Playing marquee === */
+.mix-marquee {
+  height: 18px;
+  overflow: hidden;
+  background: #000;
+  color: #00ff88;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  margin: 4px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-family: 'W95FA', 'Tahoma', monospace;
+  font-size: 12px;
+}
+.mix-marquee-inner {
+  white-space: nowrap;
+  position: absolute;
+  left: 100%;
+  padding-left: 8px;
+  will-change: transform;
+  animation: mix-marquee-slide 14s linear infinite;
+}
+@keyframes mix-marquee-slide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+/* === Visualizer === */
+.mix-visbox {
+  display: flex;
+  justify-content: center;
+  padding: 4px 4px 0;
+}
+#mix-vis {
+  background: #000;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  image-rendering: pixelated;
+  cursor: pointer;
+  display: block;
+}
+
+/* === Track list === */
+.mix-tracklist-wrap {
+  flex: 1;
+  margin: 6px 4px 0;
+  background: #fff;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  display: flex;
+  flex-direction: column;
+  min-height: 80px;
+  overflow: hidden;
+}
+.mix-tracklist-header,
+.mix-row {
+  display: grid;
+  grid-template-columns: 32px 1fr 1fr 60px;
+  align-items: center;
+  padding: 2px 6px;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.mix-tracklist-header {
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+  font-weight: bold;
+}
+.mix-tracklist {
+  flex: 1;
+  overflow-y: auto;
+}
+.mix-row {
+  cursor: default;
+  user-select: none;
+}
+.mix-row:hover { background: #d0d0d0; }
+.mix-row.active {
+  background: #000080;
+  color: #fff;
+}
+.mix-row .mr-time { text-align: right; }
+.mix-row .mr-num  { color: inherit; }
+
+/* === Transport controls === */
+.mix-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 6px 8px;
+  background: #c0c0c0;
+  border-top: 1px solid #808080;
+}
+.mix-controls button {
+  min-width: 32px;
+  height: 22px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  font-family: 'W95FA', 'Tahoma', sans-serif;
+  font-size: 11px;
+  cursor: default;
+}
+.mix-controls button:active {
+  border-color: #808080 #fff #fff #808080;
+}
+.mix-vol-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+}
+.mix-vol-wrap input[type=range] {
+  width: 100px;
+}
+.mix-time {
+  margin-left: auto;
+  font-family: 'Courier New', monospace;
+  background: #000;
+  color: #00ff88;
+  padding: 2px 6px;
+  border: 1px solid;
+  border-color: #808080 #fff #fff #808080;
+  font-size: 11px;
+}
