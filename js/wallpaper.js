@@ -1,11 +1,9 @@
-/* wallpaper.js - generates authentic Win95 wallpapers via canvas,
-   exposes RW.Wallpaper.apply(name) and the catalog. */
+/* wallpaper.js - 7 authentic Win95 wallpapers, Teal default */
 
 (function () {
   const RW = window.RW = window.RW || {};
   const Wallpaper = RW.Wallpaper = {};
 
-  // Pseudo-random with seed so wallpapers regenerate identically
   function rng(seed) {
     let s = seed >>> 0;
     return function () {
@@ -15,24 +13,21 @@
   }
 
   function paintClouds(ctx, w, h) {
-    // Authentic Clouds.bmp: vertical gradient (deeper blue top to lighter mid),
-    // with diffuse white wisps. We approximate the gradient and overlay blobs.
     const grad = ctx.createLinearGradient(0, 0, 0, h);
-    grad.addColorStop(0, '#3a7fbf');
-    grad.addColorStop(0.55, '#5a9ed8');
-    grad.addColorStop(1, '#7fb6e2');
+    grad.addColorStop(0, '#3B81C4');
+    grad.addColorStop(1, '#87CEEB');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
     const r = rng(95);
-    // Lay down 90 soft white blobs of varying radii
     ctx.globalCompositeOperation = 'lighter';
-    for (let i = 0; i < 90; i++) {
+    // Soft cloud shapes: clusters of overlapping radial blobs
+    for (let i = 0; i < 80; i++) {
       const cx = r() * w;
       const cy = r() * h;
-      const radius = 60 + r() * 220;
+      const radius = 80 + r() * 220;
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
-      const alpha = 0.10 + r() * 0.18;
+      const alpha = 0.12 + r() * 0.18;
       g.addColorStop(0, 'rgba(255,255,255,' + alpha + ')');
       g.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.fillStyle = g;
@@ -40,13 +35,12 @@
       ctx.arc(cx, cy, radius, 0, Math.PI * 2);
       ctx.fill();
     }
-    // A few brighter wisps near the top
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 22; i++) {
       const cx = r() * w;
-      const cy = r() * h * 0.55;
+      const cy = r() * h * 0.6;
       const radius = 30 + r() * 90;
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
-      g.addColorStop(0, 'rgba(255,255,255,0.45)');
+      g.addColorStop(0, 'rgba(255,255,255,0.5)');
       g.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.fillStyle = g;
       ctx.beginPath();
@@ -57,21 +51,21 @@
   }
 
   function paintTriangles(ctx, w, h) {
-    // Win95 Triangles: dark teal field with scattered colored triangles
-    ctx.fillStyle = '#005a5a';
+    // Win95 Plus! Triangles: dark teal field, small muted triangles
+    ctx.fillStyle = '#0a4b4b';
     ctx.fillRect(0, 0, w, h);
     const r = rng(123);
-    const palette = ['#ff8080', '#80ff80', '#8080ff', '#ffff80', '#ff80ff', '#80ffff'];
-    for (let i = 0; i < 140; i++) {
+    const palette = ['#d4a4a4', '#a4d4a4', '#a4a4d4', '#d4d4a4', '#d4a4d4', '#a4d4d4', '#888888'];
+    for (let i = 0; i < 280; i++) {
       const cx = r() * w;
       const cy = r() * h;
-      const size = 12 + r() * 36;
+      const size = 6 + r() * 14;
       const rot = r() * Math.PI * 2;
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(rot);
       ctx.fillStyle = palette[Math.floor(r() * palette.length)];
-      ctx.globalAlpha = 0.55;
+      ctx.globalAlpha = 0.6 + r() * 0.3;
       ctx.beginPath();
       ctx.moveTo(0, -size / 2);
       ctx.lineTo(size / 2, size / 2);
@@ -84,11 +78,9 @@
   }
 
   function paintCarvedStone(ctx, w, h) {
-    // Carved Stone: warm gray with soft noise + carved bevel grid blocks
     ctx.fillStyle = '#9c8e7c';
     ctx.fillRect(0, 0, w, h);
     const r = rng(404);
-    // Noise speckle
     const imgData = ctx.getImageData(0, 0, w, h);
     const data = imgData.data;
     for (let i = 0; i < data.length; i += 4) {
@@ -98,7 +90,6 @@
       data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + n));
     }
     ctx.putImageData(imgData, 0, 0);
-    // Bevel blocks
     const block = 96;
     for (let y = 0; y < h; y += block) {
       for (let x = 0; x < w; x += block) {
@@ -119,6 +110,82 @@
     }
   }
 
+  function paintForest(ctx, w, h) {
+    // Forest: green base with random speckles
+    ctx.fillStyle = '#2d5e3a';
+    ctx.fillRect(0, 0, w, h);
+    const r = rng(771);
+    const palette = ['#1d3e25', '#3a7a4a', '#4a8a5a', '#7a8a3a', '#5a4a2a', '#8b7b2b', '#234020', '#a8a440'];
+    for (let i = 0; i < 6000; i++) {
+      const x = Math.floor(r() * w);
+      const y = Math.floor(r() * h);
+      const sz = 1 + Math.floor(r() * 3);
+      ctx.fillStyle = palette[Math.floor(r() * palette.length)];
+      ctx.fillRect(x, y, sz, sz);
+    }
+    // Dappled brighter highlights
+    for (let i = 0; i < 80; i++) {
+      const cx = r() * w;
+      const cy = r() * h;
+      const rad = 18 + r() * 36;
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
+      g.addColorStop(0, 'rgba(180,210,120,0.10)');
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function paintSetup(ctx, w, h) {
+    // Setup: blue/grey 8px checker
+    const colA = '#5384A8';
+    const colB = '#7AAACC';
+    const cell = 8;
+    for (let y = 0; y < h; y += cell) {
+      for (let x = 0; x < w; x += cell) {
+        ctx.fillStyle = (((x / cell) + (y / cell)) % 2 === 0) ? colA : colB;
+        ctx.fillRect(x, y, cell, cell);
+      }
+    }
+  }
+
+  function paintBrick(ctx, w, h) {
+    // Brick: rows offset, mortar lines grey
+    ctx.fillStyle = '#7a7670';
+    ctx.fillRect(0, 0, w, h);
+    const brickW = 64;
+    const brickH = 28;
+    const mortar = 4;
+    for (let row = 0, y = 0; y < h; row++, y += brickH + mortar) {
+      const offset = (row % 2 === 0) ? 0 : -((brickW + mortar) / 2);
+      for (let x = offset; x < w; x += brickW + mortar) {
+        const r = ((x * 73 + y * 31 + row * 17) & 0xff) / 255;
+        const variant = '#' +
+          Math.floor(0x8b - 16 + r * 32).toString(16).padStart(2, '0') +
+          Math.floor(0x3a - 8  + r * 16).toString(16).padStart(2, '0') +
+          Math.floor(0x2a - 8  + r * 12).toString(16).padStart(2, '0');
+        ctx.fillStyle = variant;
+        ctx.fillRect(x, y, brickW, brickH);
+        // Bevel highlight
+        ctx.strokeStyle = 'rgba(255,200,160,0.25)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, y + brickH);
+        ctx.lineTo(x, y);
+        ctx.lineTo(x + brickW, y);
+        ctx.stroke();
+        ctx.strokeStyle = 'rgba(0,0,0,0.30)';
+        ctx.beginPath();
+        ctx.moveTo(x + brickW, y);
+        ctx.lineTo(x + brickW, y + brickH);
+        ctx.lineTo(x, y + brickH);
+        ctx.stroke();
+      }
+    }
+  }
+
   function generate(name) {
     const canvas = document.createElement('canvas');
     const w = 1600;
@@ -126,9 +193,12 @@
     canvas.width = w;
     canvas.height = h;
     const ctx = canvas.getContext('2d');
-    if (name === 'Clouds')      paintClouds(ctx, w, h);
+    if (name === 'Clouds')           paintClouds(ctx, w, h);
     else if (name === 'Triangles')   paintTriangles(ctx, w, h);
-    else if (name === 'Carved Stone') paintCarvedStone(ctx, w, h);
+    else if (name === 'Carved Stone')paintCarvedStone(ctx, w, h);
+    else if (name === 'Forest')      paintForest(ctx, w, h);
+    else if (name === 'Setup')       paintSetup(ctx, w, h);
+    else if (name === 'Brick')       paintBrick(ctx, w, h);
     else return null;
     return canvas.toDataURL('image/png');
   }
@@ -142,12 +212,13 @@
   }
 
   Wallpaper.catalog = [
-    { name: 'Clouds',       kind: 'image' },
     { name: 'Teal',         kind: 'color', value: '#008080' },
+    { name: 'Clouds',       kind: 'image' },
     { name: 'Triangles',    kind: 'image' },
     { name: 'Carved Stone', kind: 'image' },
-    { name: 'Navy',         kind: 'color', value: '#000080' },
-    { name: 'Magenta',      kind: 'color', value: '#800080' }
+    { name: 'Forest',       kind: 'image' },
+    { name: 'Setup',        kind: 'image' },
+    { name: 'Brick',        kind: 'image' }
   ];
 
   Wallpaper.apply = function (name) {
@@ -186,7 +257,7 @@
   function init() {
     let saved = null;
     try { saved = sessionStorage.getItem('rw93_wallpaper'); } catch (e) {}
-    Wallpaper.apply(saved || 'Clouds');
+    Wallpaper.apply(saved || 'Teal');
   }
 
   document.addEventListener('rw:desktop-ready', init);
