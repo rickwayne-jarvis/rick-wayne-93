@@ -1,0 +1,80 @@
+/* music.css - Sound Recorder mixtape */
+
+.sr-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #c0c0c0;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+}
+.sr-tracklist {
+  flex: 1;
+  background: #fff;
+  margin: 8px;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  overflow-y: auto;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 11px;
+}
+.sr-track {
+  padding: 4px 8px;
+  cursor: default;
+  display: flex;
+  gap: 6px;
+}
+.sr-track.selected { background: var(--w95-navy); color: #fff; }
+.sr-track:hover:not(.selected) { background: #efefef; }
+.sr-num { width: 18px; font-weight: bold; }
+.sr-title { flex: 1; }
+
+.sr-display {
+  background: #000;
+  color: #4afe4a;
+  margin: 0 8px 8px;
+  border: 2px solid;
+  border-color: #404040 #fff #fff #404040;
+  padding: 6px 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+.sr-now { margin-bottom: 4px; }
+.sr-wave { height: 10px; background: #000; border: 1px solid #2a2; position: relative; overflow: hidden; }
+.sr-wave-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: linear-gradient(90deg, #1ec01e, #4afe4a);
+  width: 6%;
+  transition: width 0.08s linear;
+}
+
+.sr-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  background: #c0c0c0;
+  border-top: 1px solid #fff;
+  box-shadow: inset 0 1px 0 #808080;
+}
+.sr-btn {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #404040 #404040 #fff;
+  padding: 4px 8px;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 12px;
+  cursor: default;
+  min-width: 32px;
+  min-height: 26px;
+}
+.sr-btn:active { border-color: #404040 #fff #fff #404040; padding: 5px 7px 3px 9px; }
+.sr-btn.sr-play { font-weight: bold; color: #006600; }
+.sr-vol-wrap {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sr-vol-wrap input[type=range] { width: 90px; }

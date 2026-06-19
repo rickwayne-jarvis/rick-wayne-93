@@ -30,6 +30,8 @@
     { id: 'contact',  label: 'CONTACT.eml',     icon: ICONS.mail,     action: () => openContact() },
     { id: 'mine',     label: 'MINESWEEPER.exe', icon: ICONS.mine,     action: () => RW.Minesweeper.open() },
     { id: 'movie',    label: 'Movie Maker.exe', icon: ICONS.movie,    action: () => RW.MovieMaker.open() },
+    { id: 'music',    label: 'Music.exe',       icon: ICONS.music,    action: () => RW.Music && RW.Music.open() },
+    { id: 'ie',       label: 'Internet Explorer.exe', icon: ICONS.ie, action: () => RW.IE && RW.IE.open() },
     { id: 'recycle',  label: 'Recycle Bin',     icon: ICONS.recycle,  action: () => openRecycle() }
   ];
 
