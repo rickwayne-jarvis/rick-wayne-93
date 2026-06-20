@@ -11,14 +11,14 @@
   // === Track config. Swap title / artist / src in one place. ===
   // src: string -> use HTMLAudioElement. null -> procedural synth via synthPreset.
   const MIXTAPE = [
-    { title: 'Untitled Track 1', artist: 'TBD',           src: null, duration: 36, synthPreset: 'preset1' },
-    { title: 'Untitled Track 2', artist: 'TBD',           src: null, duration: 34, synthPreset: 'preset2' },
-    { title: 'Untitled Track 3', artist: 'TBD',           src: null, duration: 38, synthPreset: 'preset3' },
-    { title: 'Untitled Track 4', artist: 'TBD',           src: null, duration: 32, synthPreset: 'preset4' },
-    { title: 'Untitled Track 5', artist: 'TBD',           src: null, duration: 40, synthPreset: 'preset5' },
-    { title: 'Untitled Track 6', artist: 'TBD',           src: null, duration: 36, synthPreset: 'preset6' },
-    { title: 'Untitled Track 7', artist: 'TBD',           src: null, duration: 33, synthPreset: 'preset7' },
-    { title: 'Untitled Track 8', artist: 'TBD',           src: null, duration: 42, synthPreset: 'preset8' }
+    { title: 'Bring Me To Life',     artist: 'Evanescence',           src: 'audio/01-evanescence-bring-me-to-life.mp3',     duration: 0 },
+    { title: "What's My Age Again",  artist: 'Blink-182',             src: 'audio/02-blink182-whats-my-age-again.mp3',      duration: 0 },
+    { title: 'This Love',            artist: 'Maroon 5',              src: 'audio/03-maroon5-this-love.mp3',                duration: 0 },
+    { title: 'Here (In Your Arms)',  artist: 'Hellogoodbye',          src: 'audio/04-hellogoodbye-here-in-your-arms.mp3',   duration: 0 },
+    { title: 'Hands Down',           artist: 'Dashboard Confessional',src: 'audio/05-dashboard-confessional-hands-down.mp3',duration: 0 },
+    { title: 'Breathing',            artist: 'Yellowcard',            src: 'audio/06-yellowcard-breathing.mp3',             duration: 0 },
+    { title: 'Grand Theft Autumn',   artist: 'Fall Out Boy',          src: 'audio/07-fall-out-boy-grand-theft-autumn.mp3',  duration: 0 },
+    { title: 'Semi-Charmed Life',    artist: 'Third Eye Blind',       src: 'audio/08-third-eye-blind-semi-charmed-life.mp3',duration: 0 }
   ];
   Mix.MIXTAPE = MIXTAPE;
 
