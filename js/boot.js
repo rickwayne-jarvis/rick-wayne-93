@@ -42,39 +42,12 @@
   }
 
   function startBoot(skipChime) {
-    // Stage 1: text scroll.
-    // v8: the very first BIOS line is already in the static HTML so the
-    // first painted frame is text-on-black with no white flash. We start
-    // the scroll at line index 1 when the seed is present, and fall back
-    // to printing every line from the start if it isn't.
-    const lines = [
-      'RICK WAYNE BIOS v4.51',
-      'Copyright (C) 1989-2026 Rick Wayne',
-      '',
-      'MEMORY OK... 32 MB FREE',
-      'DETECTING DREAMS... FOUND',
-      'LOADING NOSTALGIA.SYS',
-      'INITIALIZING IMAGINATION...',
-      'MOUNTING CAMERA.SYS',
-      'READING REELS FROM DISK...',
-      '',
-      'Starting MS-DOS...',
-      "C:\\> WIN",
-      ''
-    ];
-    const seeded = (bootText.textContent || '').indexOf('RICK WAYNE BIOS') >= 0;
-    let i = seeded ? 1 : 0;
-    function nextLine() {
-      if (skipped) return;
-      if (i >= lines.length) {
-        later(toStage2, 350);
-        return;
-      }
-      bootText.textContent += lines[i] + '\n';
-      i++;
-      later(nextLine, 90);
-    }
-    nextLine();
+    // v9: skip the BIOS POST text entirely. Go straight to the iconic
+    // Windows clouds "Loading Rick's Nostalgia" screen. Stage 1 is hidden
+    // before paint via the inline style block in index.html.
+    if (stage1) stage1.hidden = true;
+    if (bootText) bootText.textContent = '';
+    toStage2();
   }
 
   function toStage2() {
