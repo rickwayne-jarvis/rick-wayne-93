@@ -335,7 +335,17 @@
     }
 
     trackEls.forEach((el, i) => {
-      el.addEventListener('click', () => selectTrack(i));
+      el.addEventListener('click', () => {
+        selectTrack(i);
+        // v7 touch: single-tap also starts the track on phones.
+        if (window.RW_TOUCH) {
+          ensureCtx();
+          if (ctx && ctx.state === 'suspended') ctx.resume();
+          startTrack(i);
+          showNow();
+          animateWave();
+        }
+      });
       el.addEventListener('dblclick', () => {
         selectTrack(i);
         ensureCtx();

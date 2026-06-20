@@ -1,11 +1,19 @@
 /* wm.js - Window Manager
-   Open/close/drag/resize/min/max/focus/z-order/taskbar buttons. */
+   Open/close/drag/resize/min/max/focus/z-order/taskbar buttons.
+
+   v7: touch awareness. When window.RW_TOUCH is true (set in index.html based
+   on (pointer: coarse) plus viewport width), new windows open fullscreen
+   under the taskbar, drag and resize are disabled, and only one window is
+   visible at a time (others are minimized into the taskbar). The Win95
+   chrome (title bar, bevels, controls) is unchanged - it's the same OS,
+   just sized for thumbs. */
 
 (function () {
   const RW = window.RW = window.RW || {};
 
   const layer = () => document.getElementById('window-layer');
   const taskbar = () => document.getElementById('task-buttons');
+  const isTouch = () => !!window.RW_TOUCH;
 
   let zCounter = 100;
   let idCounter = 0;
@@ -13,6 +21,18 @@
   let activeId = null;
 
   const WM = RW.WM = {};
+
+  function taskbarHeight() {
+    const tb = document.getElementById('taskbar');
+    return tb ? tb.offsetHeight : 28;
+  }
+
+  function fitFullscreen(el) {
+    el.style.left = '0px';
+    el.style.top = '0px';
+    el.style.width = window.innerWidth + 'px';
+    el.style.height = (window.innerHeight - taskbarHeight()) + 'px';
+  }
 
   function makeId() { return 'win_' + (++idCounter); }
 
@@ -26,7 +46,20 @@
     Object.values(windows).forEach(x => {
       x.el.classList.add('inactive');
       const tb = x.task; if (tb) tb.classList.remove('active');
+      // v7 touch: hide every other window. Only the active one is visible;
+      // the rest live on the taskbar and come back when tapped. Marks them
+      // minimized in our internal state so toggleMinimize works correctly.
+      if (isTouch() && x !== w) {
+        x.el.style.display = 'none';
+        x.minimized = true;
+        if (x.task) x.task.classList.add('minimized');
+      }
     });
+    if (isTouch()) {
+      w.el.style.display = '';
+      w.minimized = false;
+      fitFullscreen(w.el);
+    }
     w.el.classList.remove('inactive');
     if (w.task) {
       w.task.classList.add('active');
@@ -47,6 +80,13 @@
     if (activeId === id) activeId = null;
     if (RW.Audio) RW.Audio.click();
     document.dispatchEvent(new CustomEvent('rw:window-closed', { detail: { id: id } }));
+    // v7 touch: when the active window closes, surface the next one if any
+    // exist - otherwise the user is staring at the empty desktop wondering
+    // where their other apps went.
+    if (isTouch()) {
+      const remaining = Object.keys(windows);
+      if (remaining.length) bringToFront(remaining[remaining.length - 1]);
+    }
   }
 
   function toggleMinimize(id) {
@@ -168,8 +208,15 @@
     el.style.width = width + 'px';
     el.style.height = height + 'px';
 
-    // Resize handle (corner)
-    if (w.resizable) {
+    // v7 touch: every window opens fullscreen. Drag/resize are pointless on
+    // a phone, so they get skipped entirely below.
+    if (isTouch()) {
+      fitFullscreen(el);
+      w.maximized = true;
+    }
+
+    // Resize handle (corner) - mouse only
+    if (w.resizable && !isTouch()) {
       const rh = document.createElement('div');
       rh.className = 'rw-resize-handle';
       el.appendChild(rh);
@@ -178,8 +225,8 @@
 
     layer().appendChild(el);
 
-    // Drag
-    addDrag(el, tb, w);
+    // Drag - mouse only
+    if (!isTouch()) addDrag(el, tb, w);
 
     // Focus on mousedown
     el.addEventListener('mousedown', () => bringToFront(id), true);
@@ -279,6 +326,14 @@
   function getActive() { return activeId ? windows[activeId] : null; }
   function get(id) { return windows[id]; }
   function all() { return Object.values(windows); }
+
+  // v7 touch: keep fullscreen windows fitted across orientation changes.
+  window.addEventListener('resize', () => {
+    if (!isTouch()) return;
+    Object.values(windows).forEach(x => {
+      if (!x.minimized) fitFullscreen(x.el);
+    });
+  });
 
   Object.assign(WM, {
     open, close, bringToFront, toggleMinimize, toggleMaximize,

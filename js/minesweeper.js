@@ -207,6 +207,40 @@
       }
       setSmile(state.won ? '8)' : (state.over ? 'X(' : ':)'));
     });
+
+    // v7 touch: long-press cycles the flag. A normal tap still reveals.
+    let touchTimer = null;
+    let touchFlagged = false;
+    div.addEventListener('touchstart', (e) => {
+      if (!window.RW_TOUCH || state.over || state.won) return;
+      touchFlagged = false;
+      setSmile('O');
+      if (touchTimer) clearTimeout(touchTimer);
+      touchTimer = setTimeout(() => {
+        touchFlagged = true;
+        cycleFlag(+div.dataset.r, +div.dataset.c);
+        setSmile(':)');
+        // haptic-ish feedback via the click sound
+        if (RW.Audio) RW.Audio.click();
+      }, 450);
+    }, { passive: true });
+    div.addEventListener('touchend', (e) => {
+      if (!window.RW_TOUCH) return;
+      if (touchTimer) { clearTimeout(touchTimer); touchTimer = null; }
+      if (state.over || state.won) return;
+      if (touchFlagged) {
+        touchFlagged = false;
+        e.preventDefault();
+        return;
+      }
+      reveal(+div.dataset.r, +div.dataset.c);
+      setSmile(state.won ? '8)' : (state.over ? 'X(' : ':)'));
+      e.preventDefault();
+    });
+    div.addEventListener('touchcancel', () => {
+      if (touchTimer) { clearTimeout(touchTimer); touchTimer = null; }
+      touchFlagged = false;
+    });
   }
 
   function startTimer() {

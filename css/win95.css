@@ -118,22 +118,13 @@ button { font-family: inherit; }
   background: var(--w95-gray);
 }
 
-/* Mobile fallback */
-.mobile-fallback {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 100000;
-  background: var(--w95-teal);
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-.mobile-card { position: relative; max-width: 340px; width: 100%; }
-@media (max-width: 720px), (max-height: 480px) {
-  .mobile-fallback { display: flex; }
-  .desktop, .boot-screen { display: none !important; }
-}
+/* v7: the v6 mobile-fallback element and its small-viewport media query
+   were removed because the desktop OS now adapts to every viewport via
+   css/responsive.css. The .mobile-fallback / .mobile-card classes are
+   left defined (and hidden) only as a safety net in case any old cached
+   HTML references them. */
+.mobile-fallback { display: none !important; }
+.mobile-card { display: none !important; }
 
 /* Boot screen */
 .boot-screen {

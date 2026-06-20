@@ -48,6 +48,55 @@
   CM.show = show;
 
   document.addEventListener('click', hide);
+
+  // v7 touch: long-press (>=500ms) acts as right-click. Bound on the desktop
+  // surface only - inside windows, normal taps stay normal taps.
+  (function () {
+    let timer = null;
+    let startX = 0, startY = 0;
+    let firedLongPress = false;
+    const LONG_PRESS_MS = 500;
+    const MOVE_TOLERANCE = 10;
+
+    document.addEventListener('touchstart', (e) => {
+      if (!window.RW_TOUCH) return;
+      const desk = e.target.closest('#desktop-surface');
+      if (!desk) return;
+      if (e.target.closest('.window')) return; // skip inside windows
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY;
+      firedLongPress = false;
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        firedLongPress = true;
+        const synth = new MouseEvent('contextmenu', {
+          bubbles: true, cancelable: true,
+          clientX: startX, clientY: startY
+        });
+        e.target.dispatchEvent(synth);
+      }, LONG_PRESS_MS);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!timer) return;
+      const t = e.touches[0];
+      if (Math.abs(t.clientX - startX) > MOVE_TOLERANCE ||
+          Math.abs(t.clientY - startY) > MOVE_TOLERANCE) {
+        clearTimeout(timer); timer = null;
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      if (timer) { clearTimeout(timer); timer = null; }
+      // If long-press fired, suppress the subsequent click so we don't also
+      // open the icon underneath.
+      if (firedLongPress) {
+        firedLongPress = false;
+        e.preventDefault();
+      }
+    });
+  })();
+
   document.addEventListener('contextmenu', (e) => {
     const icon = e.target.closest('.desktop-icon');
     const desk = e.target.closest('#desktop-surface');

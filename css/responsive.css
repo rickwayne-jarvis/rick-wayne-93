@@ -1,0 +1,614 @@
+/* responsive.css - v7
+
+   Make the Win95 desktop OS usable on a phone without breaking the desktop
+   experience. The rule: same OS, same chrome (bevels, gradients, blue title
+   bars, MS Sans Serif / Tahoma fonts), just sized for thumbs. No layout
+   restructuring - only scaling.
+
+   Two triggers:
+     - html.rw-touch         set by the inline script in index.html when
+                             pointer:coarse or a narrow touchable viewport
+                             is detected. Used for behavioural CSS.
+     - @media (max-width: 768px)  used for plain sizing overrides so that
+                             desktop browsers resized small also get the
+                             friendly layout, and to guard against
+                             misdetection.
+
+   Anything inside @media (pointer: fine) is desktop-mouse-only and must
+   stay untouched at full size. */
+
+/* =========================================================================
+   1. Touch device baseline
+   ========================================================================= */
+html.rw-touch,
+html.rw-touch body {
+  /* allow iOS to actually scroll inside windows; the OS root is fixed but
+     window bodies use overflow:auto and need -webkit-overflow-scrolling */
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+html.rw-touch button,
+html.rw-touch .start-item,
+html.rw-touch .mb-item,
+html.rw-touch .explorer-item,
+html.rw-touch .mc-drive,
+html.rw-touch .desktop-icon {
+  /* kill the iOS tap highlight - the Win95 selection style is enough */
+  -webkit-tap-highlight-color: rgba(0, 0, 128, 0.15);
+}
+
+html.rw-touch .rw-window-body {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================================================
+   2. Desktop icons - bigger and easier to tap
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .desktop-icons {
+    top: 12px;
+    left: 10px;
+    width: 96px;
+    gap: 18px;
+  }
+  .desktop-icon {
+    width: 96px;
+    min-height: 96px;
+    padding: 6px 0 4px;
+  }
+  .desktop-icon .icon-img {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 8px;
+  }
+  .desktop-icon .icon-img svg {
+    width: 56px;
+    height: 56px;
+  }
+  .desktop-icon .icon-label {
+    font-size: 13px;
+    max-width: 94px;
+    line-height: 1.2;
+    padding: 2px 4px;
+  }
+}
+
+/* =========================================================================
+   3. Taskbar - taller, bigger Start button, bigger tray
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .taskbar {
+    height: 48px;
+    padding: 4px;
+    gap: 4px;
+  }
+  .start-btn {
+    height: 40px;
+    padding: 0 12px;
+    font-size: 14px;
+    gap: 6px;
+  }
+  .start-btn:active, .start-btn.active {
+    padding: 1px 11px 0 13px;
+  }
+  .start-logo {
+    width: 20px;
+    height: 20px;
+  }
+  .task-divider {
+    height: 40px;
+  }
+  .task-buttons {
+    gap: 4px;
+  }
+  .task-btn {
+    height: 40px;
+    font-size: 13px;
+    padding: 0 8px;
+    flex: 0 1 180px;
+    min-width: 100px;
+  }
+  .task-btn .tb-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  .system-tray {
+    height: 40px;
+  }
+  .tray-icon {
+    height: 32px;
+    min-width: 36px;
+    padding: 0 8px;
+  }
+  .tray-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .clock {
+    font-size: 13px;
+    min-width: 72px;
+    padding-right: 10px;
+  }
+}
+
+/* =========================================================================
+   4. Start menu - wider, taller rows, thumb-friendly font
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .start-menu {
+    left: 4px;
+    right: 4px;
+    bottom: 52px;
+    min-width: 0;
+    max-width: calc(100vw - 8px);
+    font-size: 15px;
+  }
+  .start-side { width: 40px; padding: 16px 0; }
+  .start-side-text { font-size: 22px; }
+  .start-items { min-width: 0; padding: 4px; flex: 1; }
+  .start-item {
+    min-height: 44px;
+    padding: 10px 28px 10px 8px;
+    font-size: 15px;
+  }
+  .start-item .si-ico {
+    width: 28px;
+    font-size: 14px;
+    margin-right: 8px;
+  }
+  .start-item .si-arrow { font-size: 14px; }
+  .sub-menu {
+    min-width: 220px;
+    padding: 4px;
+  }
+  .sub-menu .start-item {
+    min-height: 44px;
+    font-size: 14px;
+  }
+  /* second-level submenus would overflow off the right edge of the screen,
+     so flip them open above their parent instead. Still the same bevel,
+     just stacked. */
+  .start-menu .has-sub .sub-menu {
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    top: auto;
+    min-width: 0;
+  }
+}
+
+/* =========================================================================
+   5. Windows - fullscreen on touch, bigger title bar + controls
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .window > .title-bar {
+    height: 32px;
+    padding: 3px 4px 3px 8px;
+    font-size: 13px;
+  }
+  .window > .title-bar .title-bar-controls button {
+    width: 44px;
+    height: 28px;
+    min-width: 44px;
+    font-size: 14px;
+    margin-left: 2px;
+  }
+  .title-bar-text .tb-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  /* The resize handle is hidden by wm.js on touch, but belt + braces. */
+  .rw-resize-handle { display: none; }
+
+  /* body fills more, since the title bar is taller */
+  .rw-window-body {
+    height: calc(100% - 32px);
+  }
+}
+
+/* =========================================================================
+   6. Context menu - bigger rows for finger tapping
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .context-menu {
+    font-size: 15px;
+    min-width: 220px;
+  }
+  .context-menu li {
+    padding: 12px 28px;
+    min-height: 44px;
+  }
+  .context-menu .sub-menu { min-width: 200px; }
+}
+
+/* =========================================================================
+   7. File Explorer - large-icon mode, more spacing
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .menu-bar { font-size: 13px; }
+  .menu-bar .mb-item { padding: 8px 14px; }
+  .toolbar { padding: 4px; }
+  .toolbar .tb-btn {
+    min-width: 56px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+  .toolbar .tb-btn .ico { font-size: 18px; }
+  .toolbar .tb-sep { height: 36px; }
+  .address-bar { padding: 4px 6px; font-size: 13px; }
+  .address-bar .address-input { height: 32px; font-size: 13px; }
+  .explorer-list {
+    padding: 12px;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill, 108px);
+  }
+  .explorer-item {
+    width: 108px;
+    padding: 8px 4px;
+  }
+  .explorer-item .icon-img {
+    width: 56px;
+    height: 56px;
+  }
+  .explorer-item .icon-img svg {
+    width: 56px;
+    height: 56px;
+  }
+  .explorer-item .favicon { width: 56px; height: 56px; }
+  .explorer-item .label {
+    font-size: 13px;
+    margin-top: 6px;
+    max-width: 100px;
+    line-height: 1.2;
+  }
+  .status-bar {
+    height: 26px;
+    font-size: 12px;
+  }
+  .status-bar .sb-cell { height: 22px; }
+  .my-computer-grid {
+    grid-template-columns: repeat(auto-fill, 108px);
+    gap: 14px;
+    padding: 14px;
+  }
+  .mc-drive .icon-img { width: 56px; height: 56px; }
+  .mc-drive .icon-img svg { width: 56px; height: 56px; }
+  .mc-drive .label { font-size: 13px; }
+}
+
+/* =========================================================================
+   8. WMP - video over info layout on narrow viewports
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .wmp-main { flex-direction: column; }
+  .wmp-video {
+    min-height: 220px;
+    flex: 0 0 auto;
+    height: 38vh;
+  }
+  .wmp-info {
+    width: auto;
+    border-left: 0;
+    border-top: 2px solid var(--w95-gray-darker);
+    max-height: 40vh;
+    font-size: 13px;
+  }
+  .wmp-info h3 { font-size: 14px; }
+  .wmp-transport button {
+    width: 44px;
+    height: 36px;
+    font-size: 14px;
+  }
+  .wmp-volume input[type=range] { width: 100px; }
+  .wmp-seek .time { font-size: 13px; min-width: 88px; }
+  .wmp-status { height: 24px; font-size: 12px; }
+}
+
+/* =========================================================================
+   9. Calculator - bigger keys
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .calc-body {
+    padding: 6px;
+    font-size: 13px;
+  }
+  .calc-display {
+    height: 44px;
+    margin: 8px 4px;
+  }
+  .calc-display-text {
+    font-size: 22px;
+    line-height: 36px;
+  }
+  .calc-keys { gap: 6px; padding: 0 4px 6px; }
+  .calc-row { gap: 6px; }
+  .calc-body button.k {
+    height: 48px;
+    font-size: 16px;
+  }
+  .calc-row .k-empty { height: 48px; }
+}
+
+/* =========================================================================
+   10. Paint - bigger tools, fluid canvas
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .paint-chrome {
+    width: 100%;
+    max-width: 100%;
+  }
+  /* Paint app body */
+  .paint-app-body .paint-toolbar button,
+  .paint-app .paint-toolbar button {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .paint-app-body .paint-palette-swatch,
+  .paint-app .paint-palette-swatch {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .paint-canvas { padding: 6px; }
+}
+
+/* =========================================================================
+   11. Minesweeper - bigger cells
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .ms-frame { margin: 12px; padding: 8px; }
+  .ms-header { padding: 6px 8px; margin-bottom: 8px; }
+  .ms-lcd {
+    font-size: 26px;
+    min-width: 64px;
+    padding: 3px 6px;
+  }
+  .ms-smiley {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+  }
+  .ms-cell {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 18px;
+  }
+  .ms-menu { font-size: 13px; }
+  .ms-menu .mb-item { padding: 8px 14px; }
+  .ms-menu .mb-sub div {
+    padding: 10px 24px 10px 22px;
+    font-size: 13px;
+  }
+}
+
+/* =========================================================================
+   12. Solitaire - bigger cards, scrollable felt
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .sol-felt {
+    padding: 8px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sol-top {
+    grid-template-columns: 56px 56px 20px 56px 56px 56px 56px;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .sol-tableau {
+    grid-template-columns: repeat(7, 56px);
+    gap: 6px;
+    min-height: 360px;
+  }
+  .sol-pile, .sol-card, .sol-empty {
+    width: 56px;
+  }
+  .sol-card, .sol-empty {
+    height: 78px;
+  }
+  .sol-tab { min-height: 360px; }
+  .sol-card.face .pip { font-size: 24px; }
+  .sol-card.face .cnr { font-size: 12px; }
+  .sol-body .menu-bar { font-size: 13px; }
+  .sol-body .menu-bar .mb-item { padding: 8px 14px; }
+}
+
+/* =========================================================================
+   13. Movie Maker - bigger preview + buttons
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .mm-toolbar button,
+  .mm-btn {
+    min-height: 40px !important;
+    font-size: 13px !important;
+  }
+  .mm-preview, .mm-screen {
+    min-height: 220px;
+  }
+  /* first-movie WMP card */
+  .fm-line { font-size: 20px; padding: 10px; }
+  .fm-btn { padding: 8px 16px; font-size: 13px; min-height: 40px; }
+  .fm-time { font-size: 14px; }
+  .fm-info { font-size: 13px; padding: 10px 12px; }
+}
+
+/* =========================================================================
+   14. Mixtape - bigger controls, scaled visualizer
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .mixtape-body, .mt-body {
+    font-size: 13px;
+  }
+  .mt-controls button,
+  .mixtape-body button {
+    min-height: 40px;
+    min-width: 40px;
+    font-size: 14px;
+  }
+  .mt-visualizer canvas,
+  .mixtape-vis canvas {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 120px;
+  }
+  .mt-track-list, .mixtape-tracks {
+    font-size: 13px;
+  }
+  .mt-track-list li, .mixtape-tracks li {
+    min-height: 44px;
+    padding: 10px 12px;
+  }
+}
+
+/* =========================================================================
+   15. IE + MySpace - scale naturally inside IE chrome
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .ie-toolbar button, .ie-btn {
+    min-height: 40px;
+    font-size: 13px;
+  }
+  .ie-addr-bar input, .ie-address input {
+    height: 36px;
+    font-size: 14px;
+  }
+  /* MySpace inside IE - let it scroll naturally */
+  .myspace-page, .ms-page, .myspace-body {
+    font-size: 14px;
+  }
+}
+
+/* =========================================================================
+   16. Music - bigger transport, fluid layout
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .music-body button, .music-controls button {
+    min-height: 40px;
+    min-width: 40px;
+    font-size: 14px;
+  }
+  .music-body input[type=range] {
+    height: 28px;
+  }
+}
+
+/* =========================================================================
+   17. Dialog buttons - bigger
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .dialog-body { padding: 14px; font-size: 13px; }
+  .dialog-body p { margin: 8px 0; }
+  .dialog-buttons {
+    gap: 8px;
+    padding: 10px;
+  }
+  .dialog-buttons button {
+    min-width: 88px;
+    min-height: 40px;
+    font-size: 13px;
+    padding: 4px 12px;
+  }
+  .run-dialog input[type=text] {
+    height: 36px;
+    font-size: 14px;
+  }
+  .shutdown-dialog label {
+    display: block;
+    padding: 8px 4px;
+    font-size: 14px;
+  }
+  .shutdown-dialog input[type=radio] {
+    transform: scale(1.4);
+    margin-right: 10px;
+  }
+}
+
+/* =========================================================================
+   18. Boot screen - scale to fill phone viewport
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .boot-screen { font-size: 13px; }
+  .boot-stage { padding: 24px; }
+  .boot-text { font-size: 12px; }
+  .boot-banner { margin-bottom: 40px; }
+  .boot-flag {
+    width: 72px;
+    height: 72px;
+    gap: 4px;
+  }
+  .boot-microsoft { font-size: 16px; }
+  .boot-windows, .boot-windows span { font-size: 44px; }
+  .boot-progress-wrap {
+    width: calc(100vw - 48px);
+    max-width: 360px;
+  }
+  .boot-loading { font-size: 16px; }
+  .boot-progress { height: 18px; }
+  .boot-skip { font-size: 12px; }
+  .bsod { padding: 24px; font-size: 14px; }
+  .shutdown-screen { font-size: 18px; padding: 24px; text-align: center; }
+}
+
+/* =========================================================================
+   19. Notepad / About Me - readable on phones
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .notepad-doc {
+    padding: 14px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .notepad-body textarea {
+    font-size: 14px;
+    padding: 10px;
+  }
+  .paint-chrome { width: 100%; }
+  .photo-caption { font-size: 13px; }
+}
+
+/* =========================================================================
+   20. Recycle Bin rows + ARP rows
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .recycle-row {
+    grid-template-columns: 32px 1fr 100px;
+    padding: 8px 8px;
+    font-size: 13px;
+  }
+  .recycle-row.recycle-head {
+    grid-template-columns: 1fr 100px;
+    font-size: 13px;
+  }
+  .recycle-toolbar { padding: 8px; gap: 8px; }
+  .recycle-toolbar button { min-height: 40px; padding: 6px 12px; font-size: 13px; }
+  .arp-list { max-height: 200px; }
+  .arp-row { padding: 8px 0; font-size: 13px; }
+}
+
+/* =========================================================================
+   21. Suppress horizontal scrollbar on the OS root
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  html, body { overflow: hidden !important; }
+  .desktop-surface { overflow: hidden; }
+}
+
+/* =========================================================================
+   22. Display Properties dialog - narrower preview
+   ========================================================================= */
+@media (max-width: 768px), (pointer: coarse) {
+  .display-prefs .preview {
+    width: 100%;
+    max-width: 320px;
+    height: 160px;
+  }
+  .display-prefs .dp-list {
+    max-height: 200px;
+    font-size: 13px;
+  }
+  .display-prefs .dp-row {
+    padding: 8px 10px;
+    min-height: 40px;
+  }
+}

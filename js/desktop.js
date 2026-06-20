@@ -67,6 +67,7 @@
   function buildIcons() {
     const ul = document.getElementById('desktop-icons');
     ul.innerHTML = '';
+    const touch = !!window.RW_TOUCH;
     desktopIcons.forEach(cfg => {
       const li = document.createElement('li');
       li.className = 'desktop-icon';
@@ -78,6 +79,12 @@
         document.querySelectorAll('.desktop-icon.selected').forEach(x => x.classList.remove('selected'));
         li.classList.add('selected');
         if (RW.Audio) RW.Audio.click();
+        // v7 touch: single-tap to open. On a phone, double-tap is a
+        // browser zoom gesture and feels wrong for an icon.
+        if (touch) {
+          if (RW.Audio) RW.Audio.dblclick();
+          cfg.action();
+        }
       });
       li.addEventListener('dblclick', (e) => {
         e.stopPropagation();
@@ -236,6 +243,9 @@
       el.addEventListener('click', () => {
         w.body.querySelectorAll('.mc-drive').forEach(x => x.classList.remove('selected'));
         el.classList.add('selected');
+        // v7 touch: single-tap opens. Same authentic Win95 chrome, just
+        // friendlier for thumbs.
+        if (window.RW_TOUCH) drives[i].action();
       });
       el.addEventListener('dblclick', () => drives[i].action());
       el.addEventListener('contextmenu', (e) => {
@@ -379,6 +389,10 @@
         e.stopPropagation();
         list.querySelectorAll('.explorer-item.selected').forEach(x => x.classList.remove('selected'));
         el.classList.add('selected');
+        if (window.RW_TOUCH && it.action) {
+          if (RW.Audio) RW.Audio.dblclick();
+          it.action();
+        }
       });
       el.addEventListener('dblclick', (e) => {
         e.stopPropagation();
@@ -598,6 +612,7 @@
         e.stopPropagation();
         list.querySelectorAll('.explorer-item.selected').forEach(x => x.classList.remove('selected'));
         el.classList.add('selected');
+        if (window.RW_TOUCH) { if (RW.Audio) RW.Audio.dblclick(); it.action(); }
       });
       el.addEventListener('dblclick', () => { if (RW.Audio) RW.Audio.dblclick(); it.action(); });
       list.appendChild(el);

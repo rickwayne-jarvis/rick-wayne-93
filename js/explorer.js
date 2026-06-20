@@ -66,6 +66,11 @@
         list.querySelectorAll('.explorer-item.selected').forEach(x => x.classList.remove('selected'));
         el.classList.add('selected');
         if (RW.Audio) RW.Audio.click();
+        // v7 touch: single-tap to open
+        if (window.RW_TOUCH && it.action) {
+          if (RW.Audio) RW.Audio.dblclick();
+          it.action();
+        }
       });
       el.addEventListener('dblclick', (e) => {
         e.stopPropagation();
