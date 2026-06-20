@@ -1,0 +1,100 @@
+/* welcome-note.css
+   A pinned Post-It style sticky note on the Win95 desktop. Hand-written feel,
+   yellow paper, slight tape at the corner, lo-fi crinkle. Lives in the
+   bottom-right by default. Persists across window opens. Dismissable, and the
+   dismissal sticks for the rest of the session.
+*/
+
+.welcome-note {
+  position: fixed;
+  right: 24px;
+  bottom: 64px; /* sits above the taskbar */
+  width: 280px;
+  z-index: 600; /* above wallpaper, below windows */
+  padding: 18px 18px 14px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0) 0px,
+      rgba(0,0,0,0) 23px,
+      rgba(0,0,0,0.04) 24px
+    ),
+    linear-gradient(135deg, #fff9b0 0%, #fff394 50%, #ffea7a 100%);
+  color: #2a2a18;
+  font-family: 'Caveat', 'Marker Felt', 'Bradley Hand', 'Comic Sans MS', cursive;
+  font-size: 18px;
+  line-height: 1.35;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.25),
+    0 10px 22px rgba(0, 0, 0, 0.18),
+    inset 0 0 22px rgba(150, 130, 0, 0.07);
+  transform: rotate(-1.6deg);
+  border-radius: 1px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Strip of "tape" at the top-left */
+.welcome-note::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  width: 80px;
+  height: 22px;
+  background: rgba(220, 220, 220, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+  transform: rotate(-4deg);
+  pointer-events: none;
+}
+
+.welcome-note p {
+  margin: 0 0 10px;
+}
+
+.welcome-note p:last-of-type {
+  margin-bottom: 0;
+}
+
+.welcome-note .signoff {
+  margin-top: 12px;
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.welcome-note .dismiss {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Tahoma', 'MS Sans Serif', sans-serif;
+  font-size: 16px;
+  color: #6a5a00;
+  opacity: 0.5;
+  padding: 0;
+  line-height: 22px;
+}
+
+.welcome-note .dismiss:hover,
+.welcome-note .dismiss:focus {
+  opacity: 1;
+  color: #2a2a18;
+  outline: none;
+}
+
+/* Mobile: slightly smaller, more centered */
+@media (max-width: 720px) {
+  .welcome-note {
+    right: 12px;
+    bottom: 80px;
+    width: calc(100vw - 24px);
+    max-width: 320px;
+    font-size: 16px;
+  }
+}

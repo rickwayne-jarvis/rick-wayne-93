@@ -50,6 +50,9 @@
        prior v6 mobile route + mobile.js / mobile.css / content.js files are
        still in the repo but no longer wired up. -->
   <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/w95fa">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap">
   <link rel="stylesheet" href="css/98.css">
   <link rel="stylesheet" href="css/win95.css">
   <link rel="stylesheet" href="css/desktop.css">
@@ -65,6 +68,7 @@
   <link rel="stylesheet" href="css/ie.css">
   <link rel="stylesheet" href="css/mixtape.css">
   <link rel="stylesheet" href="css/myspace.css">
+  <link rel="stylesheet" href="css/welcome-note.css">
   <!-- responsive.css MUST load last so its @media overrides win. -->
   <link rel="stylesheet" href="css/responsive.css">
 
@@ -113,6 +117,7 @@
   <script src="js/keyboard.js" defer></script>
   <script src="js/easter.js" defer></script>
   <script src="js/boot.js" defer></script>
+  <script src="js/welcome-note.js" defer></script>
 </head>
 <body>
 
@@ -181,6 +186,15 @@
       <div id="window-layer"></div>
 
       <div id="context-menu" class="context-menu" hidden></div>
+
+      <aside class="welcome-note" id="welcome-note" role="note" aria-label="A note from Rick">
+        <button class="dismiss" type="button" id="welcome-note-dismiss" aria-label="Dismiss note">x</button>
+        <p>hey, welcome to the basement.</p>
+        <p>i was 14 in 2003 when i picked up a camera. windows movie maker on a beige compaq. mom let me wreck the basement with cables. i never stopped.</p>
+        <p>this whole little OS is an homage. to that room, to that machine, to whatever it is that made me want to spend my life building things.</p>
+        <p>poke around. easter eggs everywhere. hit the X any time to get back to the real site.</p>
+        <p class="signoff">rick</p>
+      </aside>
     </div>
 
     <!-- Taskbar -->
