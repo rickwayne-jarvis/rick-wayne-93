@@ -580,7 +580,77 @@
     // Push initial blank snapshot for undo coverage
     pushUndo();
 
+    // v8 easter egg: when a single non-white color covers more than 50%
+    // of the canvas, pop a small Win95 dialog from the corner once per
+    // session. Sampling is cheap - we step through the canvas in big
+    // strides every few seconds while the user is actively drawing.
+    setupCoverageEgg(canvas, ctx);
   };
+
+  let coverageFired = false;
+  function setupCoverageEgg(canvas, ctx) {
+    // Session guard: only one fire per session, ever.
+    try { if (sessionStorage.getItem('rw93_paint_coverage') === '1') coverageFired = true; } catch (e) {}
+    if (coverageFired) return;
+
+    let dirty = false;
+    canvas.addEventListener('mousedown', () => { dirty = true; });
+
+    function sample() {
+      if (coverageFired) { clearInterval(timer); return; }
+      if (!dirty) return;
+      dirty = false;
+      try {
+        const w = canvas.width, h = canvas.height;
+        // Step through every 8th pixel in each axis -> 80x60 = 4800 samples.
+        const img = ctx.getImageData(0, 0, w, h);
+        const data = img.data;
+        const counts = {};
+        let total = 0;
+        for (let y = 0; y < h; y += 8) {
+          for (let x = 0; x < w; x += 8) {
+            const i = (y * w + x) * 4;
+            const r = data[i], g = data[i + 1], b = data[i + 2];
+            // Quantize to 32-color buckets so anti-aliased edges don't
+            // count as separate hues.
+            const key = ((r >> 5) << 10) | ((g >> 5) << 5) | (b >> 5);
+            counts[key] = (counts[key] || 0) + 1;
+            total++;
+          }
+        }
+        // The blank canvas starts as white. Ignore white when checking
+        // dominance so "didn't draw anything" doesn't fire the egg.
+        const whiteKey = ((255 >> 5) << 10) | ((255 >> 5) << 5) | (255 >> 5);
+        delete counts[whiteKey];
+        let maxN = 0;
+        for (const k in counts) if (counts[k] > maxN) maxN = counts[k];
+        if (maxN / total > 0.5) {
+          coverageFired = true;
+          try { sessionStorage.setItem('rw93_paint_coverage', '1'); } catch (e) {}
+          showCoverageDialog();
+          clearInterval(timer);
+        }
+      } catch (e) { /* tainted canvas etc - just bail */ }
+    }
+    const timer = setInterval(sample, 3500);
+  }
+
+  function showCoverageDialog() {
+    const html =
+      '<div class="dialog-body">' +
+        '<p><b>Bold choice. Save it. Send it to Rick.</b></p>' +
+        '<p>rick_wayne@me.com</p>' +
+      '</div>' +
+      '<div class="dialog-buttons"><button data-close>OK</button></div>';
+    const dw = RW.WM.open({
+      title: 'Paint', icon: RW.ICONS.exe,
+      width: 360, height: 180, resizable: false, contentHTML: html,
+      // Tuck the dialog into the corner per spec.
+      x: Math.max(20, window.innerWidth - 380),
+      y: Math.max(20, window.innerHeight - 240)
+    });
+    dw.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(dw.id));
+  }
 
   function wireMenu(wrap, w, handler) {
     wrap.querySelectorAll('.menu-bar .mb-item').forEach(mb => {

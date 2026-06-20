@@ -186,6 +186,11 @@
         reBtn.disabled = false;
         recBtn.textContent = 'REC';
         setRecDot(false);
+        // v8 easter egg: after a successful recording, fade in a small
+        // tooltip next to the Send button. Removes itself when the user
+        // clicks Send or after a short timeout. Only shown once per
+        // session so a re-record doesn't double-spawn it.
+        showSendTooltip();
       };
       state.recorder = recorder;
       state.recording = true;
@@ -238,9 +243,61 @@
       if (RW.Audio) RW.Audio.click();
     });
     sendBtn.addEventListener('click', () => {
+      // v8 easter egg cleanup: hide the "I read every one" tooltip the
+      // moment the user actually clicks Send.
+      hideSendTooltip();
       if (!state.blob || !state.blobURL) return;
       openSendDialog();
     });
+
+    // v8 easter egg: tooltip pinned next to the Send to Rick button after
+    // a successful recording. Fades in, hangs around for a while or until
+    // the user clicks Send. One per session.
+    let sendTooltipEl = null;
+    let sendTooltipTimer = null;
+    let sendTooltipShown = false;
+    try { if (sessionStorage.getItem('rw93_mm_tooltip') === '1') sendTooltipShown = true; } catch (e) {}
+    function showSendTooltip() {
+      if (sendTooltipShown) return;
+      sendTooltipShown = true;
+      try { sessionStorage.setItem('rw93_mm_tooltip', '1'); } catch (e) {}
+      if (sendTooltipEl) { try { sendTooltipEl.remove(); } catch (e) {} sendTooltipEl = null; }
+      const tip = document.createElement('div');
+      tip.className = 'mm-send-tip';
+      tip.textContent = 'I read every one. Promise. - Rick';
+      // Inline styling so the tooltip works without needing a CSS edit.
+      tip.style.cssText =
+        'position:absolute;background:#ffffe1;border:1px solid #000;color:#000;' +
+        'font-family:"W95FA","Microsoft Sans Serif",Tahoma,sans-serif;font-size:11px;' +
+        'padding:5px 8px;box-shadow:1px 1px 0 #808080;z-index:1000;pointer-events:none;' +
+        'opacity:0;transition:opacity 600ms ease-in;white-space:nowrap;';
+      // Position above the Send button, anchored to the window body.
+      try {
+        const winEl = wrap.closest('.window') || wrap;
+        const winRect = winEl.getBoundingClientRect();
+        const btnRect = sendBtn.getBoundingClientRect();
+        tip.style.left = Math.max(8, btnRect.left - winRect.left - 40) + 'px';
+        tip.style.top  = Math.max(8, btnRect.top  - winRect.top  - 30) + 'px';
+        winEl.appendChild(tip);
+      } catch (e) {
+        // Fallback: attach to wrap with simple offset.
+        wrap.appendChild(tip);
+      }
+      sendTooltipEl = tip;
+      // Force reflow then fade in.
+      void tip.offsetWidth;
+      tip.style.opacity = '1';
+      // Auto-hide after a generous read window.
+      sendTooltipTimer = setTimeout(hideSendTooltip, 9000);
+    }
+    function hideSendTooltip() {
+      if (sendTooltipTimer) { clearTimeout(sendTooltipTimer); sendTooltipTimer = null; }
+      if (!sendTooltipEl) return;
+      const el = sendTooltipEl;
+      sendTooltipEl = null;
+      el.style.opacity = '0';
+      setTimeout(() => { try { el.remove(); } catch (e) {} }, 500);
+    }
 
     // ===== Menus =====
     function closeMenus() {

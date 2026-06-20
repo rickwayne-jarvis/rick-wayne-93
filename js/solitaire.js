@@ -468,7 +468,46 @@
         b.addEventListener('click', () => {
           state.deckBack = b.dataset.deck;
           render();
+          // v8: indecision easter egg. Track the last few deck choices;
+          // if the user has picked 3 different decks in a row, Rick lobs
+          // a one-liner. Fires once per session so it doesn't get noisy.
+          trackDeckPick(b.dataset.deck);
         });
+      });
+      dw.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(dw.id));
+    }
+
+    // v8 easter egg state - lives on the Solitaire window scope so it
+    // resets when the user closes and reopens the game in a new session.
+    const deckPickHistory = [];
+    let indecisionFired = false;
+    function trackDeckPick(deck) {
+      // Only register a NEW pick if it differs from the most recent one.
+      // Picking the same deck twice in a row doesn't count as indecision.
+      const last = deckPickHistory[deckPickHistory.length - 1];
+      if (deck === last) return;
+      deckPickHistory.push(deck);
+      // Keep history bounded so we don't grow forever.
+      while (deckPickHistory.length > 3) deckPickHistory.shift();
+      if (indecisionFired) return;
+      // Three different consecutive picks fires the egg.
+      if (deckPickHistory.length >= 3) {
+        const a = deckPickHistory[0], b = deckPickHistory[1], c = deckPickHistory[2];
+        if (a !== b && b !== c && a !== c) {
+          indecisionFired = true;
+          showIndecisionDialog();
+        }
+      }
+    }
+    function showIndecisionDialog() {
+      const html =
+        '<div class="dialog-body">' +
+          '<p><b>Indecisive. Same. - Rick</b></p>' +
+        '</div>' +
+        '<div class="dialog-buttons"><button data-close>OK</button></div>';
+      const dw = RW.WM.open({
+        title: 'Solitaire', icon: ICONS.exe,
+        width: 320, height: 160, resizable: false, contentHTML: html
       });
       dw.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(dw.id));
     }

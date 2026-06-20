@@ -122,7 +122,45 @@
       memory: 0
     };
 
-    function setDisplay(s) { state.display = s; dispEl.textContent = s; }
+    function setDisplay(s) {
+      state.display = s;
+      dispEl.textContent = s;
+      // v8 easter egg: when the display equals exactly 1989, pop a
+      // dialog. Trigger off the display update so it works whether the
+      // user typed 1989 directly or computed it (e.g. 1000 + 989). Fires
+      // once per session.
+      checkBirthYearEgg(s);
+    }
+    let birthYearFired = false;
+    try { if (sessionStorage.getItem('rw93_calc_1989') === '1') birthYearFired = true; } catch (e) {}
+    function checkBirthYearEgg(disp) {
+      if (birthYearFired) return;
+      // Display always carries a trailing '.' for integers (e.g. "1989.").
+      // Accept any equivalent representation that parses to exactly 1989
+      // with no decimal part.
+      const v = parseFloat(disp);
+      if (!isFinite(v)) return;
+      if (v !== 1989) return;
+      // Reject things like 1989.5; the integer check above + display dot
+      // pattern is the safest signal.
+      if (Math.abs(v - 1989) > 0.0000001) return;
+      birthYearFired = true;
+      try { sessionStorage.setItem('rw93_calc_1989', '1'); } catch (e) {}
+      // Defer slightly so the dialog doesn't open inside the same input
+      // handler that just updated the display.
+      setTimeout(() => {
+        const html =
+          '<div class="dialog-body">' +
+            '<p><b>My birth year. We met for a reason.</b></p>' +
+          '</div>' +
+          '<div class="dialog-buttons"><button data-close>OK</button></div>';
+        const dw = RW.WM.open({
+          title: 'Calculator', icon: ICONS.exe,
+          width: 360, height: 160, resizable: false, contentHTML: html
+        });
+        dw.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(dw.id));
+      }, 80);
+    }
 
     function inputDigit(d) {
       if (state.replaceOnInput || state.display === '0.' || state.display === 'Error') {
