@@ -191,6 +191,20 @@
   letter-spacing: 4px;
   z-index: 2;
 }
+/* v9: real Rick photo (2003) styled with the same lo-fi retro filter as the
+   About Me matrix photo. Looks like a profile pic uploaded from a
+   Compaq camera through a 56k connection. */
+.msp-pp-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 1;
+  filter: contrast(1.1) saturate(0.85) brightness(0.95) sepia(0.15);
+  image-rendering: pixelated;
+}
 .msp-pp-scan {
   position: absolute;
   inset: 0;

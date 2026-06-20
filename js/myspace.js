@@ -115,7 +115,7 @@
           '<div class="msp-profilepic">' +
             '<div class="msp-profilepic-inner">' +
               '<div class="msp-pp-glow"></div>' +
-              '<div class="msp-pp-initials">RW</div>' +
+              '<img class="msp-pp-photo" src="images/1%20(80).JPG" alt="Rick, 2003">' +
               '<div class="msp-pp-scan"></div>' +
             '</div>' +
           '</div>' +
