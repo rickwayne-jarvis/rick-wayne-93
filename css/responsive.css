@@ -44,42 +44,46 @@ html.rw-touch .rw-window-body {
 
 /* =========================================================================
    2. Desktop icons - bigger and easier to tap.
-   v9: 11 icons stack vertically and overflow off-screen on a phone. Wrap
-   into multi-column flex so every icon is reachable without scrolling.
-   The icon column stays anchored to the wallpaper's left edge (Win95
-   convention), it just wraps to a second / third column as needed.
+   v9: 11 icons stacked vertically overflow off-screen on a phone. Wrap
+   into multi-column flex so every icon is reachable without scrolling
+   and the welcome note in the bottom-center doesn't bury the lower
+   icons. Column row-height stays a comfortable tap target.
    ========================================================================= */
 @media (max-width: 768px), (pointer: coarse) {
+  /* The icon list stacks two columns down the left half of the wallpaper.
+     Width capped so the welcome note can sit in the right/bottom area
+     without burying the lower icons; overflow-hidden so anything that
+     spills past the available area clips instead of pushing the layout
+     (the user can always dismiss the note for full reach). */
   .desktop-icons {
-    top: 12px;
-    left: 10px;
-    right: 10px;
-    bottom: 56px; /* clear of the welcome note + taskbar */
-    width: auto;
+    top: 8px;
+    left: 8px;
+    width: 168px;
+    bottom: 44px;
     flex-flow: column wrap;
     align-content: flex-start;
-    gap: 12px 14px;
+    gap: 6px 10px;
     overflow: hidden;
   }
   .desktop-icon {
-    width: 78px;
-    min-height: 82px;
-    padding: 4px 0 2px;
+    width: 76px;
+    min-height: 72px;
+    padding: 2px 0 2px;
   }
   .desktop-icon .icon-img {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 6px;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 4px;
   }
   .desktop-icon .icon-img svg {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
   }
   .desktop-icon .icon-label {
-    font-size: 12px;
-    max-width: 76px;
-    line-height: 1.2;
-    padding: 2px 4px;
+    font-size: 11px;
+    max-width: 74px;
+    line-height: 1.15;
+    padding: 1px 3px;
   }
 }
 
@@ -112,13 +116,20 @@ html.rw-touch .rw-window-body {
   }
   .task-buttons {
     gap: 3px;
+    /* v9: phones can stack multiple windows but the taskbar is narrow;
+       let it horizontally scroll so the back ones stay reachable. */
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
   }
   .task-btn {
     height: 30px;
     font-size: 11px;
     padding: 0 6px;
-    flex: 0 1 140px;
-    min-width: 70px;
+    flex: 0 0 120px;
+    min-width: 100px;
+    max-width: 160px;
   }
   .task-btn .tb-icon svg {
     width: 16px;
@@ -581,8 +592,10 @@ html.rw-touch .rw-window-body {
     gap: 4px;
   }
   .ie-addr-input {
-    height: 30px;
-    font-size: 13px;
+    height: 32px;
+    /* iOS Safari zooms when an input is tapped if its font-size is under
+       16px. Bump to 16px so the page stays put. */
+    font-size: 16px;
     min-width: 0;
     flex: 1 1 60%;
   }
@@ -696,21 +709,22 @@ html.rw-touch .rw-window-body {
     font-size: 13px;
     padding: 4px 12px;
   }
-  /* Contact compose: bigger taps + comfortable typing on touch. */
+  /* Contact compose: bigger taps + comfortable typing on touch. iOS
+     auto-zooms inputs smaller than 16px, so anchor both fields at 16. */
   .eml-compose { padding: 12px 14px 0; gap: 8px; }
   .eml-lbl { min-width: 64px; font-size: 13px; }
   .eml-subject {
     height: 36px;
-    font-size: 14px;
+    font-size: 16px;
   }
   .eml-body {
     min-height: 160px;
-    font-size: 15px;
+    font-size: 16px;
     padding: 8px;
   }
   .run-dialog input[type=text] {
     height: 36px;
-    font-size: 14px;
+    font-size: 16px;
   }
   .shutdown-dialog label {
     display: block;
