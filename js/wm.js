@@ -27,11 +27,21 @@
     return tb ? tb.offsetHeight : 28;
   }
 
+  // v9: on touch, windows no longer fill the entire viewport. We leave
+  // a strip across the top (so the rickwayne.cc overlay close X stays
+  // tappable) and a small inset on each side so the desktop wallpaper
+  // still peeks through behind the window. Multiple windows can stack
+  // via the taskbar.
   function fitFullscreen(el) {
-    el.style.left = '0px';
-    el.style.top = '0px';
-    el.style.width = window.innerWidth + 'px';
-    el.style.height = (window.innerHeight - taskbarHeight()) + 'px';
+    const topInset = 64;
+    const sideInset = 12;
+    const bottomBuffer = 8;
+    const w = window.innerWidth - sideInset * 2;
+    const h = window.innerHeight - topInset - taskbarHeight() - bottomBuffer;
+    el.style.left = sideInset + 'px';
+    el.style.top = topInset + 'px';
+    el.style.width = w + 'px';
+    el.style.height = h + 'px';
   }
 
   function makeId() { return 'win_' + (++idCounter); }
@@ -42,18 +52,11 @@
     zCounter++;
     if (zCounter > 8999) zCounter = 8999;
     w.el.style.zIndex = zCounter;
-    // mark all inactive
+    // mark all inactive. v9: do not hide other windows on touch. Windows
+    // stack normally and the user can swap between them via the taskbar.
     Object.values(windows).forEach(x => {
       x.el.classList.add('inactive');
       const tb = x.task; if (tb) tb.classList.remove('active');
-      // v7 touch: hide every other window. Only the active one is visible;
-      // the rest live on the taskbar and come back when tapped. Marks them
-      // minimized in our internal state so toggleMinimize works correctly.
-      if (isTouch() && x !== w) {
-        x.el.style.display = 'none';
-        x.minimized = true;
-        if (x.task) x.task.classList.add('minimized');
-      }
     });
     if (isTouch()) {
       w.el.style.display = '';

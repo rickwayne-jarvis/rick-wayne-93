@@ -77,58 +77,60 @@ html.rw-touch .rw-window-body {
 /* =========================================================================
    3. Taskbar - taller, bigger Start button, bigger tray
    ========================================================================= */
+/* v9: taskbar slimmed down on mobile. Was 48px which ate too much screen.
+   Now 36px - still finger-tappable but leaves real estate for the apps. */
 @media (max-width: 768px), (pointer: coarse) {
   .taskbar {
-    height: 48px;
-    padding: 4px;
-    gap: 4px;
+    height: 36px;
+    padding: 2px;
+    gap: 3px;
   }
   .start-btn {
-    height: 40px;
-    padding: 0 12px;
-    font-size: 14px;
-    gap: 6px;
+    height: 30px;
+    padding: 0 10px;
+    font-size: 12px;
+    gap: 5px;
   }
   .start-btn:active, .start-btn.active {
-    padding: 1px 11px 0 13px;
+    padding: 1px 9px 0 11px;
   }
   .start-logo {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
   }
   .task-divider {
-    height: 40px;
+    height: 30px;
   }
   .task-buttons {
-    gap: 4px;
+    gap: 3px;
   }
   .task-btn {
-    height: 40px;
-    font-size: 13px;
-    padding: 0 8px;
-    flex: 0 1 180px;
-    min-width: 100px;
+    height: 30px;
+    font-size: 11px;
+    padding: 0 6px;
+    flex: 0 1 140px;
+    min-width: 70px;
   }
   .task-btn .tb-icon svg {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
   }
   .system-tray {
-    height: 40px;
+    height: 30px;
   }
   .tray-icon {
-    height: 32px;
-    min-width: 36px;
-    padding: 0 8px;
+    height: 26px;
+    min-width: 30px;
+    padding: 0 6px;
   }
   .tray-icon svg {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
   .clock {
-    font-size: 13px;
-    min-width: 72px;
-    padding-right: 10px;
+    font-size: 11px;
+    min-width: 56px;
+    padding-right: 8px;
   }
 }
 
@@ -139,7 +141,7 @@ html.rw-touch .rw-window-body {
   .start-menu {
     left: 4px;
     right: 4px;
-    bottom: 52px;
+    bottom: 40px; /* sits just above the slimmer 36px taskbar */
     min-width: 0;
     max-width: calc(100vw - 8px);
     font-size: 15px;

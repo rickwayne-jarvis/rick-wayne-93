@@ -88,13 +88,32 @@
   outline: none;
 }
 
-/* Mobile: slightly smaller, more centered */
-@media (max-width: 720px) {
+/* Mobile: pinned at the bottom-center, smaller, capped width */
+@media (max-width: 720px), (pointer: coarse) {
   .welcome-note {
     right: 12px;
-    bottom: 80px;
-    width: calc(100vw - 24px);
-    max-width: 320px;
+    left: 12px;
+    bottom: 52px; /* above the smaller mobile taskbar (36px + margin) */
+    width: auto;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 14px 14px 12px;
     font-size: 16px;
+    line-height: 1.3;
+    transform: rotate(-1deg);
+    z-index: 650;
+  }
+  .welcome-note .signoff {
+    font-size: 20px;
+    margin-top: 8px;
+  }
+  .welcome-note .dismiss {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    top: 2px;
+    right: 4px;
+    line-height: 32px;
   }
 }
