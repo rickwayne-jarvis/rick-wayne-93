@@ -57,9 +57,9 @@
     /* v5: My Space shortcut sits below Movie Maker per spec. CSS-built IE icon
        plus the white shortcut-arrow corner glyph (no external image). */
     { id: 'myspace',  label: 'My Space.url',    icon: mySpaceShortcutIconSVG, action: () => RW.MySpace && RW.MySpace.open() },
-    /* v5: Mixtape.exe with cassette icon. */
+    /* v5: Mixtape.exe with cassette icon.
+       v8: Music.exe retired - Mixtape is the only music player. */
     { id: 'mixtape',  label: 'Mixtape.exe',     icon: mixtapeIconSVG,         action: () => RW.Mixtape && RW.Mixtape.open() },
-    { id: 'music',    label: 'Music.exe',       icon: ICONS.music,    action: () => RW.Music && RW.Music.open() },
     { id: 'ie',       label: 'Internet Explorer.exe', icon: ICONS.ie, action: () => RW.IE && RW.IE.open() },
     { id: 'recycle',  label: 'Recycle Bin',     icon: ICONS.recycle,  action: () => openRecycle() }
   ];
@@ -324,6 +324,7 @@
 
   function openProgramFiles() {
     if (RW.WM.get('pf')) { RW.WM.bringToFront('pf'); return; }
+    // v8: Mixtape.exe replaces Music.exe in Program Files.
     const items = [
       { label: 'Notepad',               icon: ICONS.text,  action: () => openAbout() },
       { label: 'Calculator',            icon: ICONS.exe,   action: () => RW.Calculator.open() },
@@ -331,6 +332,7 @@
       { label: 'Solitaire',             icon: ICONS.exe,   action: () => RW.Solitaire.open() },
       { label: 'Minesweeper',           icon: ICONS.mine,  action: () => RW.Minesweeper.open() },
       { label: 'Movie Maker',           icon: ICONS.movie, action: () => RW.MovieMaker.open() },
+      { label: 'Mixtape',               icon: ICONS.exe,   action: () => RW.Mixtape && RW.Mixtape.open() },
       { label: 'Windows Media Player',  icon: ICONS.video, action: () => RW.Explorer.openWork() }
     ];
     openFolderWindow({ id: 'pf', title: 'Program Files', path: 'C:\\Program Files', items: items });

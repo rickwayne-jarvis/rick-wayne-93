@@ -119,7 +119,9 @@
       case 'open-calculator':   RW.Calculator.open(); break;
       case 'open-paint':        RW.Paint.open(); break;
       case 'open-moviemaker':   RW.MovieMaker.open(); break;
-      case 'open-music':        RW.Music.open(); break;
+      // v8: Music.exe consolidated into Mixtape.exe. Stale references to
+      // open-music are routed to the Mixtape player.
+      case 'open-music':        RW.Mixtape && RW.Mixtape.open(); break;
       case 'open-ie':           RW.IE.open(); break;
       case 'open-mixtape':      RW.Mixtape && RW.Mixtape.open(); break;
       case 'open-myspace':      RW.MySpace && RW.MySpace.open(); break;
