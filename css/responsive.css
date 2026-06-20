@@ -480,6 +480,77 @@ html.rw-touch .rw-window-body {
 }
 
 /* =========================================================================
+   15b. MySpace mobile layout (v8)
+   The fake MySpace page renders inside the IE chrome window. At <=600px
+   the two-column grid stacks single-column, the Top 8 collapses to 2 wide
+   (so 4 rows of 2), the floating music widget drops under the profile
+   pic, and the comments break out of their 56px avatar grid so the text
+   gets full width. No horizontal scroll at iPhone widths.
+   ========================================================================= */
+@media (max-width: 600px) {
+  .msp-main {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 6px;
+  }
+  /* Music widget no longer floats top-right - it sits under the profile
+     pic in the left column so it doesn't cover the header/nav. */
+  .msp-musicwidget {
+    position: static;
+    width: auto;
+    margin: 6px 8px 0;
+  }
+  /* Header/nav must not horizontal-scroll. Let the long nav wrap. */
+  .msp-topband-inner {
+    padding: 6px 10px 8px;
+  }
+  .msp-nav {
+    word-spacing: 0;
+    line-height: 1.6;
+  }
+  .msp-nav a {
+    display: inline-block;
+    padding: 2px 4px;
+  }
+  /* Profile pic shrinks so the column doesn't blow out. */
+  .msp-profilepic-inner {
+    height: 200px;
+  }
+  /* Top 8 collapses 4-wide to 2-wide (so the layout is 2 cols x 4 rows). */
+  .msp-top8-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  /* Comments: avatar floats left of full-width text so each comment uses
+     the full column width on mobile. */
+  .msp-comment {
+    grid-template-columns: 44px 1fr;
+    gap: 6px;
+  }
+  .msp-comment-avatar {
+    width: 40px;
+    height: 40px;
+  }
+  /* Contact box buttons stay 2-up but with bigger tap targets. */
+  .msp-cb-btn {
+    padding: 6px 5px;
+    font-size: 11px;
+  }
+  /* Section bodies a touch tighter. */
+  .msp-section-body {
+    padding: 6px 8px 8px;
+  }
+  /* Interests table: shrink the label column so the value gets more room. */
+  .msp-interests-table th {
+    width: 70px;
+    font-size: 10px;
+  }
+  .msp-interests-table td {
+    font-size: 11px;
+  }
+}
+
+/* =========================================================================
    16. Music - bigger transport, fluid layout
    ========================================================================= */
 @media (max-width: 768px), (pointer: coarse) {
