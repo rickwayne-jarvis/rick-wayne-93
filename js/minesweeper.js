@@ -108,16 +108,26 @@
     resizeAndNew();
   };
 
+  // v8: detect touch devices the same way the rest of the OS does.
+  function isTouchDevice() {
+    if (window.RW_TOUCH) return true;
+    if ('ontouchstart' in window) return true;
+    return (navigator.maxTouchPoints || 0) > 0;
+  }
+
   function resizeAndNew() {
     const cfg = DIFFICULTIES[currentDiff];
     const win = RW.WM.get('minesweeper');
-    if (win) {
-      // re-size container based on grid
+    if (win && !isTouchDevice()) {
+      // Desktop: re-size container based on grid (classic Minesweeper feel).
       const w = 24 + cfg.w * 18 + 24;
       const h = 130 + cfg.h * 18;
       win.el.style.width = (w + 16) + 'px';
       win.el.style.height = (h + 60) + 'px';
     }
+    // v8: on touch devices the window manager already opens fullscreen and
+    // we leave it that way. The cell grid is scaled in renderGrid() instead
+    // so the board fits the available width.
     newGame();
   }
 
@@ -172,13 +182,40 @@
   function renderGrid() {
     const grid = domRefs.grid;
     grid.innerHTML = '';
-    grid.style.gridTemplateColumns = 'repeat(' + state.w + ', 18px)';
+
+    // v8: compute a cell size that fits the available width on touch
+    // devices. The board never goes wider than the window. The minimum
+    // tap target stays comfortable across all three difficulties.
+    let cellSize = 18;
+    if (isTouchDevice()) {
+      const win = RW.WM.get('minesweeper');
+      // Inner padding inside the .ms-frame (12px each side) plus a small
+      // margin for safety. Falls back to the viewport width if we can't
+      // measure the window yet.
+      const winWidth = (win && win.el && win.el.clientWidth) ? win.el.clientWidth : window.innerWidth;
+      const padding = 48;
+      const availWidth = Math.max(160, winWidth - padding);
+      const cap = currentDiff === 'beginner'     ? 48
+                : currentDiff === 'intermediate' ? 32
+                : 24;
+      cellSize = Math.max(20, Math.min(cap, Math.floor(availWidth / state.w)));
+    }
+
+    grid.style.gridTemplateColumns = 'repeat(' + state.w + ', ' + cellSize + 'px)';
     for (let r = 0; r < state.h; r++) {
       for (let c = 0; c < state.w; c++) {
         const cell = state.cells[r][c];
         const div = document.createElement('div');
         div.className = 'ms-cell';
         div.dataset.r = r; div.dataset.c = c;
+        if (cellSize !== 18) {
+          div.style.width = cellSize + 'px';
+          div.style.height = cellSize + 'px';
+          div.style.lineHeight = cellSize + 'px';
+          // Number font scales with cell size so 1-8 stay readable but
+          // never overflow.
+          div.style.fontSize = Math.max(11, Math.floor(cellSize * 0.55)) + 'px';
+        }
         attachCellHandlers(div);
         grid.appendChild(div);
       }
