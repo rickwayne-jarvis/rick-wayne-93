@@ -315,17 +315,30 @@
         e.preventDefault();
         beginDrag(info, cards, e.clientX, e.clientY, 'mouse');
       });
-      // v9: touch drag. Single touch begins drag, touchmove follows, touchend
-      // drops on whichever pile is under the finger. Prevents default on
-      // touchmove so the felt doesn't scroll mid-drag.
+      // v9: touch drag. Defer the actual drag (and its ghost element)
+      // until the finger moves past a small threshold; up to that point
+      // a touch + release fires a click so the existing double-tap auto
+      // send still works. Once we cross the threshold we preventDefault
+      // on touchmove so the felt doesn't scroll mid-drag.
+      let pending = null;
       el.addEventListener('touchstart', (e) => {
         if (!e.touches || e.touches.length !== 1) return;
         const cards = gatherCards(info);
         if (!cards.length) return;
         const t = e.touches[0];
-        beginDrag(info, cards, t.clientX, t.clientY, 'touch');
-        e.preventDefault();
+        pending = { x: t.clientX, y: t.clientY, cards: cards, info: info };
+      }, { passive: true });
+      el.addEventListener('touchmove', (e) => {
+        if (!pending || dragState) return;
+        const t = e.touches[0];
+        if (Math.abs(t.clientX - pending.x) > 6 || Math.abs(t.clientY - pending.y) > 6) {
+          beginDrag(pending.info, pending.cards, t.clientX, t.clientY, 'touch');
+          pending = null;
+          e.preventDefault();
+        }
       }, { passive: false });
+      el.addEventListener('touchend', () => { pending = null; });
+      el.addEventListener('touchcancel', () => { pending = null; });
     }
 
     function beginDrag(info, cards, x, y, src) {

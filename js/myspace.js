@@ -89,10 +89,6 @@
       '<div class="msp-topband">' +
         '<div class="msp-topband-inner">' +
           '<div class="msp-logo">myspace<span class="msp-dot">.</span>com<span class="msp-tag">a place for friends</span></div>' +
-          '<div class="msp-nav">' +
-            ['Home','Browse','Search','Invite','Film','Mail','Blog','Favorites','Forum','Groups','Events','Videos','Music','Comedy','Classifieds']
-              .map(l => '<a href="#" onclick="return false">' + l + '</a>').join(' | ') +
-          '</div>' +
         '</div>' +
       '</div>' +
 
