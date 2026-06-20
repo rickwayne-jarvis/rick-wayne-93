@@ -22,6 +22,8 @@
     open = false;
     menu().hidden = true;
     btn().classList.remove('active');
+    // v9: clear sticky touch-tap hover state so reopen starts collapsed.
+    menu().querySelectorAll('.start-item.hover').forEach(x => x.classList.remove('hover'));
   }
   function toggle() { open ? closeMenu() : openMenu(); }
   SM.toggle = toggle;
@@ -97,7 +99,21 @@
     menu().addEventListener('click', (e) => {
       const li = e.target.closest('.start-item');
       if (!li) return;
-      if (li.classList.contains('has-sub')) return; // submenus
+      // v9: touch devices have no real hover, so submenus stay closed
+      // unless we explicitly toggle them on tap. Close siblings at the
+      // same depth first, then toggle this one open/closed.
+      if (li.classList.contains('has-sub')) {
+        if (!window.RW_TOUCH) return;
+        e.stopPropagation();
+        const wasOpen = li.classList.contains('hover');
+        const parentList = li.parentElement;
+        if (parentList) {
+          parentList.querySelectorAll(':scope > .start-item.hover')
+            .forEach(x => x.classList.remove('hover'));
+        }
+        if (!wasOpen) li.classList.add('hover');
+        return;
+      }
       if (li.classList.contains('disabled')) return;
       const act = li.dataset.action;
       const label = li.dataset.label || '';

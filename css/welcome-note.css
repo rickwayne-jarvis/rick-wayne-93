@@ -10,7 +10,7 @@
   right: 24px;
   bottom: 64px; /* sits above the taskbar */
   width: 280px;
-  z-index: 600; /* above wallpaper, below windows */
+  z-index: 50; /* above wallpaper, below windows (which start at z 100) */
   padding: 18px 18px 14px;
   background:
     repeating-linear-gradient(
@@ -88,7 +88,10 @@
   outline: none;
 }
 
-/* Mobile: pinned at the bottom-center, smaller, capped width */
+/* Mobile: pinned at the bottom-center, smaller, capped width.
+   v9: z-index 50 keeps the note above the wallpaper but below the
+   window-layer (windows start at z 100 and climb), so opening any app
+   tucks the note out of the way without the user having to dismiss it. */
 @media (max-width: 720px), (pointer: coarse) {
   .welcome-note {
     right: 12px;
@@ -98,22 +101,23 @@
     max-width: 360px;
     margin-left: auto;
     margin-right: auto;
-    padding: 14px 14px 12px;
+    padding: 14px 16px 12px;
     font-size: 16px;
     line-height: 1.3;
     transform: rotate(-1deg);
-    z-index: 650;
+    z-index: 50;
   }
   .welcome-note .signoff {
     font-size: 20px;
     margin-top: 8px;
   }
   .welcome-note .dismiss {
-    width: 32px;
-    height: 32px;
-    font-size: 20px;
-    top: 2px;
-    right: 4px;
-    line-height: 32px;
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+    top: 0;
+    right: 0;
+    line-height: 36px;
+    opacity: 0.7;
   }
 }

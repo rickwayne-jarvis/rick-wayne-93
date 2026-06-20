@@ -145,6 +145,10 @@
 
   function openAbout() {
     if (RW.WM.get('about-me')) { RW.WM.bringToFront('about-me'); return; }
+    // v9: wrap "1989" in a tappable span and tag the matrix photo so the
+    // touch easter eggs that used to live in the retired mobile.js fire
+    // here too (3 taps on 1989 -> birthday dialog, long-press matrix ->
+    // Properties dialog).
     const html = '\n<div class="notepad-doc">\n' +
       '  <pre class="np-pre">RICK WAYNE - DIRECTOR.SYS\n' +
       '==========================\n' +
@@ -153,7 +157,7 @@
       'Director. Creative Director. Writer.\n' +
       'Brooklyn, NY\n' +
       '</pre>\n' +
-      '  <pre class="np-pre">I was born in 1989. That\'s why you\'re seeing this hidden Windows theme. My career started here, on a beige Windows 95 machine, making home videos in Windows Movie Maker in 2003. I never stopped. I hone the craft every day.</pre>\n\n' +
+      '  <pre class="np-pre">I was born in <span class="year-tap" id="np-year-tap" tabindex="0">1989</span>. That\'s why you\'re seeing this hidden Windows theme. My career started here, on a beige Windows 95 machine, making home videos in Windows Movie Maker in 2003. I never stopped. I hone the craft every day.</pre>\n\n' +
       '  <pre class="np-pre">FIRST SHOOT\n' +
       '-----------</pre>\n' +
       '  <div class="first-shoot-photo">\n' +
@@ -163,7 +167,7 @@
       '        <span class="paint-ctrls"><button>_</button><button>[]</button><button>X</button></span>\n' +
       '      </div>\n' +
       '      <div class="paint-menubar">File  Edit  View  Image  Options  Help</div>\n' +
-      '      <div class="paint-canvas">\n' +
+      '      <div class="paint-canvas" id="np-matrix-tap">\n' +
       '        <div class="scanlines"></div>\n' +
       '        <div class="vhs-noise"></div>\n' +
       '        <img class="first-shoot-img" src="images/1%20(80).JPG" alt="Rick\'s first shoot">\n' +
@@ -180,38 +184,109 @@
       '  <pre class="np-pre">P.S. - open Mixtape.exe. I made you something.</pre>\n\n' +
       '  <pre class="np-pre">(c) 1993-2026 Rick Wayne. All rights reserved.</pre>\n' +
       '</div>\n';
-    RW.WM.open({
+    const w = RW.WM.open({
       id: 'about-me',
       title: 'About Me.txt - Notepad',
       icon: ICONS.text,
       width: 620, height: 540,
       contentHTML: html
     });
+    wireAboutEasterEggs(w.body);
+  }
+
+  // v9: ported from the retired mobile.js so the touch easter eggs work
+  // in the desktop OS too. Three quick taps on "1989" pops a birthday
+  // dialog; long-press the matrix photo pops a faux Properties dialog.
+  function wireAboutEasterEggs(root) {
+    const yearEl = root.querySelector('#np-year-tap');
+    if (yearEl) {
+      let n = 0, tmr = null;
+      yearEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        n++;
+        if (tmr) clearTimeout(tmr);
+        tmr = setTimeout(() => { n = 0; }, 1400);
+        if (n >= 3) {
+          n = 0;
+          const html =
+            '<div class="dialog-body">' +
+              '<p><b>happy_birthday.bat</b></p>' +
+              '<p>1989 was a great year. Tim Berners-Lee proposed the World Wide Web. Game Boy launched. Rick was born.</p>' +
+              '<p>The rest is in the work.</p>' +
+            '</div>' +
+            '<div class="dialog-buttons"><button data-close>OK</button></div>';
+          const dw = RW.WM.open({
+            title: 'happy_birthday.bat', icon: ICONS.exe,
+            width: 380, height: 220, resizable: false, contentHTML: html
+          });
+          dw.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(dw.id));
+        }
+      });
+    }
+    const matrix = root.querySelector('#np-matrix-tap');
+    if (matrix) {
+      const propsHTML =
+        '<div class="dialog-body">' +
+          '<p><b>matrix.jpg Properties</b></p>' +
+          '<p><b>Original photo:</b> ~2003.</p>' +
+          '<p><b>Camera:</b> don\'t remember.</p>' +
+          '<p><b>People:</b> still my friends.</p>' +
+          '<p><b>Made by:</b> Rick.</p>' +
+        '</div>' +
+        '<div class="dialog-buttons"><button data-close>OK</button></div>';
+      function popProps() {
+        const dw = RW.WM.open({
+          title: 'Properties', icon: ICONS.text,
+          width: 360, height: 240, resizable: false, contentHTML: propsHTML
+        });
+        dw.body.querySelector('[data-close]').addEventListener('click', () => RW.WM.close(dw.id));
+      }
+      matrix.addEventListener('contextmenu', (e) => { e.preventDefault(); popProps(); });
+      let lpTimer = null;
+      matrix.addEventListener('touchstart', () => {
+        if (lpTimer) clearTimeout(lpTimer);
+        lpTimer = setTimeout(popProps, 600);
+      }, { passive: true });
+      const clearLP = () => { if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } };
+      matrix.addEventListener('touchend', clearLP);
+      matrix.addEventListener('touchmove', clearLP, { passive: true });
+      matrix.addEventListener('touchcancel', clearLP);
+    }
   }
 
   function openContact() {
     if (RW.WM.get('contact-eml')) { RW.WM.bringToFront('contact-eml'); return; }
     const bio = RW.bio;
+    // v9: real composable form. Subject + body live in inputs/textarea
+    // so the mobile keyboard actually does something and the user can
+    // type their pitch before Send routes them to their mail client.
+    const defaultSubject = 'Project inquiry for Rick Wayne';
+    const defaultBody = 'Hi Rick,\n\nI would like to talk about a project.\n\nBest,\n';
     const html =
-      '<div class="dialog-body">' +
-      '<p><b>New Message</b></p>' +
-      '<p>To: <a href="mailto:' + bio.email + '">' + bio.email + '</a></p>' +
-      '<p>Subject: Project inquiry for Rick Wayne</p>' +
-      '<hr>' +
-      '<p>Hi Rick,</p>' +
-      '<p>I would like to talk about a project.</p>' +
-      '<p>Best,</p>' +
+      '<div class="eml-compose">' +
+        '<div class="eml-header-row"><label class="eml-lbl">To:</label>' +
+          '<span class="eml-static">' + bio.email + '</span></div>' +
+        '<div class="eml-header-row"><label class="eml-lbl" for="eml-subject">Subject:</label>' +
+          '<input class="eml-subject" id="eml-subject" type="text" value="' + RW.WM.escapeHtml(defaultSubject) + '"></div>' +
+        '<textarea class="eml-body" id="eml-body" rows="6">' + RW.WM.escapeHtml(defaultBody) + '</textarea>' +
       '</div>' +
       '<div class="dialog-buttons">' +
-      '<button onclick="window.location.href=\'mailto:' + bio.email + '\'">Send</button>' +
+      '<button data-act="send">Send</button>' +
       '<button data-close="contact-eml">Close</button>' +
       '</div>';
     const w = RW.WM.open({
       id: 'contact-eml',
       title: 'Contact.eml - Inbox',
       icon: ICONS.mail,
-      width: 460, height: 320,
+      width: 460, height: 360,
       contentHTML: html
+    });
+    const subjectEl = w.body.querySelector('#eml-subject');
+    const bodyEl = w.body.querySelector('#eml-body');
+    w.body.querySelector('[data-act=send]').addEventListener('click', () => {
+      const s = encodeURIComponent(subjectEl.value || defaultSubject);
+      const b = encodeURIComponent(bodyEl.value || defaultBody);
+      window.location.href = 'mailto:' + bio.email + '?subject=' + s + '&body=' + b;
     });
     w.body.querySelectorAll('[data-close]').forEach(b => {
       b.addEventListener('click', () => RW.WM.close(b.dataset.close));

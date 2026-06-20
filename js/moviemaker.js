@@ -9,10 +9,11 @@
   MM.open = function () {
     if (RW.WM.get(ID)) { RW.WM.bringToFront(ID); return; }
 
-    if (window.innerWidth < 768) {
-      openMobileNotice();
-      return;
-    }
+    // v9: phones have getUserMedia + MediaRecorder too. Was previously
+    // bailing out under 768px with a desktop-only stub, but iOS Safari
+    // and Android Chrome both record fine, and the responsive CSS sizes
+    // the preview/controls. If permission is denied or MediaRecorder is
+    // missing the existing showError() path takes over.
 
     const wrap = document.createElement('div');
     wrap.className = 'mm-body';

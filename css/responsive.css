@@ -43,32 +43,41 @@ html.rw-touch .rw-window-body {
 }
 
 /* =========================================================================
-   2. Desktop icons - bigger and easier to tap
+   2. Desktop icons - bigger and easier to tap.
+   v9: 11 icons stack vertically and overflow off-screen on a phone. Wrap
+   into multi-column flex so every icon is reachable without scrolling.
+   The icon column stays anchored to the wallpaper's left edge (Win95
+   convention), it just wraps to a second / third column as needed.
    ========================================================================= */
 @media (max-width: 768px), (pointer: coarse) {
   .desktop-icons {
     top: 12px;
     left: 10px;
-    width: 96px;
-    gap: 18px;
+    right: 10px;
+    bottom: 56px; /* clear of the welcome note + taskbar */
+    width: auto;
+    flex-flow: column wrap;
+    align-content: flex-start;
+    gap: 12px 14px;
+    overflow: hidden;
   }
   .desktop-icon {
-    width: 96px;
-    min-height: 96px;
-    padding: 6px 0 4px;
+    width: 78px;
+    min-height: 82px;
+    padding: 4px 0 2px;
   }
   .desktop-icon .icon-img {
-    width: 56px;
-    height: 56px;
-    margin-bottom: 8px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 6px;
   }
   .desktop-icon .icon-img svg {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
   }
   .desktop-icon .icon-label {
-    font-size: 13px;
-    max-width: 94px;
+    font-size: 12px;
+    max-width: 76px;
     line-height: 1.2;
     padding: 2px 4px;
   }
@@ -334,30 +343,60 @@ html.rw-touch .rw-window-body {
 
 /* =========================================================================
    10. Paint - bigger tools, fluid canvas
+   v9: actual Paint class names are .pt-tool / .pp-palette; the old
+   .paint-toolbar / .paint-palette-swatch selectors never matched. Bumps
+   the toolbox + palette swatches into thumb territory and keeps the
+   canvas area scrolling. The Paint window itself is fullscreen-inset on
+   touch, courtesy of wm.js fitFullscreen().
    ========================================================================= */
 @media (max-width: 768px), (pointer: coarse) {
-  .paint-chrome {
-    width: 100%;
-    max-width: 100%;
-  }
-  /* Paint app body */
-  .paint-app-body .paint-toolbar button,
-  .paint-app .paint-toolbar button {
-    width: 40px !important;
-    height: 40px !important;
-  }
-  .paint-app-body .paint-palette-swatch,
-  .paint-app .paint-palette-swatch {
-    width: 28px !important;
-    height: 28px !important;
-  }
+  .paint-chrome { width: 100%; max-width: 100%; }
+  /* About-Me's Paint-chrome decoration (matrix photo frame) */
   .paint-canvas { padding: 6px; }
+
+  /* Real Paint app: toolbox/palette/menu */
+  .paint-body .menu-bar { font-size: 13px; }
+  .paint-body .menu-bar .mb-item { padding: 6px 12px; }
+  .paint-toolbox { width: 76px; }
+  .pt-tool {
+    width: 34px;
+    height: 34px;
+  }
+  .pt-opt {
+    width: 60px;
+    height: 28px;
+  }
+  .pt-options { width: 72px; }
+  .pp-palette {
+    grid-template-columns: repeat(14, minmax(20px, 1fr));
+    max-width: none;
+  }
+  .pp-palette button {
+    width: auto;
+    height: 22px;
+  }
+  .pp-current { width: 36px; height: 36px; }
+  .pp-bg, .pp-fg { width: 22px; height: 22px; }
+  .paint-palette {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 6px;
+  }
+  .paint-canvas-area { padding: 4px; }
+  .paint-statusbar .ps-cell { min-width: 60px; font-size: 11px; }
 }
 
 /* =========================================================================
    11. Minesweeper - bigger cells
    ========================================================================= */
 @media (max-width: 768px), (pointer: coarse) {
+  /* The body scrolls so Expert (30 wide) still has a way to reach the
+     right-hand cells; minesweeper.js scales cells to fit the window width
+     in the other two difficulties so scrolling only kicks in for Expert. */
+  .ms-body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .ms-frame { margin: 12px; padding: 8px; }
   .ms-header { padding: 6px 8px; margin-bottom: 8px; }
   .ms-lcd {
@@ -389,31 +428,50 @@ html.rw-touch .rw-window-body {
    ========================================================================= */
 @media (max-width: 768px), (pointer: coarse) {
   .sol-felt {
-    padding: 8px;
+    padding: 6px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
   }
   .sol-top {
-    grid-template-columns: 56px 56px 20px 56px 56px 56px 56px;
-    gap: 6px;
-    margin-bottom: 10px;
+    grid-template-columns: 44px 44px 16px 44px 44px 44px 44px;
+    gap: 5px;
+    margin-bottom: 8px;
   }
   .sol-tableau {
-    grid-template-columns: repeat(7, 56px);
-    gap: 6px;
-    min-height: 360px;
+    grid-template-columns: repeat(7, 44px);
+    gap: 5px;
+    min-height: 320px;
   }
   .sol-pile, .sol-card, .sol-empty {
-    width: 56px;
+    width: 44px;
   }
   .sol-card, .sol-empty {
-    height: 78px;
+    height: 62px;
   }
-  .sol-tab { min-height: 360px; }
-  .sol-card.face .pip { font-size: 24px; }
-  .sol-card.face .cnr { font-size: 12px; }
+  .sol-tab { min-height: 320px; }
+  .sol-card.face .pip { font-size: 20px; }
+  .sol-card.face .cnr { font-size: 11px; }
+  .sol-drag-ghost { width: 44px; height: 62px; }
   .sol-body .menu-bar { font-size: 13px; }
   .sol-body .menu-bar .mb-item { padding: 8px 14px; }
+}
+
+/* iPhone-mini and smaller: bump cards down again so the seven columns
+   still fit a 320px viewport without horizontal scroll. */
+@media (max-width: 380px) {
+  .sol-top {
+    grid-template-columns: 38px 38px 12px 38px 38px 38px 38px;
+    gap: 4px;
+  }
+  .sol-tableau {
+    grid-template-columns: repeat(7, 38px);
+    gap: 4px;
+  }
+  .sol-pile, .sol-card, .sol-empty { width: 38px; }
+  .sol-card, .sol-empty { height: 54px; }
+  .sol-card.face .pip { font-size: 17px; }
+  .sol-card.face .cnr { font-size: 10px; }
+  .sol-drag-ghost { width: 38px; height: 54px; }
 }
 
 /* =========================================================================
@@ -437,46 +495,102 @@ html.rw-touch .rw-window-body {
 
 /* =========================================================================
    14. Mixtape - bigger controls, scaled visualizer
+   v9: selectors corrected to actual `mix-*` class names used by mixtape.js
+   (the old `.mt-*` / `.mixtape-*` selectors never matched anything).
    ========================================================================= */
 @media (max-width: 768px), (pointer: coarse) {
-  .mixtape-body, .mt-body {
+  .mix-body {
     font-size: 13px;
   }
-  .mt-controls button,
-  .mixtape-body button {
-    min-height: 40px;
-    min-width: 40px;
-    font-size: 14px;
+  .mix-controls {
+    flex-wrap: wrap;
+    padding: 8px 6px 10px;
+    gap: 6px;
   }
-  .mt-visualizer canvas,
-  .mixtape-vis canvas {
+  .mix-controls button {
+    min-height: 40px;
+    min-width: 44px;
+    font-size: 14px;
+    padding: 0 8px;
+  }
+  .mix-vol-wrap {
+    margin-left: 0;
+    flex: 1 1 100%;
+    order: 5;
+  }
+  .mix-vol-wrap input[type=range] {
+    flex: 1;
+    width: auto;
+    height: 28px;
+  }
+  .mix-time {
+    margin-left: auto;
+    font-size: 13px;
+    padding: 4px 8px;
+  }
+  .mix-marquee {
+    height: 22px;
+    font-size: 13px;
+  }
+  #mix-vis {
     width: 100% !important;
     height: auto !important;
     max-height: 120px;
   }
-  .mt-track-list, .mixtape-tracks {
-    font-size: 13px;
+  .mix-tracklist-wrap {
+    min-height: 120px;
   }
-  .mt-track-list li, .mixtape-tracks li {
-    min-height: 44px;
-    padding: 10px 12px;
+  .mix-tracklist-header,
+  .mix-row {
+    /* Keep the 4-column grid but lighten the duration column so the
+       title and artist columns can breathe at phone width. */
+    grid-template-columns: 28px 1fr 1fr 50px;
+    padding: 6px;
+    font-size: 12px;
+  }
+  .mix-row {
+    min-height: 38px;
   }
 }
 
 /* =========================================================================
    15. IE + MySpace - scale naturally inside IE chrome
+   v9: actual class names in ie.js are ie-toolbar/.ie-toolbtn/.ie-addrbar/.ie-addr-input
+   (the old .ie-btn / .ie-addr-bar / .ie-address selectors never matched).
    ========================================================================= */
 @media (max-width: 768px), (pointer: coarse) {
-  .ie-toolbar button, .ie-btn {
-    min-height: 40px;
+  .ie-toolbar {
+    flex-wrap: wrap;
+    gap: 3px;
+    padding: 3px;
+  }
+  .ie-toolbar .ie-toolbtn {
+    min-height: 32px;
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+  .ie-menubar {
+    font-size: 12px;
+  }
+  .ie-menubar span {
+    padding: 4px 8px;
+  }
+  .ie-addrbar {
+    flex-wrap: wrap;
+    padding: 3px 4px;
+    gap: 4px;
+  }
+  .ie-addr-input {
+    height: 30px;
     font-size: 13px;
+    min-width: 0;
+    flex: 1 1 60%;
   }
-  .ie-addr-bar input, .ie-address input {
-    height: 36px;
-    font-size: 14px;
+  .ie-statusbar {
+    font-size: 11px;
   }
-  /* MySpace inside IE - let it scroll naturally */
-  .myspace-page, .ms-page, .myspace-body {
+  /* MySpace lives inside IE chrome; the per-page CSS below handles it. */
+  .msp-page {
     font-size: 14px;
   }
 }
@@ -581,6 +695,18 @@ html.rw-touch .rw-window-body {
     min-height: 40px;
     font-size: 13px;
     padding: 4px 12px;
+  }
+  /* Contact compose: bigger taps + comfortable typing on touch. */
+  .eml-compose { padding: 12px 14px 0; gap: 8px; }
+  .eml-lbl { min-width: 64px; font-size: 13px; }
+  .eml-subject {
+    height: 36px;
+    font-size: 14px;
+  }
+  .eml-body {
+    min-height: 160px;
+    font-size: 15px;
+    padding: 8px;
   }
   .run-dialog input[type=text] {
     height: 36px;

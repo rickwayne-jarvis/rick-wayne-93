@@ -308,13 +308,26 @@
       });
     });
 
-    // Canvas pointer events
+    // Canvas pointer events.
+    // v9: accept touch events by reading the first touch's coordinates the
+    // same way the synthesized mouse events do. The drawing handlers
+    // below stay mouse-centric; the touchstart/move/end listeners later
+    // in this function forward to them.
     function getXY(e) {
       const r = canvas.getBoundingClientRect();
       const sx = canvas.width / r.width;
       const sy = canvas.height / r.height;
-      const x = Math.floor((e.clientX - r.left) * sx);
-      const y = Math.floor((e.clientY - r.top) * sy);
+      let cx = e.clientX, cy = e.clientY;
+      if ((cx == null || cy == null) && e.touches && e.touches[0]) {
+        cx = e.touches[0].clientX;
+        cy = e.touches[0].clientY;
+      }
+      if ((cx == null || cy == null) && e.changedTouches && e.changedTouches[0]) {
+        cx = e.changedTouches[0].clientX;
+        cy = e.changedTouches[0].clientY;
+      }
+      const x = Math.floor((cx - r.left) * sx);
+      const y = Math.floor((cy - r.top) * sy);
       return [x, y];
     }
     function setStroke(color, size) {
@@ -498,6 +511,32 @@
     }
     canvas.addEventListener('mouseup', endDraw);
     canvas.addEventListener('mouseleave', endDraw);
+
+    // v9: touch support. Forward the first touch to the same handlers
+    // mousedown / mousemove / mouseup use. preventDefault so the
+    // browser doesn't scroll the canvas area while the user is drawing.
+    function dispatchAs(type, t) {
+      const ev = new MouseEvent(type, {
+        bubbles: false, cancelable: true,
+        clientX: t.clientX, clientY: t.clientY, button: 0
+      });
+      canvas.dispatchEvent(ev);
+    }
+    canvas.addEventListener('touchstart', (e) => {
+      if (!e.touches.length) return;
+      e.preventDefault();
+      dispatchAs('mousedown', e.touches[0]);
+    }, { passive: false });
+    canvas.addEventListener('touchmove', (e) => {
+      if (!e.touches.length) return;
+      e.preventDefault();
+      dispatchAs('mousemove', e.touches[0]);
+    }, { passive: false });
+    canvas.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      endDraw();
+    }, { passive: false });
+    canvas.addEventListener('touchcancel', () => endDraw());
 
     // Menu wiring
     wireMenu(wrap, w, (act) => {

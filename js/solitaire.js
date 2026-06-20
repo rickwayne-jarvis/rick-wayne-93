@@ -294,25 +294,41 @@
       });
     }
 
+    function gatherCards(info) {
+      const cards = [];
+      if (info.from === 'tab') {
+        const col = state.tab[info.col];
+        for (let k = info.pos; k < col.length; k++) cards.push(col[k]);
+      } else if (info.from === 'waste') {
+        cards.push(state.waste[state.waste.length - 1]);
+      } else if (info.from === 'found') {
+        cards.push(state.found[info.idx][state.found[info.idx].length - 1]);
+      }
+      return cards;
+    }
+
     function attachDrag(el, info) {
       el.addEventListener('mousedown', (e) => {
         if (e.button !== 0) return;
-        const cards = [];
-        if (info.from === 'tab') {
-          const col = state.tab[info.col];
-          for (let k = info.pos; k < col.length; k++) cards.push(col[k]);
-        } else if (info.from === 'waste') {
-          cards.push(state.waste[state.waste.length - 1]);
-        } else if (info.from === 'found') {
-          cards.push(state.found[info.idx][state.found[info.idx].length - 1]);
-        }
+        const cards = gatherCards(info);
         if (!cards.length) return;
         e.preventDefault();
-        beginDrag(info, cards, e);
+        beginDrag(info, cards, e.clientX, e.clientY, 'mouse');
       });
+      // v9: touch drag. Single touch begins drag, touchmove follows, touchend
+      // drops on whichever pile is under the finger. Prevents default on
+      // touchmove so the felt doesn't scroll mid-drag.
+      el.addEventListener('touchstart', (e) => {
+        if (!e.touches || e.touches.length !== 1) return;
+        const cards = gatherCards(info);
+        if (!cards.length) return;
+        const t = e.touches[0];
+        beginDrag(info, cards, t.clientX, t.clientY, 'touch');
+        e.preventDefault();
+      }, { passive: false });
     }
 
-    function beginDrag(info, cards, ev) {
+    function beginDrag(info, cards, x, y, src) {
       const ghost = document.createElement('div');
       ghost.className = 'sol-drag-ghost';
       cards.forEach((c, idx) => {
@@ -320,28 +336,54 @@
         el.style.top = (idx * 18) + 'px';
         ghost.appendChild(el);
       });
-      ghost.style.left = ev.clientX + 'px';
-      ghost.style.top  = ev.clientY + 'px';
+      ghost.style.left = x + 'px';
+      ghost.style.top  = y + 'px';
       document.body.appendChild(ghost);
-      dragState = { info, cards, ghost, startX: ev.clientX, startY: ev.clientY };
-      document.addEventListener('mousemove', onDragMove);
-      document.addEventListener('mouseup', onDragEnd);
+      dragState = { info, cards, ghost, startX: x, startY: y, src: src };
+      if (src === 'mouse') {
+        document.addEventListener('mousemove', onDragMove);
+        document.addEventListener('mouseup', onDragEnd);
+      } else {
+        document.addEventListener('touchmove', onTouchDragMove, { passive: false });
+        document.addEventListener('touchend', onTouchDragEnd);
+        document.addEventListener('touchcancel', onTouchDragEnd);
+      }
     }
     function onDragMove(e) {
       if (!dragState) return;
       dragState.ghost.style.left = (e.clientX - 24) + 'px';
       dragState.ghost.style.top  = (e.clientY - 12) + 'px';
     }
+    function onTouchDragMove(e) {
+      if (!dragState || !e.touches || !e.touches.length) return;
+      const t = e.touches[0];
+      dragState.ghost.style.left = (t.clientX - 24) + 'px';
+      dragState.ghost.style.top  = (t.clientY - 12) + 'px';
+      e.preventDefault();
+    }
+    function onTouchDragEnd(e) {
+      if (!dragState) return;
+      const t = (e.changedTouches && e.changedTouches[0]) || null;
+      const x = t ? t.clientX : dragState.startX;
+      const y = t ? t.clientY : dragState.startY;
+      document.removeEventListener('touchmove', onTouchDragMove);
+      document.removeEventListener('touchend', onTouchDragEnd);
+      document.removeEventListener('touchcancel', onTouchDragEnd);
+      finishDrag(x, y);
+    }
     function onDragEnd(e) {
       if (!dragState) return;
       document.removeEventListener('mousemove', onDragMove);
       document.removeEventListener('mouseup', onDragEnd);
+      finishDrag(e.clientX, e.clientY);
+    }
+    function finishDrag(x, y) {
       const { info, cards, ghost } = dragState;
       ghost.remove();
       dragState = null;
 
       // Determine drop target
-      const targetPile = topElementUnder(e.clientX, e.clientY);
+      const targetPile = topElementUnder(x, y);
       if (!targetPile) { return; }
       const pileKind = targetPile.dataset.pile;
       const pileIdx = parseInt(targetPile.dataset.idx, 10);

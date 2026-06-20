@@ -287,6 +287,60 @@
   height: 22px;
 }
 
+/* Contact.eml compose dialog */
+.eml-compose {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px 0;
+  gap: 6px;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 12px;
+}
+.eml-header-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.eml-lbl {
+  min-width: 56px;
+  font-weight: bold;
+}
+.eml-static { color: var(--w95-black); }
+.eml-subject {
+  flex: 1;
+  height: 22px;
+  font-family: 'W95FA','Tahoma',sans-serif;
+  font-size: 12px;
+  padding: 1px 4px;
+  border: 2px solid;
+  border-color: var(--w95-gray-darker) var(--w95-white) var(--w95-white) var(--w95-gray-darker);
+  background: #fff;
+}
+.eml-body {
+  flex: 1;
+  min-height: 120px;
+  font-family: 'Tahoma','MS Sans Serif',sans-serif;
+  font-size: 13px;
+  padding: 6px;
+  margin-top: 6px;
+  border: 2px solid;
+  border-color: var(--w95-gray-darker) var(--w95-white) var(--w95-white) var(--w95-gray-darker);
+  background: #fff;
+  resize: none;
+  outline: none;
+}
+
+/* About Me: tappable year span. Looks like a regular link cue but stays
+   discreet inside the Notepad pre block. Triple-tap fires the easter egg. */
+.year-tap {
+  color: #0000ee;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.year-tap:focus { outline: 1px dotted #000; }
+
 /* About / Properties tabs basic */
 .tab-strip {
   display: flex;
