@@ -4,8 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
   <meta name="description" content="Rick Wayne, Director. Brooklyn. A Windows 95 portfolio.">
-  <meta name="theme-color" content="#008080">
+  <meta name="theme-color" content="#000000">
   <title>RICK WAYNE 93 - DIRECTOR.SYS</title>
+
+  <!-- v8: inline boot styles. Must paint on the very first frame so there
+       is no white flash between navigation and the Win95 boot screen. The
+       full Win95 styling is layered on top by win95.css and friends. -->
+  <style>
+    html, body {
+      background: #000;
+      color: #c0c0c0;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+    [hidden] { display: none !important; }
+    #boot-screen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      color: #c0c0c0;
+      z-index: 9999;
+    }
+    #boot-stage-1 {
+      padding: 20px;
+    }
+    #boot-text {
+      white-space: pre;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #c0c0c0;
+      margin: 0;
+    }
+  </style>
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23008080'/%3E%3Crect x='2' y='2' width='12' height='2' fill='%23fff'/%3E%3Crect x='2' y='6' width='12' height='2' fill='%23fff'/%3E%3Crect x='2' y='10' width='12' height='2' fill='%23fff'/%3E%3C/svg%3E">
 
@@ -68,7 +103,9 @@
   <script src="js/paint.js" defer></script>
   <script src="js/solitaire.js" defer></script>
   <script src="js/moviemaker.js" defer></script>
-  <script src="js/music.js" defer></script>
+  <!-- v8: js/music.js is no longer wired in. Music.exe was retired and its
+       launches now route to Mixtape.exe. The file stays in the repo as
+       historical reference. -->
   <script src="js/ie.js" defer></script>
   <script src="js/mixtape.js" defer></script>
   <script src="js/myspace.js" defer></script>
@@ -79,10 +116,15 @@
 </head>
 <body>
 
-  <!-- Boot screen -->
+  <!-- Boot screen.
+       v8: stage 1 is rendered into static HTML with the first BIOS line
+       pre-populated so the very first painted frame is black with text,
+       not browser-default white. boot.js takes over from there and appends
+       the rest. -->
   <div id="boot-screen" class="boot-screen">
     <div id="boot-stage-1" class="boot-stage boot-stage-1">
-      <pre id="boot-text" class="boot-text"></pre>
+      <pre id="boot-text" class="boot-text">RICK WAYNE BIOS v4.51
+</pre>
     </div>
     <div id="boot-stage-2" class="boot-stage boot-stage-2" hidden>
       <div class="boot-banner">
@@ -185,7 +227,8 @@
                 <li class="start-item" data-action="open-calculator"><span class="si-ico">[=]</span><span class="si-label">Calculator</span></li>
                 <li class="start-item" data-action="open-paint"><span class="si-ico">[B]</span><span class="si-label">Paint</span></li>
                 <li class="start-item" data-action="open-moviemaker"><span class="si-ico">[V]</span><span class="si-label">Movie Maker</span></li>
-                <li class="start-item" data-action="open-music"><span class="si-ico">[J]</span><span class="si-label">Music</span></li>
+                <!-- v8: Music.exe consolidated into Mixtape.exe. Anything
+                     that referenced Music now uses Mixtape instead. -->
                 <li class="start-item" data-action="open-mixtape"><span class="si-ico">[#]</span><span class="si-label">Mixtape</span></li>
                 <li class="start-item" data-action="open-ie"><span class="si-ico">[E]</span><span class="si-label">Internet Explorer</span></li>
                 <li class="start-item" data-action="open-myspace"><span class="si-ico">[e]</span><span class="si-label">My Space</span></li>

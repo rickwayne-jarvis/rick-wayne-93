@@ -42,7 +42,11 @@
   }
 
   function startBoot(skipChime) {
-    // Stage 1: text scroll
+    // Stage 1: text scroll.
+    // v8: the very first BIOS line is already in the static HTML so the
+    // first painted frame is text-on-black with no white flash. We start
+    // the scroll at line index 1 when the seed is present, and fall back
+    // to printing every line from the start if it isn't.
     const lines = [
       'RICK WAYNE BIOS v4.51',
       'Copyright (C) 1989-2026 Rick Wayne',
@@ -58,7 +62,8 @@
       "C:\\> WIN",
       ''
     ];
-    let i = 0;
+    const seeded = (bootText.textContent || '').indexOf('RICK WAYNE BIOS') >= 0;
+    let i = seeded ? 1 : 0;
     function nextLine() {
       if (skipped) return;
       if (i >= lines.length) {
